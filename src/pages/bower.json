@@ -1,0 +1,23 @@
+{
+  "name": "WeBusiness",
+  "homepage": "https://github.com/HHDong1988/WeBusiness",
+  "authors": [
+    "Huanhuan Dong <donghuanhuan1988@hotmail.com>"
+  ],
+  "dependencies": {
+    "bootstrap": "3.3.7",
+    "jquery": "2.2.0",
+    "angular": "1.6.4",
+    "angular-route": "1.6.4"
+  },
+  "description": "front end pages",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
