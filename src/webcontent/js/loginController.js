@@ -6,11 +6,14 @@
   function loginController(authService) {
     var vm = this;
     vm.language = new LanguageUtility();
-    vm.tittle = languange.LOGIN;
-    vm.credential = { userName: '', passWord: '' };
+    vm.tittle = vm.language.LOGIN;
+    vm.credential = { userName: 'bobby', passWord: '123456' };
+    vm.isUserAuth = false;
 
-    vm.login = function (credential) {
-      authService.login(redential).then(function (user) {
+
+    vm.login = function () {
+      alert('login');
+      authService.login(vm.credential).then(function (user) {
 
       }, function () {
 
