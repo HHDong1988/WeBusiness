@@ -8,7 +8,7 @@
     vm.language = new LanguageUtility();
     vm.tittle = vm.language.LOGIN;
     vm.credential = { userName: 'bobby', passWord: '123456' };
-    vm.isUserAuth = false;
+    vm.isUserAuth = true;
 
 
     vm.login = function () {
