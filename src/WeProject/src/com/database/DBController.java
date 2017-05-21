@@ -9,9 +9,9 @@ import org.json.JSONObject;
 public class DBController {
 	private static String driverName = "com.mysql.jdbc.Driver"; // 定义私有字符串常量并初始化
 	private static String username = "root"; // 定义的数据库用户名
-	private static String password = "fish1122"; // 定义的数据库连接密码
+	private static String password = "lovelf521"; // 定义的数据库连接密码
 //	private static String dbName = "family"; // 定义的数据库名
-	private static String url = "jdbc:mysql://localhost:3306/microbussiness";
+	private static String url = "jdbc:mysql://localhost:3306/webusiness";
 	
 	public static JSONArray getJsonArray(PreparedStatement ps, Connection conn){
 		JSONArray jArray = new JSONArray();

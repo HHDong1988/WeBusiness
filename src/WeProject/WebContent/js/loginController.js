@@ -7,7 +7,7 @@
     var vm = this;
     vm.language = new LanguageUtility();
     vm.tittle = vm.language.LOGIN;
-    vm.credential = { userName: 'bobby', passWord: '123456' };
+    vm.credential = { username: 'Bobby', password: '111' };
     //vm.isUserAuth = authService.isAuthenticated;
     vm.isUserAuth = false;
     vm.currentUser = { userID: '', userRole: '' };
@@ -16,9 +16,11 @@
     vm.login = function () {
       authService.logIn(vm.credential).then(function (user) {
         vm.currentUser = user;
-        $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+        vm.isUserAuth = true;
+        //$rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
       }, function (error) {
-        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+        alert('error');
+        //$rootScope.$broadcast(AUTH_EVENTS.loginFailed);
       });
     };
 

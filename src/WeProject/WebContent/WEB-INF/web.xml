@@ -15,11 +15,11 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
 
   <servlet-mapping>
     <servlet-name>Hello1</servlet-name>
-    <url-pattern>/Hello1</url-pattern>
+    <url-pattern>/api/hello</url-pattern>
   </servlet-mapping>
   
   <servlet-mapping>
     <servlet-name>LogInSystem</servlet-name>
-    <url-pattern>/LogInSystem</url-pattern>
+    <url-pattern>/api/login</url-pattern>
   </servlet-mapping>
 </web-app>

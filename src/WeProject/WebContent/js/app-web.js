@@ -61,21 +61,35 @@
       };
       return this;
     })
-    .factory('authService', function ($http, sessionService) {
+    .factory('authService', function ($q, $http, sessionService) {
       var authService = {};
-      var userInfo = null;
+      var userInfo = {
+         user: { 
+           userID: '', 
+           userRole: '' 
+          }, 
+         sessionID:'' 
+        };
 
-      authService.logIn = function (credentials) {
-        var deferred = $q.defer();
-        $http.post('/api/login', credentials).then(function (res) {
-          userInfo = res;
+      // authService.logIn = function (credentials) {
+      //   var deferred = $q.defer();
+      //   $http.post('/WeBusiness/api/login', credentials).then(function (res) {
+      //     userInfo.userID = res.data.UserName;
+      //     userInfo.userRole = res.data.UserTypeID;
+      //     userInfo.sessionID = 1;
+      //     sessionService.createUserInfo(userInfo);
+      //     deferred.resolve(userInfo.user);
+      //   }, function (error) {
+      //     deferred.reject(error);
+      //   });
+        authService.logIn = function (credentials) {
+        return $http.post('/WeBusiness/api/login', credentials).then(function (res) {
+          userInfo.user.userID = res.data.UserName;
+          userInfo.user.userRole = res.data.UserTypeID;
+          userInfo.sessionID = 1;
           sessionService.createUserInfo(userInfo);
-          deferred.resolve(userInfo.user);
-        }, function (error) {
-          deferred.reject(error);
+          return userInfo.user;
         });
-
-        return deferred.promiss;
       };
 
       authService.logOut = function () {
