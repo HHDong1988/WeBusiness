@@ -13,14 +13,14 @@
   <link rel="stylesheet" href="css/site.css" />
 </head>
 
-<body class="" ng-app="app-web" ng-controller="loginController as loginVm">
-  <div ng-cloak ng-if="!loginVm.isUserAuth">
+<body class="" data-ng-app="app-web" data-ng-controller="loginController as loginVm">
+  <div data-ng-cloak ng-if="!loginVm.isUserAuth()">
     <wb-login user-data="loginVm.credential" login-func="loginVm.login()"></wb-login>
   </div>
 
-  <div ng-if="loginVm.isUserAuth">
-    <header ng-controller="headerController as headerVm">
-      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div data-ng-if="loginVm.isUserAuth()">
+    <header data-ng-controller="headerController as headerVm">
+      <nav class="navbar navbar-inverse" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-nav-collapse" aria-expanded="false">
@@ -114,15 +114,12 @@
       <div ng-view></div>
     </div>
 
+    <footer>
+      <div class="pull-right">
+      </div>
+      <strong>Copyright &copy; 2017 <a href="#">微商</a>.</strong> All rights reserved.
+    </footer>
   </div>
-  <footer>
-    <div class="pull-right">
-
-    </div>
-    <strong>Copyright &copy; 2017 <a href="#">微商</a>.</strong> All rights reserved.
-  </footer>
-  </div>
-
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -133,6 +130,7 @@
   <script src="js/toolUtility_ZH.js"></script>
   <script src="js/app-web.js"></script>
   <script src="js/loginController.js"></script>
+  <script src="js/applicationController.js"></script>
   <script src="js/headerController.js"></script>
   <script src="js/site.js"></script>
 </body>

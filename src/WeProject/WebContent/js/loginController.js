@@ -1,26 +1,23 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('loginController', ['authService', 'AUTH_EVENTS', loginController]);
+  angular.module('app-web').controller('loginController', ['$rootScope','authService', 'AUTH_EVENTS', loginController]);
 
-  function loginController(authService, AUTH_EVENTS) {
+  function loginController($rootScope, authService, AUTH_EVENTS) {
     var vm = this;
     vm.language = new LanguageUtility();
     vm.tittle = vm.language.LOGIN;
-    vm.credential = { username: 'Bobby', password: '111' };
-    //vm.isUserAuth = authService.isAuthenticated;
-    vm.isUserAuth = false;
+    vm.credential = { username: '', password: '' };
+    vm.isUserAuth = authService.isAuthenticated;
     vm.currentUser = { userID: '', userRole: '' };
 
 
     vm.login = function () {
       authService.logIn(vm.credential).then(function (user) {
         vm.currentUser = user;
-        vm.isUserAuth = true;
-        //$rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+        $rootScope.$broadcast(AUTH_EVENTS.loginSuccess,user);
       }, function (error) {
-        alert('error');
-        //$rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
       });
     };
 

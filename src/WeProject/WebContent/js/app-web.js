@@ -11,7 +11,7 @@
       notAuthenticated: 'auth-not-authenticated',
       notAuthorized: 'auth-not-authorized'
     })
-    .constant('USER_ROLE', {
+    .constant('USER_ROLES', {
       superAdmin: 'superAdmin',
       shopAdmin: 'shopAdmin',
       financeAdmin: 'financeAdmin',
@@ -44,11 +44,14 @@
       };
     })
     .service('sessionService', function ($window) {
-      this.createUserInfo = function (userInfo) {
-        this.sessionID = userInfo.sessionID;
-        this.userId = userInfo.user.userId;
-        this.userRole = userInfo.user.userRole;
-        $window.sessionStorage["userInfo"] = JSON.stringify(userInfo);
+      this.sessionID = 0;
+      this.userId = 0;
+      this.userRole = 0;
+      this.createUserInfo = function (sessionID, userId, userRole) {
+        this.sessionID = sessionID;
+        this.userId = userId;
+        this.userRole = userRole;
+        $window.sessionStorage["userInfo"] = JSON.stringify({ sessionID: this.sessionID, userID: this.user, userRole: this.userRole });
       };
       this.getStorageUerInfo = function () {
         var userInfo = JSON.parse($window.sessionStorage["userInfo"]);
@@ -63,32 +66,12 @@
     })
     .factory('authService', function ($q, $http, sessionService) {
       var authService = {};
-      var userInfo = {
-         user: { 
-           userID: '', 
-           userRole: '' 
-          }, 
-         sessionID:'' 
-        };
-
-      // authService.logIn = function (credentials) {
-      //   var deferred = $q.defer();
-      //   $http.post('/WeBusiness/api/login', credentials).then(function (res) {
-      //     userInfo.userID = res.data.UserName;
-      //     userInfo.userRole = res.data.UserTypeID;
-      //     userInfo.sessionID = 1;
-      //     sessionService.createUserInfo(userInfo);
-      //     deferred.resolve(userInfo.user);
-      //   }, function (error) {
-      //     deferred.reject(error);
-      //   });
-        authService.logIn = function (credentials) {
+      authService.logIn = function (credentials) {
         return $http.post('/WeBusiness/api/login', credentials).then(function (res) {
-          userInfo.user.userID = res.data.UserName;
-          userInfo.user.userRole = res.data.UserTypeID;
-          userInfo.sessionID = 1;
-          sessionService.createUserInfo(userInfo);
-          return userInfo.user;
+          sessionService.createUserInfo(0, res.data.data[0].UserName, res.data.data[0].UserTypeID);
+          return {userID:res.data.data[0].UserName, userRole:res.data.data[0].UserTypeID};
+        }, function (error) {
+          return error;
         });
       };
 
@@ -142,7 +125,7 @@
     })
     .config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
       $routeProvider.when('/', {
-        controller: 'loginController',
+        controller: 'applicationController',
         controllerAs: 'vm',
         templateUrl: 'views/wbHome.html'
       });
@@ -159,8 +142,8 @@
     }])
     .run(function (sessionService, $cookieStore) {
 
-      var userInfo = $cookieStore.get('userInfo');
-      if (!userInfo) {
+      var currentUser = $cookieStore.get('username');
+      if (!currentUser) {
         sessionService.destroy();
         return;
       }

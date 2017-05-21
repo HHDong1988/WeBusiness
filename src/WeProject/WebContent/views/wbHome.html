@@ -1,5 +1,9 @@
 <div>
-  <p>
-    This is home page
-  </p>
+  <div data-ng-if="vm.currentUser">Welcome, {{ currentUser.userID }}</div>
+  <div data-ng-if="vm.isAuthorized(userRoles.admin)">You're admin.</div>
+  <div data-ng-switch data-on="vm.currentUser.userRole">
+    <div data-ng-switch-when="userRoles.admin">You're admin.</div>
+    <div data-ng-switch-when="userRoles.editor">You're editor.</div>
+    <div data-ng-switch-default>You're something else.</div>
+  </div>
 </div>
