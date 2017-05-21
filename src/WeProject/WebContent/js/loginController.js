@@ -8,7 +8,8 @@
     vm.language = new LanguageUtility();
     vm.tittle = vm.language.LOGIN;
     vm.credential = { userName: 'bobby', passWord: '123456' };
-    vm.isUserAuth = authService.isAuthenticated;
+    //vm.isUserAuth = authService.isAuthenticated;
+    vm.isUserAuth = false;
     vm.currentUser = { userID: '', userRole: '' };
 
 
