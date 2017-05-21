@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" 
+xmlns="http://java.sun.com/xml/ns/j2ee" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  <servlet>
+    <servlet-name>Hello1</servlet-name>
+    <servlet-class>Hello1</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>LogInSystem</servlet-name>
+    <servlet-class>LogInSystem</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Hello1</servlet-name>
+    <url-pattern>/Hello1</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>LogInSystem</servlet-name>
+    <url-pattern>/LogInSystem</url-pattern>
+  </servlet-mapping>
+</web-app>
