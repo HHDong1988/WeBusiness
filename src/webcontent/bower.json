@@ -9,6 +9,7 @@
     "jquery": "2.2.0",
     "angular": "1.6.4",
     "angular-route": "1.6.4",
+    "angular-cookies": "1.6.4",
     "Font-Awesome": "latest",
     "bootstrap-offcanvas": "^2.4.0"
   },

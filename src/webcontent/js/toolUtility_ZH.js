@@ -1,3 +1,4 @@
 function LanguageUtility() {
-  this.LOGIN = '��¼';
+  this.LOGIN = '登录';
+  this.LOGO = '微商';
 }
