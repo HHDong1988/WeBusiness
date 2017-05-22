@@ -67,7 +67,7 @@
     .factory('authService', function ($q, $http, sessionService) {
       var authService = {};
       authService.logIn = function (credentials) {
-        return $http.post('/WeBusiness/api/login', credentials).then(function (res) {
+        return $http.post('/api/login', credentials).then(function (res) {
           sessionService.createUserInfo(0, res.data.data[0].UserName, res.data.data[0].UserTypeID);
           return {userID:res.data.data[0].UserName, userRole:res.data.data[0].UserTypeID};
         }, function (error) {
@@ -140,15 +140,16 @@
         }
       ]);
     }])
-    .run(function (sessionService, $cookieStore) {
+    .run(function (sessionService, $cookieStore, $cookies) {
 
-      var currentUser = $cookieStore.get('username');
+      var currentUser = $cookies.get('username');
       if (!currentUser) {
         sessionService.destroy();
         return;
       }
 
-      sessionService.createUserInfo(userInfo);
+      var userRole = $cookies.get('userrole')
+      sessionService.createUserInfo(0, currentUser, userRole);
     });
 
 

@@ -88,4 +88,12 @@ public class HttpUtil {
 			return false;
 		}
 	}
+	
+	public static Cookie GetCookie(String name, String value, int expireTime)
+	{
+		Cookie cookie = new Cookie( name, value);
+		cookie.setPath("/");
+		cookie.setMaxAge(expireTime);	
+		return cookie;
+	}
 }

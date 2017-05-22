@@ -79,9 +79,9 @@ public class LogInSystem extends HttpServlet {
 			endDate = new Date();
 			if (array.length()>0) {
 				jObject = HttpUtil.getResponseJson(true, array, endDate.getTime() - beginDate.getTime(), null,0,1,-1);
-				resp.addCookie(new Cookie("username", userName));
+				resp.addCookie(HttpUtil.GetCookie("username", userName, 600));
 				String tokenstr =  MD5Util.MD5(userName).trim();
-				resp.addCookie(new Cookie("token",tokenstr));
+				resp.addCookie(HttpUtil.GetCookie("token", tokenstr, 600));
 				
 				HttpSession session = req.getSession(true);
 				session.setAttribute(userName, tokenstr);
@@ -101,5 +101,5 @@ public class LogInSystem extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-
+	
 }
