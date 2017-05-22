@@ -31,7 +31,6 @@
             </button>
             <div class="brand">
               <a class="navbar-brand" href="#"><span>{{headerVm.logo}}</span></a>
-              <a class="pull-right text-center" data-toggle="offcanvas" id="toggleBtn"><i class="fa fa-chevron-left"></i></a>
             </div>
           </div>
 
@@ -109,16 +108,25 @@
         </div>
       </nav>
     </header>
-
-    <div>
-      <div ng-view></div>
-    </div>
-
-    <footer>
-      <div class="pull-right">
+    <div class="container-fluid" ng-controller="applicationController">
+      <div class="row">
+        <div class="col-md-2">
+          <ul class="nav nav-pills nav-left nav-stacked">
+            <li class="active"><a href="#">用户管理</a></li>
+            <li><a href="#">修改资料</a></li>
+            <li><a href="#">数据统计</a></li>
+          </ul>
+        </div>
+        <div class="col-md-9" ng-view></div>
       </div>
-      <strong>Copyright &copy; 2017 <a href="#">微商</a>.</strong> All rights reserved.
-    </footer>
+      <div class="row">
+        <footer class="col-md-12">
+          <div class="pull-right">
+          </div>
+          <strong>Copyright &copy; 2017 <a href="#">微商</a>.</strong> All rights reserved.
+        </footer>
+      </div>
+    </div>
   </div>
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/angular/angular.js"></script>

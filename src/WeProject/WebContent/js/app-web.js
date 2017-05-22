@@ -12,13 +12,13 @@
       notAuthorized: 'auth-not-authorized'
     })
     .constant('USER_ROLES', {
-      superAdmin: 'superAdmin',
-      shopAdmin: 'shopAdmin',
-      financeAdmin: 'financeAdmin',
-      storageAdmin: 'storageAdmin',
-      shopManager: 'shopManager',
-      distributerL1: 'distributerL1',
-      distributerL2: 'distributerL2'
+      admin: '1',
+      assistant: '2',
+      accountant: '3',
+      storeKeeper: '4',
+      primaryAgency: '5',
+      secondaryAgency: '6',
+      superAdmin: '7'
     })
     .factory('authInterceptor', function ($rootScope, $q,
       AUTH_EVENTS) {
@@ -148,7 +148,7 @@
         return;
       }
 
-      var userRole = $cookies.get('userrole')
+      var userRole = $cookies.get('usertypeid')
       sessionService.createUserInfo(0, currentUser, userRole);
     });
 
