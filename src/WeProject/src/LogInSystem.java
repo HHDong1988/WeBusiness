@@ -79,6 +79,9 @@ public class LogInSystem extends HttpServlet {
 			endDate = new Date();
 			if (array.length()>0) {
 				jObject = HttpUtil.getResponseJson(true, array, endDate.getTime() - beginDate.getTime(), null,0,1,-1);
+				String usertypeid = jObject.getString("UserTypeId");
+				jObject.remove("Password");
+				resp.addCookie(HttpUtil.GetCookie("UserTypeId", usertypeid, 600));
 				resp.addCookie(HttpUtil.GetCookie("username", userName, 600));
 				String tokenstr =  MD5Util.MD5(userName).trim();
 				resp.addCookie(HttpUtil.GetCookie("token", tokenstr, 600));
@@ -96,10 +99,10 @@ public class LogInSystem extends HttpServlet {
 			
 			writer.close();
 			conn.close();
-		} catch (SQLException e) {
+		} catch (SQLException | JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 }
