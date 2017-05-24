@@ -9,7 +9,8 @@
       logoutFailed: 'auth-logout-failed',
       sessionTimeout: 'auth-session-timeout',
       notAuthenticated: 'auth-not-authenticated',
-      notAuthorized: 'auth-not-authorized'
+      notAuthorized: 'auth-not-authorized',
+      gotCookie:'gotCookie'
     })
     .constant('USER_ROLES', {
       admin: '1',
@@ -125,9 +126,15 @@
     })
     .config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
       $routeProvider.when('/', {
-        controller: 'applicationController',
+        controller: 'homeController',
         controllerAs: 'vm',
         templateUrl: 'views/wbHome.html'
+      });
+
+      $routeProvider.when('/usermanagment', {
+        controller: 'usermanageController',
+        controllerAs: 'vm',
+        templateUrl: 'views/wbUserMange.html'
       });
 
       $routeProvider.otherwise({ redirectTo: "/" });
@@ -140,7 +147,7 @@
         }
       ]);
     }])
-    .run(function (sessionService, $cookieStore, $cookies) {
+    .run(function (sessionService,AUTH_EVENTS,$rootScope, $cookieStore, $cookies) {
 
       var currentUser = $cookies.get('username');
       if (!currentUser) {
@@ -148,8 +155,10 @@
         return;
       }
 
-      var userRole = $cookies.get('usertypeid')
-      sessionService.createUserInfo(0, currentUser, userRole);
+      var currentUserRole = $cookies.get('usertypeid')
+      sessionService.createUserInfo(0, currentUser, currentUserRole);
+
+      $rootScope.$broadcast(AUTH_EVENTS.loginSuccess,{userID:currentUser, userRole:currentUserRole});
     });
 
 
