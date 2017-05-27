@@ -12,6 +12,11 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
     <servlet-name>LogInSystem</servlet-name>
     <servlet-class>LogInSystem</servlet-class>
   </servlet>
+  
+   <servlet>
+    <servlet-name>LogoffSystem</servlet-name>
+    <servlet-class>LogoffSystem</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>Hello1</servlet-name>
@@ -21,5 +26,10 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
   <servlet-mapping>
     <servlet-name>LogInSystem</servlet-name>
     <url-pattern>/api/login</url-pattern>
+  </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>LogoffSystem</servlet-name>
+    <url-pattern>/api/logoff</url-pattern>
   </servlet-mapping>
 </web-app>
