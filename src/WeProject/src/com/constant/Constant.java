@@ -3,7 +3,8 @@ package com.constant;
 //import org.hibernate.sql.Update;
 
 public final class Constant {
-	public static final String SQL_SELECT_USER = "SELECT * FROM sys_conf_userinfo "
+	public static final String SQL_SELECT_USER = "SELECT ID, UserName, UserTypeID, CreateTime, LastLoginTime"
+			+ " FROM sys_conf_userinfo "
 			+ " WHERE UserName = ? AND Password = ? ";
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
