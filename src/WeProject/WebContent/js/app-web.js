@@ -10,7 +10,7 @@
       sessionTimeout: 'auth-session-timeout',
       notAuthenticated: 'auth-not-authenticated',
       notAuthorized: 'auth-not-authorized',
-      gotCookie:'gotCookie'
+      gotCookie: 'gotCookie'
     })
     .constant('USER_ROLES', {
       admin: '1',
@@ -70,20 +70,27 @@
       authService.logIn = function (credentials) {
         return $http.post('/api/login', credentials).then(function (res) {
           sessionService.createUserInfo(0, res.data.data[0].UserName, res.data.data[0].UserTypeID);
-          return {userID:res.data.data[0].UserName, userRole:res.data.data[0].UserTypeID};
+          return { userID: res.data.data[0].UserName, userRole: res.data.data[0].UserTypeID };
         }, function (error) {
           return error;
         });
       };
 
-      authService.logOut = function () {
-        var deferred = $q.defer();
-        $http.delete('/api/login', credentials).then(function (res) {
-          userInfo = null;
+      authService.logOff = function () {
+        return $http.post('/api/logoff').then(function (res) {
           sessionService.destroy();
-          deferred.resolve(res);
+          return { res };
         }, function (error) {
-          deferred.reject(error);
+          return error;
+        });
+      }
+
+      authService.getUserInfo = function () {
+        return $http.post('/api/', credentials).then(function (res) {
+          sessionService.createUserInfo(0, res.data.data[0].UserName, res.data.data[0].UserTypeID);
+          return { userID: res.data.data[0].UserName, userRole: res.data.data[0].UserTypeID };
+        }, function (error) {
+          return error;
         });
       }
 
@@ -147,18 +154,22 @@
         }
       ]);
     }])
-    .run(function (sessionService,AUTH_EVENTS,$rootScope, $cookieStore, $cookies) {
+    .run(function (sessionService, AUTH_EVENTS, $rootScope, $cookieStore, $cookies) {
 
       var currentUser = $cookies.get('username');
       if (!currentUser) {
         sessionService.destroy();
         return;
       }
+      
+      
+
+
 
       var currentUserRole = $cookies.get('usertypeid')
       sessionService.createUserInfo(0, currentUser, currentUserRole);
 
-      $rootScope.$broadcast(AUTH_EVENTS.loginSuccess,{userID:currentUser, userRole:currentUserRole});
+      $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, { userID: currentUser, userRole: currentUserRole });
     });
 
 

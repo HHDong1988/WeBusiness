@@ -1,2 +1,72 @@
 2017.5.21
 Bobby, Spencer: First integration to test the login function.
+
+2017.5.28
+
+Ò». menu interface
+	1. Interface: 
+	HttpGet,   /api/menu
+	2. Data:
+	Jason:   {"menu":[
+		"item1",
+		"item2",
+		.
+		.
+		.
+		]}
+¶þ. User management.
+	A. Add user
+	1. Interface:
+	HttpPost, /api/users
+	2. Data:
+	Jasaon: {"userName": ''", 
+	"password":"", 
+	"userType":"",
+	"telephone":"",
+	"realName":"",
+	"address":""}
+	B. Update User
+	1. Interface:
+	HttpPut, /api/users
+	2. Data:
+	Jasaon: {"userName": ''", 
+	"password":"", 
+	"userType":"",
+	"telephone":"",
+	"realName":"",
+	"address":""}
+  C. Delete User
+	1. Interface:
+	httpDelete, /api/users
+	2. Data:
+	Jason: {"userName":""}
+	D. Get All User:
+	1. Interface:
+	HttpGet, /api/users
+	2. Data
+	Jason:{"page":"",
+	¡°pageSize":"",
+	}
+	
+	3. Response:
+	Jasaon: {"userName": ''", 
+	"password":"", 
+	"userType":"",
+	"telephone":"",
+	"realName":"",
+	"address":"",
+	"createTime":"",
+	"lastLoginTime":""}
+
+Èý. Storage Management
+	A. Get All Products
+	1. Interface
+	HttpGet, /api/products
+	2. Data:
+	Jason{"page":"",
+	"pageSize":""}
+	
+	
+
+	
+	

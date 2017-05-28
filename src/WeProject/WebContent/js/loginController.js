@@ -23,8 +23,8 @@
       });
     };
 
-    vm.logOut = function () {
-      authService.logOut().then(function (res) {
+    vm.logOff = function () {
+      authService.logOff().then(function (res) {
         vm.currentUser = { userID: '', userRole: '' };
         $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
       }, function (error) {
