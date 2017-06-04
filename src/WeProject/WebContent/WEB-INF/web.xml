@@ -8,28 +8,40 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
     <servlet-class>Hello1</servlet-class>
   </servlet>
   
+  <servlet-mapping>
+    <servlet-name>Hello1</servlet-name>
+    <url-pattern>/api/hello</url-pattern>
+  </servlet-mapping>
+  
   <servlet>
     <servlet-name>LogInSystem</servlet-name>
     <servlet-class>LogInSystem</servlet-class>
   </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>LogInSystem</servlet-name>
+    <url-pattern>/api/login</url-pattern>
+  </servlet-mapping>  
+  
   
    <servlet>
     <servlet-name>LogoffSystem</servlet-name>
     <servlet-class>LogoffSystem</servlet-class>
   </servlet>
 
-  <servlet-mapping>
-    <servlet-name>Hello1</servlet-name>
-    <url-pattern>/api/hello</url-pattern>
-  </servlet-mapping>
-  
-  <servlet-mapping>
-    <servlet-name>LogInSystem</servlet-name>
-    <url-pattern>/api/login</url-pattern>
-  </servlet-mapping>
   
    <servlet-mapping>
     <servlet-name>LogoffSystem</servlet-name>
     <url-pattern>/api/logoff</url-pattern>
+  </servlet-mapping>
+  
+  
+  <servlet>
+    <servlet-name>Menu</servlet-name>
+    <servlet-class>servlet.accounts.Menu</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Menu</servlet-name>
+    <url-pattern>/api/menu</url-pattern>
   </servlet-mapping>
 </web-app>
