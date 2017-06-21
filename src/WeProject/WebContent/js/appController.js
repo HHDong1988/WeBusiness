@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('loginController', ['$rootScope','$scope','authService','USER_ROLES', 'AUTH_EVENTS', loginController]);
+  angular.module('app-web').controller('appController', ['$rootScope','$scope','authService', 'menuService','USER_ROLES', 'AUTH_EVENTS', appController]);
 
-  function loginController($rootScope, $scope,authService,USER_ROLES, AUTH_EVENTS) {
+  function appController($rootScope, $scope,authService,menuService, USER_ROLES, AUTH_EVENTS) {
     var vm = this;
     vm.language = new LanguageUtility();
     vm.tittle = vm.language.LOGIN;
@@ -13,6 +13,10 @@
 
     vm.currentUser = { userID: '', userRole: '' };
     vm.userRoles = USER_ROLES;
+
+    vm.menus = [{value: vm.language.USER_MANAGEMENT, href: '#!/userManagment'},
+                {value: vm.language.STORAGE_MANAGEMENT, href: '#!/storageManagement'},
+                {value: vm.language.PRODUCTS_MANAGEMENT, href: '#!/productsManagement'}];
 
     vm.login = function () {
       authService.logIn(vm.credential).then(function (user) {

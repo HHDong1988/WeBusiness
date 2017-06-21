@@ -8,4 +8,7 @@ function LanguageUtility() {
   this.USER_ROLE_AGENCY_PRIMARY = '一级代理';
   this.USER_ROLE_AGENCY_SECONDAY = '二级代理';
   this.USER_ROLE_SUPER_ADMIN = '超级管理员';
+  this.USER_MANAGEMENT = '用户管理';
+  this.STORAGE_MANAGEMENT = '库存管理';
+  this.PRODUCTS_MANAGEMENT = '商品管理';
 }

@@ -13,12 +13,12 @@
   <link rel="stylesheet" href="css/site.css" />
 </head>
 
-<body data-ng-app="app-web" data-ng-controller="loginController as loginVm">
-  <div data-ng-cloak ng-if="!loginVm.isUserAuth()">
-    <wb-login user-data="loginVm.credential" login-func="loginVm.login()"></wb-login>
+<body data-ng-app="app-web" data-ng-controller="appController as appVm">
+  <div data-ng-cloak ng-if="!appVm.isUserAuth()">
+    <wb-login user-data="appVm.credential" login-func="appVm.login()"></wb-login>
   </div>
 
-  <div data-ng-if="loginVm.isUserAuth()">
+  <div data-ng-if="appVm.isUserAuth()">
     <header data-ng-controller="headerController as headerVm">
       <nav class="navbar navbar-inverse" role="navigation">
         <div class="container-fluid">
@@ -40,7 +40,7 @@
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="#">Action</a></li>
+                  <li><a href="#/userManage">Action</a></li>
                   <li><a href="#">Another action</a></li>
                   <li><a href="#">Something else here</a></li>
                   <li role="separator" class="divider"></li>
@@ -73,13 +73,13 @@
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <img src="img/user2-160x160.jpg" class="userImg" alt="User Image">
-                  <span>{{loginVm.currentUser.userID}}</span>
+                  <span>{{appVm.currentUser.userID}}</span>
                 </a>
                 <ul class="dropdown-menu">
                   <li>
                     <img src="img/user2-160x160.jpg" class="img-circle" alt="User Image">
                     <p>
-                      {{loginVm.currentUser.userID}} - {{loginVm.currentUser.userRole}}
+                      {{appVm.currentUser.userID}} - {{appVm.currentUser.userRole}}
                       <small>2017年加入</small>
                     </p>
                   </li>
@@ -98,7 +98,7 @@
                   </li>
                   <li class="">
                     <div class="pull-right">
-                      <a href="#" class="btn btn-default btn-flat" ng-click="loginVm.logOff()">登出</a>
+                      <a href="#" class="btn btn-default btn-flat" ng-click="appVm.logOff()">登出</a>
                     </div>
                   </li>
                 </ul>
@@ -112,13 +112,11 @@
       <div class="row">
         <div class="col-md-2">
           <div>
-            <p>用 户 名:{{loginVm.currentUser.userID}}</p>
-            <p>用户类型:{{loginVm.currentUser.userRoles}}</p>
+            <p>用 户 名:{{appVm.currentUser.userID}}</p>
+            <p>用户类型:{{appVm.currentUser.userRoles}}</p>
           </div>
-          <ul class="nav nav-pills nav-left nav-stacked">
-            <li class="active"><a href="#">用户管理</a></li>
-            <li><a href="#">修改资料</a></li>
-            <li><a href="#">数据统计</a></li>
+          <ul class="nav nav-pills nav-left nav-stacked" >
+            <li ng-repeat="item in appVm.menus"><a ng-href="{{item.href}}">{{item.value}}</a></li>
           </ul>
         </div>
 
@@ -143,9 +141,10 @@
 
   <script src="js/toolUtility_ZH.js"></script>
   <script src="js/app-web.js"></script>
-  <script src="js/loginController.js"></script>
+  <script src="js/appController.js"></script>
   <script src="js/homeController.js"></script>
-  <script src="js/usermanageController.js"></script>
+  <script src="js/userManageController.js"></script>
+  <script src="js/storageManageController.js"></script>
   <script src="js/headerController.js"></script>
   <script src="js/site.js"></script>
 </body>

@@ -65,6 +65,15 @@
       };
       return this;
     })
+    .service('menuService', function ($http) {
+      this.getMenu = function () {
+        return $http.get('/api/menu').then(function (res) {
+          return res.data;
+        }, function (error) {
+          return error;
+        });
+      };
+    })
     .factory('authService', function ($q, $http, sessionService) {
       var authService = {};
       authService.logIn = function (credentials) {
@@ -92,20 +101,6 @@
         }, function (error) {
           return error;
         });
-      }
-
-      authService.checkToken = function (token) {
-        var deferred = $q.defer();
-        $http.get('/api/login', token).then(function (res) {
-          sessionService.createUserInfo(res.data.id, res.data.user.id,
-            res.data.user.role);
-          userInfo = res;
-          deferred.resolve(userInfo);
-        }, function (error) {
-          deferred.reject(error);
-        });
-
-        return deferred.promiss;
       }
 
       authService.isAuthenticated = function () {
@@ -138,10 +133,16 @@
         templateUrl: 'views/wbHome.html'
       });
 
-      $routeProvider.when('/usermanagment', {
-        controller: 'usermanageController',
+      $routeProvider.when('/userManagement', {
+        controller: 'userManageController',
         controllerAs: 'vm',
-        templateUrl: 'views/wbUserMange.html'
+        templateUrl: 'views/wbUserMangement.html'
+      });
+
+      $routeProvider.when('/storageManagement', {
+        controller: 'storageManageController',
+        controllerAs: 'vm',
+        templateUrl: 'views/wbStorageManagement.html'
       });
 
       $routeProvider.otherwise({ redirectTo: "/" });
@@ -154,17 +155,19 @@
         }
       ]);
     }])
-    .run(function (sessionService, AUTH_EVENTS, $rootScope, $cookieStore, $cookies) {
+    .run(function (sessionService, menuService, AUTH_EVENTS, $rootScope, $cookieStore, $cookies) {
 
       var currentUser = $cookies.get('username');
       if (!currentUser) {
         sessionService.destroy();
         return;
       }
-      
-      
 
-
+      menuService.getMenu().then(function (res) {
+        menuService.menus = res;
+      }, function (error) {
+        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+      });
 
       var currentUserRole = $cookies.get('usertypeid')
       sessionService.createUserInfo(0, currentUser, currentUserRole);
