@@ -6,11 +6,27 @@ public final class Constant {
 	public static final String SQL_SELECT_USER = "SELECT ID, UserName, UserTypeID, CreateTime, LastLoginTime"
 			+ " FROM sys_conf_userinfo "
 			+ " WHERE UserName = ? AND Password = ? ";
+	public static final String SQL_CHECK_USERNAME = "SELECT ID, UserName"
+			+ " FROM sys_conf_userinfo "
+			+ " WHERE UserName = ? ";
 	public static final String SQL_SELECT_USERTypeId = "SELECT UserTypeID"
 			+ " FROM sys_conf_userinfo "
 			+ " WHERE UserName = ? ";
+	public static final String SQL_ADD_USER="INSERT INTO sys_conf_userinfo (UserName,UserTypeID,"
+			+ "Password, RealName, Tel, Address, CreateTime, LastLoginTime) VALUES (?,?,?,?,?,?,?,?)";
+	//UPDATE Person SET Address = 'Zhongshan 23', City = 'Nanjing'
+	public static final String SQL_UPDATE_USER="UPDATE sys_conf_userinfo "
+			+ "SET Password = ?, RealName = ?, Tel = ?, Address = ? "
+			+ "WHERE UserName = ?";
+	public static final String SQL_DELETE_USER="DELETE FROM sys_conf_userinfo "
+			+ "WHERE UserName = ?";
+	public static final String SQL_GET_USER="SELECT ID, UserName, UserTypeID, CreateTime, LastLoginTime"
+			+ " FROM sys_conf_userinfo "
+			+ " ORDER BY ID LIMIT ?,?";
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
+	public static final String USERNAME_ERROR = "User name is occupied.";
+	public static final String DATEBASE_ERROR = "SQL operation has something wrong.";
 	public static final String COMMON_ERROR = "Don't have the right permissions!";
 	public static final String ERROR_WRONGPARAM = "Parameter wrong!";
 	
@@ -58,7 +74,7 @@ public final class Constant {
 	public static final int Accountant_Id = 3;
 	public static final int Storekeeper_Id = 4;
 	
-	// Menu ÍêÉÆ/ĞŞ¸Ä×ÊÁÏ	µÇÂ¼/ÍË³ö	·ÖÏí	¹ºÂòÈ¨ÏŞ	²éÑ¯ÔËµ¥ºÅ	ÊÕÈ¡Ìá³É	ÊÕÈ¡´úÀíÌá³É	¼Ç×¡¹ºÂòÈËĞÅÏ¢
+	// Menu å®Œå–„/ä¿®æ”¹èµ„æ–™	ç™»å½•/é€€å‡º	åˆ†äº«	è´­ä¹°æƒé™	æŸ¥è¯¢è¿å•å·	æ”¶å–ææˆ	æ”¶å–ä»£ç†ææˆ	è®°ä½è´­ä¹°äººä¿¡æ¯
 	public static final String Loginlogout_Menu="LoginLogout";
 	public static final String EditUserinfo_Menu="EditUserMenu";
 	public static final String Share_Menu="Share";

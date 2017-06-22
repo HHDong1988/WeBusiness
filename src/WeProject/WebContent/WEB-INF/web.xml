@@ -44,4 +44,13 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
     <servlet-name>Menu</servlet-name>
     <url-pattern>/api/menu</url-pattern>
   </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>Account</servlet-name>
+    <servlet-class>servlet.accounts.Account</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Account</servlet-name>
+    <url-pattern>/api/account</url-pattern>
+  </servlet-mapping>
 </web-app>

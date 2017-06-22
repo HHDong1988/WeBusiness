@@ -50,8 +50,8 @@ public class LogInSystem extends HttpServlet {
 		String psd = null;
 		try {
 			object = new JSONObject(pJasonStr);
-			userName = (String) object.get("username");
-			psd = (String) object.get("password");
+			userName = ((String) object.get("username")).trim();
+			psd = ((String) object.get("password")).trim();
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
