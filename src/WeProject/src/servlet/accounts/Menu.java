@@ -83,7 +83,7 @@ public class Menu extends HttpServlet {
 			if (array.length()>0) {
 				JSONObject userobject = array.getJSONObject(0);
 				int usertypeid = userobject.getInt("UserTypeID");
-				List<String> menulist =RoleMenuMap.GetMenuList(usertypeid);
+				List<Integer> menulist =RoleMenuMap.GetMenuList(usertypeid);
 				JSONArray jsonarray = new JSONArray();
 				jsonarray.put(menulist);
 				jObject = HttpUtil.getResponseJson(true, jsonarray.getJSONArray(0), endDate.getTime() - beginDate.getTime(), null,0,1,-1);

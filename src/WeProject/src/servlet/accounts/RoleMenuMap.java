@@ -11,9 +11,9 @@ import org.json.JSONObject;
 
 public final class RoleMenuMap {
 	
-	private static HashMap<Integer, List<String>> rolemenumap;
+	private static HashMap<Integer, List<Integer>> rolemenumap;
 	
-	public static List<String> GetMenuList(Integer role){
+	public static List<Integer> GetMenuList(Integer role){
 		if(rolemenumap==null){
 			InitMap();
 		}
@@ -37,18 +37,18 @@ public final class RoleMenuMap {
 			店长（管理员）	完善/修改资料	登录/退出	数据统计					
 
 		 * */
-		List<String> primary_angency_menulist = Arrays.asList(Constant.EditUserinfo_Menu, Constant.Loginlogout_Menu,
-				Constant.Share_Menu,Constant.Buy_Menu,Constant.SearchTrackingNumber_Menu,Constant.Commission_Menu,
-				Constant.CommissionFromSecondary_Menu,Constant.RememberBuyer_Menu,Constant.Loginlogout_Menu);
-		List<String> secondary_angency_menulist = Arrays.asList(Constant.EditUserinfo_Menu, Constant.Loginlogout_Menu,
-				Constant.Share_Menu,Constant.Buy_Menu,Constant.SearchTrackingNumber_Menu,Constant.Commission_Menu,
-				Constant.RememberBuyer_Menu,Constant.Loginlogout_Menu);
-		List<String> super_admin_menulist = Arrays.asList(Constant.EditUserinfo_Menu, Constant.ManagerUser_Menu,Constant.Loginlogout_Menu);
-		List<String> assistant_menulist = Arrays.asList(Constant.EditUserinfo_Menu, Constant.TakeOffTakeOnShelves_Menu, Constant.Loginlogout_Menu);
-		List<String> accountant_menulist = Arrays.asList(Constant.EditUserinfo_Menu, Constant.Finance_Menu, Constant.Loginlogout_Menu);
-		List<String> storekeeper_menulist = Arrays.asList(Constant.EditUserinfo_Menu, Constant.Storage_Menu, Constant.Loginlogout_Menu);
-		List<String> admin_menulist = Arrays.asList(Constant.EditUserinfo_Menu, Constant.ShopOwner_Menu, Constant.Loginlogout_Menu);
-		rolemenumap = new HashMap<Integer, List<String>>();
+		/*
+		 * 
+		 * 
+		 * */
+		List<Integer> primary_angency_menulist = Arrays.asList();
+		List<Integer> secondary_angency_menulist = Arrays.asList();
+		List<Integer> super_admin_menulist = Arrays.asList(Constant.User_Management);
+		List<Integer> assistant_menulist = Arrays.asList();
+		List<Integer> accountant_menulist = Arrays.asList(Constant.Finance_Management);
+		List<Integer> storekeeper_menulist = Arrays.asList(Constant.Storage_Management);
+		List<Integer> admin_menulist = Arrays.asList(Constant.Product_Management);
+		rolemenumap = new HashMap<Integer, List<Integer>>();
 		rolemenumap.put(Constant.Primary_Agency_Id, primary_angency_menulist);
 		rolemenumap.put(Constant.Secondary_Agency_Id, secondary_angency_menulist);
 		rolemenumap.put(Constant.Super_Admin_Id, super_admin_menulist);
