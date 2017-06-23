@@ -89,10 +89,10 @@ public final class Constant {
 	public static final String Storage_Menu="Storage";
 	public static final String ShopOwner_Menu="ShopOwner";
 	
-	public static final int User_Management=1;
-	public static final int Product_Management=2;
-	public static final int Finance_Management=3;
-	public static final int Storage_Management=4;
+	public static final int User_Management=0;
+	public static final int Product_Management=1;
+	public static final int Finance_Management=2;
+	public static final int Storage_Management=3;
 	
 	
 //	select 

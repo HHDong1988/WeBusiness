@@ -51,6 +51,6 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
   </servlet>
   <servlet-mapping>
     <servlet-name>Account</servlet-name>
-    <url-pattern>/api/account</url-pattern>
+    <url-pattern>/api/users</url-pattern>
   </servlet-mapping>
 </web-app>
