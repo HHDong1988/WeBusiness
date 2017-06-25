@@ -98,6 +98,11 @@ public class LogInSystem extends HttpServlet {
 				writer.append(jObject.toString());
 			}
 			
+			ps = conn.prepareStatement(Constant.SQL_UPDATE_USERLOGINTIME);
+			java.sql.Timestamp sqlDate=new java.sql.Timestamp(beginDate.getTime());
+			ps.setString(2, userName);
+			ps.setObject(1, sqlDate);
+			ps.executeUpdate();
 			writer.close();
 			conn.close();
 		} catch (SQLException | JSONException e) {
