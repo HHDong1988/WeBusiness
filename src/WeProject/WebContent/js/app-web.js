@@ -21,6 +21,9 @@
       secondaryAgency: '6',
       superAdmin: '7'
     })
+    .constant('MENU_EVENT',{
+      menuList:'1'
+    })
     .constant('MENUS',{
       USER_MANAGEMENT:'1',
       PRODUCT_MANAGEMENT:'2',
@@ -84,7 +87,7 @@
     })
     .service('userService', function ($http) {
       this.getAllUsers = function (page, pageSize) {
-        var url = '/api/users'+'?page='+page+'&pageSize='+pageSize;
+        var url = '/api/users?page='+page+'&pageSize='+pageSize;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -108,7 +111,8 @@
         });
       };
       this.deleteUser = function (userData) {
-        return $http.delete('/api/users'+'/'+ userData.UserName).then(function (res) {
+        var url = '/api/users?UserName=' + userData.UserName;
+        return $http.delete(url).then(function (res) {
           return res;
         }, function (error) {
           return error;
@@ -196,7 +200,7 @@
         }
       ]);
     }])
-    .run(function (sessionService, menuService, AUTH_EVENTS, $rootScope, $cookieStore, $cookies) {
+    .run(function (sessionService, menuService, AUTH_EVENTS,MENU_EVENT, $rootScope, $cookieStore, $cookies) {
 
       var currentUser = $cookies.get('username');
       if (!currentUser) {
@@ -206,6 +210,7 @@
 
       menuService.getMenu().then(function (res) {
         menuService.menus = res.data.data;
+        $rootScope.$broadcast(MENU_EVENT.menuList, { menuList: menuService.menus});
       }, function (error) {
         $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
       });

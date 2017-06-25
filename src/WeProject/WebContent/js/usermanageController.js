@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('userManageController', ['$scope', 'userService', 'PAGE_SIZE_OPTIONS', userManageController])
+  angular.module('app-web').controller('userManageController', ['$scope', 'userService', 'PAGE_SIZE_OPTIONS',userManageController])
 
   function userManageController($scope, userService, PAGE_SIZE_OPTIONS) {
     var vm = this;
@@ -13,7 +13,6 @@
 
     vm.onEditUser = function (user) {
       vm.userModalTittle = vm.language.USER_EDIT;
-      user.UserTypeID = user.UserType.id;
       vm.editUser = user;
       $('#userModal').modal();
     }
@@ -32,10 +31,12 @@
           });
         }
       }
+      vm.refreshPage();
     }
 
     vm.saveUserChange = function () {
       if (vm.userModalTittle == vm.language.USER_NEW) {
+        vm.editUser.UserTypeID = vm.editUser.UserType.id;
         userService.addUser(vm.editUser).then(function (res) {
 
         }, function (error) {
@@ -43,6 +44,7 @@
         });
       }
       else if (vm.userModalTittle == vm.language.USER_EDIT) {
+        vm.editUser.UserTypeID = vm.editUser.UserType.id;
         userService.updateUser(vm.editUser).then(function (res) {
 
         }, function (error) {
@@ -50,14 +52,14 @@
         });
       }
       vm.editUser = {};
-      $('#userModal').modal('hide')
-
+      $('#userModal').modal('hide');
+      vm.refreshPage();
     }
 
     vm.createPages = function () {
       vm.pages = [];
-      var pageCount = vm.userCount / vm.pageSize;
-      for (var i = 1; i <= pageCount; i++) {
+      vm.totalPage =Math.ceil(vm.dataTotal / vm.pageSize);
+      for (var i = 1; i <= vm.totalPage; i++) {
         vm.pages.push(i);
       }
     }
@@ -81,7 +83,7 @@
     }
 
     vm.gotoPage = function (page) {
-      if (page < 1 || page > vm.totalPage) {
+      if (page < 1) {
         return;
       }
 
@@ -93,12 +95,17 @@
           var user = vm.users[i];
           user.bSelect = false;
           user.UserType = {name:vm.userTypes[user.UserTypeID - 1].name, id:user.UserTypeID};
+          vm.dataTotal = res.data.total;
+          vm.createPages();
         }
       }, function (error) {
 
       });
     }
 
+    vm.refreshPage = function () {
+      vm.gotoPage(vm.currentPage);
+    }
 
     vm.selectPage = function () {
       var startIndex = (vm.currentPage - 1) * vm.pageSize;
@@ -125,12 +132,13 @@
       vm.dataEnd = 5;
 
       vm.userModalTittle = vm.language.USER_NEW;
-      vm.editUser = { UserName: '', PassWord: '', UserType: {name:'', UserTypeID:''}, Tel: '', RealName: '', Address: '' };
+      vm.editUser = { UserName: '', Password: '', UserType: {name:'', UserTypeID:''}, UserTypeID:'', Tel: '', RealName: '', Address: '' };
 
       vm.bSelectCurrentPage = false;
 
 
-      vm.columnHeaders = [vm.language.USER_NAME,
+      vm.columnHeaders = [vm.language.USER_ID,
+      vm.language.USER_NAME,
       vm.language.USER_TYPE,
       vm.language.USER_TEL,
       vm.language.USER_REAL_NAME,
@@ -153,7 +161,6 @@
       // { UserName: 'Dennis', UserTypeID: 'administrator', telephone: '345678', realName: 'Dennis', address: 'Dalian', CreateTime: '2017-06-01', LastLoginTime: '2017-06-02', bSelect: false}];
 
       vm.gotoPage(vm.currentPage);
-      vm.createPages();
     };
 
     vm.init();

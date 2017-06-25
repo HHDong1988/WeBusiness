@@ -23,6 +23,7 @@ function LanguageUtility() {
   this.SAVE = '保存';
   this.CANCEL = '取消';
   this.CLOSE = '关闭';
+  this.USER_ID = '序号';
   this.USER_NAME = '用户名';
   this.USER_PASSWORD = '密码';
   this.USER_TYPE = '用户类型';

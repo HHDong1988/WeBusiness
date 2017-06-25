@@ -27,7 +27,7 @@
             <div class="form-group">
               <label for="password" class="col-sm-2 control-label">{{vm.language.USER_PASSWORD}}</label>
               <div class="col-sm-10">
-                <input type="password" class="form-control" id="password" ng-model="vm.editUser.PassWord" placeholder="{{vm.language.USER_PASSWORD}}">
+                <input type="password" class="form-control" id="password" ng-model="vm.editUser.Password" placeholder="{{vm.language.USER_PASSWORD}}">
               </div>
             </div>
             <div class="form-group">
@@ -123,6 +123,7 @@
             <td>
               <input type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="user.bSelect">
             </td>
+            <td>{{user.ID}}</td>
             <td>{{user.UserName}}</td>
             <td>{{user.UserType.name}}</td>
             <td>{{user.Tel}}</td>

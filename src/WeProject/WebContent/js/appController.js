@@ -1,10 +1,18 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('appController', ['$rootScope', '$scope', 'authService', 'menuService', 'USER_ROLES', 'AUTH_EVENTS', appController]);
+  angular.module('app-web').controller('appController', ['$rootScope', '$scope', 'authService', 'menuService', 'USER_ROLES', 'AUTH_EVENTS','MENU_EVENT', appController]);
 
-  function appController($rootScope, $scope, authService, menuService, USER_ROLES, AUTH_EVENTS) {
+  function appController($rootScope, $scope, authService, menuService, USER_ROLES, AUTH_EVENTS,MENU_EVENT) {
     var vm = this;
+
+    $scope.$on(MENU_EVENT.menuList, function (event, msg) {
+      vm.menus = [];
+      for (var i = 0; i < msg.menuList.length; i++) {
+        var element = msg.menuList[i];
+        vm.menus.push(vm.menuList[element]);       
+      }
+    });
 
     $scope.$on(AUTH_EVENTS.gotCookie, function (event, msg) {
       vm.currentUser = msg;
@@ -42,17 +50,10 @@
       vm.userRoles = USER_ROLES;
 
       vm.menus = [];
-      var menuList = [{ value: vm.language.USER_MANAGEMENT, href: '#!/userManagement' },
+      vm.menuList = [{ value: vm.language.USER_MANAGEMENT, href: '#!/userManagement' },
                       { value: vm.language.PRODUCTS_MANAGEMENT, href: '#!/productsManagement' },
                       { value: vm.language.FINANCE_MANAGEMENT, href: '#!/financeManagement' },
                       { value: vm.language.STORAGE_MANAGEMENT, href: '#!/storageManagement' }];
-
-      // vm.menus = menuList;
-
-      for (var index = 0; index < menuService.menus.length; index++) {
-        var element = menuService.menus[index];
-        vm.menus.push(menuList[element]);
-      }
     };
 
     vm.init();
