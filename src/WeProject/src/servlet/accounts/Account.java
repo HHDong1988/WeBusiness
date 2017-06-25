@@ -113,12 +113,12 @@ public class Account extends HttpServlet{
 	"realName":"",
 	"address":""}
 			 * */
-			userName = ((String) object.get("username")).trim();
-			psd = ((String) object.get("password")).trim();
-			tel = ((String) object.get("telephone")).trim();
-			realName = ((String) object.get("realName")).trim();
-			address = ((String) object.get("address")).trim();
-			usertypeId = object.getInt("userType");
+			userName = ((String) object.get("Username")).trim();
+			psd = ((String) object.get("Password")).trim();
+			tel = ((String) object.get("Tel")).trim();
+			realName = ((String) object.get("RealName")).trim();
+			address = ((String) object.get("Address")).trim();
+			usertypeId = object.getInt("UserTypeID");
 		
 			
 			ps = conn.prepareStatement(Constant.SQL_UPDATE_USER);
@@ -175,24 +175,27 @@ public class Account extends HttpServlet{
 		
 		try {
 			conn = DBController.getConnection();
+			ps = conn.prepareStatement(Constant.SQL_GET_ALLUSER);
+			JSONArray allUserArray = DBController.getJsonArray(ps, conn);
+			int total = allUserArray.length();
 
             int startPoint =iPagesize * (iPageNum-1);
 			//iPagesize * (iPageNum-1) +" ," + iPagesize
 			
-			ps = conn.prepareStatement(Constant.SQL_GET_USER);
+			ps = conn.prepareStatement(Constant.SQL_GET_USERBYPAGE);
 			
 			ps.setInt(1, startPoint);
 			ps.setInt(2, iPagesize);
 			JSONArray array = DBController.getJsonArray(ps, conn);
 
 			endDate = new Date();
-			if(array==null){
+			if(array==null||(array!=null&&array.length()==0)){
 				jObject = HttpUtil.getResponseJson(false, null,
-						endDate.getTime() - beginDate.getTime(), Constant.USERNAME_ERROR,0,1,-1);
+						endDate.getTime() - beginDate.getTime(), Constant.DATEBASEEMPTY_ERROR,0,1,-1);
 				writer.append(jObject.toString());
 			}else
 			{
-				jObject = HttpUtil.getResponseJson(true, array, endDate.getTime() - beginDate.getTime(), null,0,1,-1);
+				jObject = HttpUtil.getResponseJson(true, array, endDate.getTime() - beginDate.getTime(), null,total,iPageNum,iPagesize);
 				writer.append(jObject.toString());
 			}
 
@@ -240,7 +243,7 @@ public class Account extends HttpServlet{
 	"realName":"",
 	"address":""}
 			 * */
-			userName = ((String) object.get("username")).trim();
+			userName = ((String) object.get("UserName")).trim();
 			ps = conn.prepareStatement(Constant.SQL_DELETE_USER);;
 			ps.setString(1, userName);
 
@@ -304,12 +307,12 @@ public class Account extends HttpServlet{
 	"address":""}
 			 * */
 			conn = DBController.getConnection();
-			userName = ((String) object.get("username")).trim();
-			psd = ((String) object.get("password")).trim();
-			tel = ((String) object.get("telephone")).trim();
-			realName = ((String) object.get("realName")).trim();
-			address = ((String) object.get("address")).trim();
-			usertypeId = object.getInt("userType");
+			userName = ((String) object.get("Username")).trim();
+			psd = ((String) object.get("Password")).trim();
+			tel = ((String) object.get("Tel")).trim();
+			realName = ((String) object.get("RealName")).trim();
+			address = ((String) object.get("Address")).trim();
+			usertypeId = object.getInt("UserTypeID");
 		
 			ps = conn.prepareStatement(Constant.SQL_CHECK_USERNAME);
 			ps.setString(1, userName);

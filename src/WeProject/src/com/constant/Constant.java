@@ -20,15 +20,18 @@ public final class Constant {
 			+ "WHERE UserName = ?";
 	public static final String SQL_DELETE_USER="DELETE FROM sys_conf_userinfo "
 			+ "WHERE UserName = ?";
-	public static final String SQL_GET_USER="SELECT ID, UserName, UserTypeID, CreateTime, LastLoginTime, RealName, Tel, Address"
+	public static final String SQL_GET_USERBYPAGE="SELECT ID, UserName, UserTypeID, CreateTime, LastLoginTime, RealName, Tel, Address"
 			+ " FROM sys_conf_userinfo "
 			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_GET_ALLUSER="SELECT ID, UserName"
+			+ " FROM sys_conf_userinfo ";
 	public static final String SQL_UPDATE_USERLOGINTIME = "UPDATE sys_conf_userinfo "
 			+ "SET LastLoginTime = ? "
 			+ "WHERE UserName = ?";
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
 	public static final String USERNAME_ERROR = "User name is occupied.";
+	public static final String DATEBASEEMPTY_ERROR = "Database is empty.";
 	public static final String DATEBASE_ERROR = "SQL operation has something wrong.";
 	public static final String COMMON_ERROR = "Don't have the right permissions!";
 	public static final String ERROR_WRONGPARAM = "Parameter wrong!";
