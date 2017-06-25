@@ -23,6 +23,9 @@ public final class Constant {
 	public static final String SQL_GET_USER="SELECT ID, UserName, UserTypeID, CreateTime, LastLoginTime, RealName, Tel, Address"
 			+ " FROM sys_conf_userinfo "
 			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_UPDATE_USERLOGINTIME = "UPDATE sys_conf_userinfo "
+			+ "SET LastLoginTime = ? "
+			+ "WHERE UserName = ?";
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
 	public static final String USERNAME_ERROR = "User name is occupied.";

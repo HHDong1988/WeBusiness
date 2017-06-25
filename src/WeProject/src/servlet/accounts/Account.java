@@ -28,8 +28,10 @@ import com.util.MD5Util;
 
 public class Account extends HttpServlet{
 	private static final long serialVersionUID = 1L;
+	
+	private enum OperationType{ Insert, Delete, Update, Get}
 
-	private Boolean HasAdminAuthority(HttpServletRequest req,Connection conn){
+	private Boolean HasAdminAuthority(HttpServletRequest req,Connection conn, String targetUserName, OperationType operationType){
 		Cookie[] cookies = req.getCookies();
 		String username = null;
 		if (cookies != null) {
@@ -46,7 +48,20 @@ public class Account extends HttpServlet{
 				array.length();
 				JSONObject userobject = array.getJSONObject(0);
 				int usertypeid = userobject.getInt("UserTypeID");
-				if(usertypeid==1)return true;
+				
+				switch(operationType){
+				case Insert:
+				case Delete:
+				case Get:{
+					if(usertypeid==Constant.Super_Admin_Id)return true;
+					break;
+				}
+				case Update:{
+					if(usertypeid==Constant.Super_Admin_Id)return true;
+					if(username.equals(targetUserName))return true;
+					return false;
+				}
+				}
 			} catch (SQLException | JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
