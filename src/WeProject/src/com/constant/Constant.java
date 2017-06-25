@@ -20,7 +20,7 @@ public final class Constant {
 			+ "WHERE UserName = ?";
 	public static final String SQL_DELETE_USER="DELETE FROM sys_conf_userinfo "
 			+ "WHERE UserName = ?";
-	public static final String SQL_GET_USERBYPAGE="SELECT ID, UserName, UserTypeID, CreateTime, LastLoginTime, RealName, Tel, Address"
+	public static final String SQL_GET_USERBYPAGE="SELECT ID, Password, UserName, UserTypeID, CreateTime, LastLoginTime, RealName, Tel, Address"
 			+ " FROM sys_conf_userinfo "
 			+ " ORDER BY ID LIMIT ?,?";
 	public static final String SQL_GET_USERTOTALCOUNT="SELECT COUNT(ID) as total, UserName"

@@ -113,7 +113,7 @@ public class Account extends HttpServlet{
 	"realName":"",
 	"address":""}
 			 * */
-			userName = ((String) object.get("Username")).trim();
+			userName = ((String) object.get("UserName")).trim();
 			psd = ((String) object.get("Password")).trim();
 			tel = ((String) object.get("Tel")).trim();
 			realName = ((String) object.get("RealName")).trim();
