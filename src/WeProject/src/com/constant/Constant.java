@@ -23,7 +23,7 @@ public final class Constant {
 	public static final String SQL_GET_USERBYPAGE="SELECT ID, UserName, UserTypeID, CreateTime, LastLoginTime, RealName, Tel, Address"
 			+ " FROM sys_conf_userinfo "
 			+ " ORDER BY ID LIMIT ?,?";
-	public static final String SQL_GET_ALLUSER="SELECT ID, UserName"
+	public static final String SQL_GET_USERTOTALCOUNT="SELECT COUNT(ID) as total, UserName"
 			+ " FROM sys_conf_userinfo ";
 	public static final String SQL_UPDATE_USERLOGINTIME = "UPDATE sys_conf_userinfo "
 			+ "SET LastLoginTime = ? "

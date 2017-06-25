@@ -31,7 +31,7 @@ public class Account extends HttpServlet{
 	
 	private enum OperationType{ Insert, Delete, Update, Get}
 
-	private Boolean HasAdminAuthority(HttpServletRequest req,Connection conn, String targetUserName, OperationType operationType){
+	private Boolean HasAuthority(HttpServletRequest req,Connection conn, String targetUserName, OperationType operationType){
 		Cookie[] cookies = req.getCookies();
 		String username = null;
 		if (cookies != null) {
@@ -85,14 +85,14 @@ public class Account extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-		/*if(!HttpUtil.doBeforeProcessing(req)){
+		if(!HttpUtil.doBeforeProcessing(req)){
 			endDate = new Date();
 			jObject = HttpUtil.getResponseJson(false, null,
 					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
 			writer.append(jObject.toString());
 			writer.close();
 			return;
-		}*/
+		}
 		
 		String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
 		JSONObject object;
@@ -119,7 +119,16 @@ public class Account extends HttpServlet{
 			realName = ((String) object.get("RealName")).trim();
 			address = ((String) object.get("Address")).trim();
 			usertypeId = object.getInt("UserTypeID");
-		
+		    
+			if(!HasAuthority(req,conn,userName,OperationType.Update)){
+				endDate = new Date();
+				jObject = HttpUtil.getResponseJson(false, null,
+						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+				writer.append(jObject.toString());
+				writer.close();
+				conn.close();
+				return;
+			}
 			
 			ps = conn.prepareStatement(Constant.SQL_UPDATE_USER);
 			
@@ -149,6 +158,8 @@ public class Account extends HttpServlet{
 		}
 	}
 	
+	
+	//get
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -162,22 +173,42 @@ public class Account extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-		/*if(!HttpUtil.doBeforeProcessing(req)){
+		if(!HttpUtil.doBeforeProcessing(req)){
 			endDate = new Date();
 			jObject = HttpUtil.getResponseJson(false, null,
 					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
 			writer.append(jObject.toString());
 			writer.close();
 			return;
-		}*/
+		}
 		int iPageNum = Integer.parseInt(req.getParameter("page").trim());
 		int iPagesize = Integer.parseInt(req.getParameter("pageSize").trim());
-		
+		int total=0;
 		try {
 			conn = DBController.getConnection();
-			ps = conn.prepareStatement(Constant.SQL_GET_ALLUSER);
-			JSONArray allUserArray = DBController.getJsonArray(ps, conn);
-			int total = allUserArray.length();
+			if(!HasAuthority(req,conn,null,OperationType.Get)){
+				endDate = new Date();
+				jObject = HttpUtil.getResponseJson(false, null,
+						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+				writer.append(jObject.toString());
+				writer.close();
+				conn.close();
+				return;
+			}
+			
+			ps = conn.prepareStatement(Constant.SQL_GET_USERTOTALCOUNT);
+			JSONArray jArrTotalArray = null;
+			try {
+				jArrTotalArray = DBController.getJsonArray(ps, conn);
+				if(jArrTotalArray != null && jArrTotalArray.length() > 0){
+					total = jArrTotalArray.getJSONObject(0).getInt("total");
+				} else {
+					total = 0;
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
             int startPoint =iPagesize * (iPageNum-1);
 			//iPagesize * (iPageNum-1) +" ," + iPagesize
@@ -207,7 +238,7 @@ public class Account extends HttpServlet{
 		}
 	}
 	
-
+    //delete
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -219,14 +250,14 @@ public class Account extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-		/*if(!HttpUtil.doBeforeProcessing(req)){
+		if(!HttpUtil.doBeforeProcessing(req)){
 			endDate = new Date();
 			jObject = HttpUtil.getResponseJson(false, null,
 					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
 			writer.append(jObject.toString());
 			writer.close();
 			return;
-		}*/
+		}
 		
 		String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
 		JSONObject object;
@@ -244,6 +275,16 @@ public class Account extends HttpServlet{
 	"address":""}
 			 * */
 			userName = ((String) object.get("UserName")).trim();
+			
+			if(!HasAuthority(req,conn,userName,OperationType.Delete)){
+				endDate = new Date();
+				jObject = HttpUtil.getResponseJson(false, null,
+						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+				writer.append(jObject.toString());
+				writer.close();
+				conn.close();
+				return;
+			}
 			ps = conn.prepareStatement(Constant.SQL_DELETE_USER);;
 			ps.setString(1, userName);
 
@@ -279,14 +320,14 @@ public class Account extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-		/*if(!HttpUtil.doBeforeProcessing(req)){
+		if(!HttpUtil.doBeforeProcessing(req)){
 			endDate = new Date();
 			jObject = HttpUtil.getResponseJson(false, null,
 					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
 			writer.append(jObject.toString());
 			writer.close();
 			return;
-		}*/
+		}
 		
 		String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
 		JSONObject object;
@@ -307,12 +348,22 @@ public class Account extends HttpServlet{
 	"address":""}
 			 * */
 			conn = DBController.getConnection();
-			userName = ((String) object.get("Username")).trim();
+			userName = ((String) object.get("UserName")).trim();
 			psd = ((String) object.get("Password")).trim();
 			tel = ((String) object.get("Tel")).trim();
 			realName = ((String) object.get("RealName")).trim();
 			address = ((String) object.get("Address")).trim();
 			usertypeId = object.getInt("UserTypeID");
+			
+			if(!HasAuthority(req,conn,userName,OperationType.Insert)){
+				endDate = new Date();
+				jObject = HttpUtil.getResponseJson(false, null,
+						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+				writer.append(jObject.toString());
+				writer.close();
+				conn.close();
+				return;
+			}
 		
 			ps = conn.prepareStatement(Constant.SQL_CHECK_USERNAME);
 			ps.setString(1, userName);
