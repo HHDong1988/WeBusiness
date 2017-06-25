@@ -258,14 +258,10 @@ public class Account extends HttpServlet{
 			writer.close();
 			return;
 		}
-		
-		String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
-		JSONObject object;
 
 		String userName = null;
 		try {
 			conn = DBController.getConnection();
-			object = new JSONObject(pJasonStr);
 			/*
 			 * Jasaon: {"userName": ''", 
 	"password":"", 
@@ -274,7 +270,7 @@ public class Account extends HttpServlet{
 	"realName":"",
 	"address":""}
 			 * */
-			userName = ((String) object.get("UserName")).trim();
+			userName = req.getParameter("UserName").trim();
 			
 			if(!HasAuthority(req,conn,userName,OperationType.Delete)){
 				endDate = new Date();
@@ -302,7 +298,7 @@ public class Account extends HttpServlet{
 
 			writer.close();
 			conn.close();
-		} catch (SQLException |JSONException e) {
+		} catch (SQLException  e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
