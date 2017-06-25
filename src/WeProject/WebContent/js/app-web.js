@@ -21,6 +21,13 @@
       secondaryAgency: '6',
       superAdmin: '7'
     })
+    .constant('MENUS',{
+      USER_MANAGEMENT:'1',
+      PRODUCT_MANAGEMENT:'2',
+      FINANCE_MANAGEMENT:'3',
+      STORAGE_MANAGEMENT:'4'
+    })
+    .constant('PAGE_SIZE_OPTIONS',[10,20,50,100])
     .factory('authInterceptor', function ($rootScope, $q,
       AUTH_EVENTS) {
       return {
@@ -66,13 +73,47 @@
       return this;
     })
     .service('menuService', function ($http) {
+      this.menus = [];
       this.getMenu = function () {
         return $http.get('/api/menu').then(function (res) {
-          return res.data;
+          return res;
         }, function (error) {
           return error;
         });
       };
+    })
+    .service('userService', function ($http) {
+      this.getAllUsers = function (page, pageSize) {
+        var url = '/api/users'+'?page='+page+'&pageSize='+pageSize;
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      };
+
+      this.addUser = function (userData) {
+        return $http.post('/api/users', userData).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      };
+
+      this.updateUser = function (userData) {
+        return $http.put('/api/users', userData).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      };
+      this.deleteUser = function (userData) {
+        return $http.delete('/api/users'+'/'+ userData.UserName).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      }
     })
     .factory('authService', function ($q, $http, sessionService) {
       var authService = {};
@@ -136,7 +177,7 @@
       $routeProvider.when('/userManagement', {
         controller: 'userManageController',
         controllerAs: 'vm',
-        templateUrl: 'views/wbUserMangement.html'
+        templateUrl: 'views/wbUserManagement.html'
       });
 
       $routeProvider.when('/storageManagement', {
@@ -164,7 +205,7 @@
       }
 
       menuService.getMenu().then(function (res) {
-        menuService.menus = res;
+        menuService.menus = res.data.data;
       }, function (error) {
         $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
       });

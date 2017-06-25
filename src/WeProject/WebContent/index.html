@@ -8,8 +8,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
-  <link rel="stylesheet" href="bower_components/bootstrap-offcanvas/dist/css/bootstrap.offcanvas.css">
   <link rel="stylesheet" href="bower_components/Font-Awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="plugins/DataTables-1.10.15/media/css/jquery.dataTables.css">
+  <link rel="stylesheet" href="plugins/DataTables-1.10.15/media/css/dataTables.bootstrap.css">
+  <link rel="stylesheet" href="plugins/angular-datatables/plugins/bootstrap/datatables.bootstrap.min.css">
+  <link rel="stylesheet" href="plugins/angular-datatables/css/angular-datatables.css">
   <link rel="stylesheet" href="css/site.css" />
 </head>
 
@@ -36,23 +39,11 @@
 
           <div class="collapse navbar-collapse" id="header-nav-collapse">
             <ul class="nav navbar-nav">
-              <li><a href="#"></a></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#/userManage">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li role="separator" class="divider"></li>
-                  <li><a href="#">Separated link</a></li>
-                  <li role="separator" class="divider"></li>
-                  <li><a href="#">One more separated link</a></li>
-                </ul>
-              </li>
+              <li ng-repeat="item in appVm.menus"><a ng-href="{{item.href}}">{{item.value}}</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-bell-o"></i>
                   <span class="label label-warning">10</span>
                 </a>
@@ -71,7 +62,7 @@
                 </ul>
               </li>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown">
                   <img src="img/user2-160x160.jpg" class="userImg" alt="User Image">
                   <span>{{appVm.currentUser.userID}}</span>
                 </a>
@@ -110,18 +101,7 @@
     </header>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-2">
-          <div>
-            <p>用 户 名:{{appVm.currentUser.userID}}</p>
-            <p>用户类型:{{appVm.currentUser.userRoles}}</p>
-          </div>
-          <ul class="nav nav-pills nav-left nav-stacked" >
-            <li ng-repeat="item in appVm.menus"><a ng-href="{{item.href}}">{{item.value}}</a></li>
-          </ul>
-        </div>
-
-        <div class="col-md-9" ng-view></div>
-
+        <div class="col-md-12" ng-view></div>
       </div>
       <div class="row">
         <footer class="col-md-12">
@@ -133,11 +113,14 @@
     </div>
   </div>
   <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="plugins/DataTables-1.10.15/media/js/jquery.dataTables.js"></script>
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-cookies/angular-cookies.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
-
   <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="plugins/angular-datatables/js/angular-datatables.js"></script>
+  <script src="plugins/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.js"></script>
+  <script src="plugins/DataTables-1.10.15/media/js/dataTables.bootstrap.js"></script>
 
   <script src="js/toolUtility_ZH.js"></script>
   <script src="js/app-web.js"></script>

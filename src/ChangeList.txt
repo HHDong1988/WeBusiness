@@ -17,8 +17,10 @@ Bobby, Spencer: First integration to test the login function.
     notes by spencer: for Finance, Storage, Shop Owner and Assitant, the menu for them is very unique. So I doesn't list all of them. And use their type(Finace, Storage...) to instead. We can discuss later.
     I want to use Chinese, but it seems that git doesn't allow me to do this T_T 
 
+
+
 ¶þ. User management.
-	A. Add user
+A. Add user
 	1. Interface:
 	HttpPost, /api/users
 	2. Data:
@@ -28,7 +30,7 @@ Bobby, Spencer: First integration to test the login function.
 	"telephone":"",
 	"realName":"",
 	"address":""}
-	B. Update User
+B. Update User
 	1. Interface:
 	HttpPut, /api/users
 	2. Data:
@@ -60,6 +62,8 @@ Bobby, Spencer: First integration to test the login function.
 	"address":"",
 	"createTime":"",
 	"lastLoginTime":""}
+
+
 
 Èý. Storage Management
 	A. Get All Products
