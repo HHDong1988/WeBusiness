@@ -136,15 +136,10 @@
 
       vm.bSelectCurrentPage = false;
 
-
-      vm.columnHeaders = [vm.language.USER_ID,
-      vm.language.USER_NAME,
-      vm.language.USER_TYPE,
-      vm.language.USER_TEL,
-      vm.language.USER_REAL_NAME,
-      vm.language.USER_ADDRESS,
-      vm.language.USER_CREATE_TIME,
-      vm.language.USER_LAST_LOGIN_TIME];
+      vm.columnHeaders = [vm.language.STORAGE_ID,
+      vm.language.STORAGE_NAME,
+      vm.language.STORAGE_AMOUNT,
+      vm.language.STORAGE_SOLD_AMOUNT];
 
       vm.userTypes = [{ name: vm.language.USER_ROLE_ADMIN, id: 1 },
       { name: vm.language.USER_ROLE_ASSISTENT, id: 2 },

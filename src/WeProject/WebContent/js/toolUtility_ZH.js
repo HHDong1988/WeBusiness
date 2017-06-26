@@ -32,4 +32,8 @@ function LanguageUtility() {
   this.USER_ADDRESS = '地址';
   this.USER_CREATE_TIME = '创建时间';
   this.USER_LAST_LOGIN_TIME = '上次登陆时间';
+  this.STORAGE_ID = '序号';
+  this.STORAGE_NAME = '货物名称';
+  this.STORAGE_AMOUNT = '货物数量';
+  this.STORAGE_SOLD_AMOUNT = '销售数量';
 }

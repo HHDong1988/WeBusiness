@@ -25,20 +25,20 @@
         var user = vm.users[i];
         if (user.bSelect) {
           userService.deleteUser(user).then(function (res) {
-
+            vm.refreshPage();
           }, function (error) {
 
           });
         }
       }
-      vm.refreshPage();
+      
     }
 
     vm.saveUserChange = function () {
       if (vm.userModalTittle == vm.language.USER_NEW) {
         vm.editUser.UserTypeID = vm.editUser.UserType.id;
         userService.addUser(vm.editUser).then(function (res) {
-
+          vm.refreshPage();
         }, function (error) {
 
         });
@@ -46,14 +46,13 @@
       else if (vm.userModalTittle == vm.language.USER_EDIT) {
         vm.editUser.UserTypeID = vm.editUser.UserType.id;
         userService.updateUser(vm.editUser).then(function (res) {
-
+          vm.refreshPage();
         }, function (error) {
 
         });
       }
       vm.editUser = {};
       $('#userModal').modal('hide');
-      vm.refreshPage();
     }
 
     vm.createPages = function () {

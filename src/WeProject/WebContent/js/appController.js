@@ -6,13 +6,13 @@
   function appController($rootScope, $scope, authService, menuService, USER_ROLES, AUTH_EVENTS,MENU_EVENT) {
     var vm = this;
 
-    $scope.$on(MENU_EVENT.menuList, function (event, msg) {
-      vm.menus = [];
-      for (var i = 0; i < msg.menuList.length; i++) {
-        var element = msg.menuList[i];
-        vm.menus.push(vm.menuList[element]);       
-      }
-    });
+    // $scope.$on(MENU_EVENT.menuList, function (event, msg) {
+    //   vm.menus = [];
+    //   for (var i = 0; i < msg.menuList.length; i++) {
+    //     var element = msg.menuList[i];
+    //     vm.menus.push(vm.menuList[element]);       
+    //   }
+    // });
 
     $scope.$on(AUTH_EVENTS.gotCookie, function (event, msg) {
       vm.currentUser = msg;
@@ -54,6 +54,7 @@
                       { value: vm.language.PRODUCTS_MANAGEMENT, href: '#!/productsManagement' },
                       { value: vm.language.FINANCE_MANAGEMENT, href: '#!/financeManagement' },
                       { value: vm.language.STORAGE_MANAGEMENT, href: '#!/storageManagement' }];
+      vm.menus = vm.menuList;
     };
 
     vm.init();
