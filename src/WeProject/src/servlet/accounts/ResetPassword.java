@@ -32,35 +32,7 @@ public class ResetPassword extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Boolean HasAuthority(HttpServletRequest req,Connection conn, String targetUserName){
-		Cookie[] cookies = req.getCookies();
-		String username = null;
-		if (cookies != null) {
-			for (Cookie c : cookies) {
-				if (c.getName().equals("username")) {
-					username = c.getValue();
-				}
-			}
-			PreparedStatement ps = null;
-			try {
-				ps = conn.prepareStatement(Constant.SQL_SELECT_USERTypeId);
-				ps.setString(1, username);
-				JSONArray array = DBController.getJsonArray(ps, conn);
-				array.length();
-				JSONObject userobject = array.getJSONObject(0);
-				int usertypeid = userobject.getInt("UserTypeID");
-				if(usertypeid==Constant.Super_Admin_Id)return true;
-				return false;
-			} catch (SQLException | JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
-			}
-			
-				
-		}
-		return false;
-	}
+	
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -98,25 +70,16 @@ public class ResetPassword extends HttpServlet {
 		try {
 			conn = DBController.getConnection();
 			object = new JSONObject(pJasonStr);
-			/*
-			 * Jasaon: {"userName": ''", 
-	"password":"", 
-	"userType":"",
-	"telephone":"",
-	"realName":"",
-	"address":""}
-			 * */
-			userName = ((String) object.get("UserName")).trim();
+			
 			oldpsd = ((String) object.get("OldPassword")).trim();
 			newpsd =((String) object.get("NewPassword")).trim();
-			if(!HasAuthority(req,conn,userName)){
-				endDate = new Date();
-				jObject = HttpUtil.getResponseJson(false, null,
-						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-				writer.append(jObject.toString());
-				writer.close();
-				conn.close();
-				return;
+			Cookie[] cookies = req.getCookies();
+			if (cookies != null) {
+				for (Cookie c : cookies) {
+					if (c.getName().equals("username")) {
+						userName = c.getValue();
+					}
+				}
 			}
 			ps = conn.prepareStatement(Constant.SQL_SELECT_USER);
 			ps.setString(1, userName);
