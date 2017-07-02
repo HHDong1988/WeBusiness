@@ -25,7 +25,7 @@ public final class Constant {
 			+ " WHERE AliveUser=1"
 			+ " ORDER BY ID LIMIT ?,?";
 	public static final String SQL_RESET_PASSWORD="UPDATE sys_conf_userinfo "
-			+ "SET Password = ?, LastLoginTime = null "
+			+ "SET Password = ?"
 			+ "WHERE UserName = ?";
 			
 	public static final String SQL_GET_USERTOTALCOUNT="SELECT COUNT(ID) as total, UserName"
@@ -49,6 +49,7 @@ public final class Constant {
 	public static final String COMMON_ERROR = "Don't have the right permissions!";
 	public static final String ERROR_WRONGPARAM = "Parameter wrong!";
 	public static final String FORMAT_ERROR = "Format is not correct.";
+	public static final String PASSWORD_ERROR = "Password is not correct.";
 	
 	// public 
 	public static final String SQL_SELECT_USER_LIST = "SELECT ID, UserName FROM data_user";

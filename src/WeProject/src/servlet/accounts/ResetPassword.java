@@ -81,18 +81,19 @@ public class ResetPassword extends HttpServlet {
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-//		if(!HttpUtil.doBeforeProcessing(req)){
-//			endDate = new Date();
-//			jObject = HttpUtil.getResponseJson(false, null,
-//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//			writer.append(jObject.toString());
-//			writer.close();
-//			return;
-//		}
+		if(!HttpUtil.doBeforeProcessing(req)){
+			endDate = new Date();
+			jObject = HttpUtil.getResponseJson(false, null,
+					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+			writer.append(jObject.toString());
+			writer.close();
+			return;
+		}
 		
 		String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
 		JSONObject object;
-		String psd = null;
+		String oldpsd = null;
+		String newpsd = null;
 		String userName = null;
 		try {
 			conn = DBController.getConnection();
@@ -106,28 +107,40 @@ public class ResetPassword extends HttpServlet {
 	"address":""}
 			 * */
 			userName = ((String) object.get("UserName")).trim();
-			psd = ((String) object.get("Password")).trim();
-
-//			if(!HasAuthority(req,conn,userName)){
-//				endDate = new Date();
-//				jObject = HttpUtil.getResponseJson(false, null,
-//						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//				writer.append(jObject.toString());
-//				writer.close();
-//				conn.close();
-//				return;
-//			}
-			
+			oldpsd = ((String) object.get("OldPassword")).trim();
+			newpsd =((String) object.get("NewPassword")).trim();
+			if(!HasAuthority(req,conn,userName)){
+				endDate = new Date();
+				jObject = HttpUtil.getResponseJson(false, null,
+						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+				writer.append(jObject.toString());
+				writer.close();
+				conn.close();
+				return;
+			}
+			ps = conn.prepareStatement(Constant.SQL_SELECT_USER);
+			ps.setString(1, userName);
+			ps.setString(2, oldpsd);
+			//rs = ps.executeQuery();
+			JSONArray array = DBController.getJsonArray(ps, conn);
+			array.length();
+			endDate = new Date();
+			if (array.length()<=0||newpsd==null||newpsd.equals("")) {
+				jObject = HttpUtil.getResponseJson(false, null,
+						endDate.getTime() - beginDate.getTime(), Constant.PASSWORD_ERROR,0,1,-1);
+				writer.append(jObject.toString());
+				return;
+			}
 			ps = conn.prepareStatement(Constant.SQL_RESET_PASSWORD);
 			
-			ps.setString(1, psd);
+			ps.setString(1, newpsd);
 			ps.setString(2, userName);
 
 			int itemCount = ps.executeUpdate();
 			endDate = new Date();
 			if(itemCount<=0){
 				jObject = HttpUtil.getResponseJson(false, null,
-						endDate.getTime() - beginDate.getTime(), Constant.USERNAME_ERROR,0,1,-1);
+						endDate.getTime() - beginDate.getTime(), Constant.DATEBASE_ERROR,0,1,-1);
 				writer.append(jObject.toString());
 			}else
 			{
