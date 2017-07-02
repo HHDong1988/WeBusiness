@@ -180,12 +180,12 @@ public class Account extends HttpServlet{
 				return;
 			}
 			
-			Boolean result=DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", array, "ID");
+			Boolean result=DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", array, "UserName");
 
 			endDate = new Date();
 			if(!result){
 				jObject = HttpUtil.getResponseJson(false, null,
-						endDate.getTime() - beginDate.getTime(), Constant.USERNAME_ERROR,0,1,-1);
+						endDate.getTime() - beginDate.getTime(), Constant.DATEBASE_ERROR,0,1,-1);
 				writer.append(jObject.toString());
 			}else
 			{
