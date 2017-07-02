@@ -147,7 +147,6 @@ public class Account extends HttpServlet{
 		resp.setContentType("application/json; charset=utf-8");
 		resp.setCharacterEncoding("UTF-8");
 		Connection conn = null;
-		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
 		if(!HttpUtil.doBeforeProcessing(req)){
@@ -161,29 +160,15 @@ public class Account extends HttpServlet{
 		
 		String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
 		JSONObject object;
-		String psd = null;
-		int usertypeId ;
-		String tel=null;
-		String realName=null;
-		String address=null;
 		String userName = null;
 		try {
 			conn = DBController.getConnection();
 			object = new JSONObject(pJasonStr);
-			/*
-			 * Jasaon: {"userName": ''", 
-	"password":"", 
-	"userType":"",
-	"telephone":"",
-	"realName":"",
-	"address":""}
-			 * */
+			JSONArray array = new JSONArray();
+			array.put(object);
+			
 			userName = ((String) object.get("UserName")).trim();
-			psd = ((String) object.get("Password")).trim();
-			tel = ((String) object.get("Tel")).trim();
-			realName = ((String) object.get("RealName")).trim();
-			address = ((String) object.get("Address")).trim();
-			usertypeId = object.getInt("UserTypeID");
+			
 		    
 			if(!HasAuthority(req,conn,userName,OperationType.Update)){
 				endDate = new Date();
@@ -195,17 +180,10 @@ public class Account extends HttpServlet{
 				return;
 			}
 			
-			ps = conn.prepareStatement(Constant.SQL_UPDATE_USER);
-			
-			ps.setString(1, psd);
-			ps.setString(2, realName);
-			ps.setString(3, tel);
-			ps.setString(4, address);
-			ps.setString(5, userName);
+			Boolean result=DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", array, "ID");
 
-			int itemCount = ps.executeUpdate();
 			endDate = new Date();
-			if(itemCount<=0){
+			if(!result){
 				jObject = HttpUtil.getResponseJson(false, null,
 						endDate.getTime() - beginDate.getTime(), Constant.USERNAME_ERROR,0,1,-1);
 				writer.append(jObject.toString());
