@@ -1,5 +1,17 @@
 function LanguageUtility() {
-  this.LOGIN = '登录';
+  this.LOGIN = '登陆';
+  this.LOGOUT = '退出';
+  this.WELCOME = '欢迎';
+  this.MY_BUSINESS = '我的微店';
+  this.LOGIN_TITTLE = '登陆到微店系统';
+  this.CHANGE_PASSWORD = '修改密码';
+  this.SET_PERSONAL_INFO = '完善个人信息';
+  this.CONFIRM_CHANGE = '确认修改';
+  this.USERNAME_REQUIRED = '必须输入用户名';
+  this.PASSWORD_REQUIRED = '必须输入密码';
+  this.OLD_PASSWORD_REQUIRED = '必须输入旧密码';
+  this.CONFIRM_PASSWORD_THESAME = '两次输入密码必须相同';
+  this.PASSWORD_RULE = '密码饱含大写字母，小写字母，数字和符号中的至少三种，长度不小于8位，不大于16位';
   this.LOGO = '微商';
   this.USER_ROLE_ADMIN = '管理员';
   this.USER_ROLE_ASSISTENT = '店员';
@@ -16,6 +28,8 @@ function LanguageUtility() {
   this.CREATE_ITEM = '创建';
   this.EDIT_ITEM = '编辑';
   this.DELETE_ITEM = '删除';
+  this.REFRESH_ITEM = '刷新';
+  this.SYNC_ITEM = '数据同步';
   this.USER_NEW = '新建用户';
   this.USER_EDIT = '编辑用户';
   this.USER_DELETE = '删除用户';
@@ -23,17 +37,26 @@ function LanguageUtility() {
   this.SAVE = '保存';
   this.CANCEL = '取消';
   this.CLOSE = '关闭';
+  this.RESET = '重置';
   this.USER_ID = '序号';
   this.USER_NAME = '用户名';
   this.USER_PASSWORD = '密码';
-  this.USER_TYPE = '用户类型';
-  this.USER_TEL = '电话号码';
+  this.USER_OLD_PASSWORD = '旧密码';
+  this.USER_NEW_PASSWORD = '新密码';
+  this.USER_CONFIRM_PASSWORD = '确认密码';
+  this.USER_TYPE = '身份';
+  this.USER_TEL = '联系电话';
   this.USER_REAL_NAME = '真实姓名';
   this.USER_ADDRESS = '地址';
   this.USER_CREATE_TIME = '创建时间';
   this.USER_LAST_LOGIN_TIME = '上次登陆时间';
+  this.USER_SUPERIOR_USER = '上级用户';
   this.STORAGE_ID = '序号';
   this.STORAGE_NAME = '货物名称';
   this.STORAGE_AMOUNT = '货物数量';
   this.STORAGE_SOLD_AMOUNT = '销售数量';
+  this.WARNING_TITTLE = '警告';
+  this.WARNING_MESSAGE_SAVE_USERS = '继续添加之前，请保存当前修改';
+  this.SUCCESS_TITTLE = '操作成功';
+  this.SUCCESS_MESAAGE_SYNC_USERS = '保存用户成功';  
 }

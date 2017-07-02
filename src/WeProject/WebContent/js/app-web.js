@@ -21,16 +21,16 @@
       secondaryAgency: '6',
       superAdmin: '7'
     })
-    .constant('MENU_EVENT',{
-      menuList:'1'
+    .constant('MENU_EVENT', {
+      menuList: '1'
     })
-    .constant('MENUS',{
-      USER_MANAGEMENT:'1',
-      PRODUCT_MANAGEMENT:'2',
-      FINANCE_MANAGEMENT:'3',
-      STORAGE_MANAGEMENT:'4'
+    .constant('MENUS', {
+      USER_MANAGEMENT: '1',
+      PRODUCT_MANAGEMENT: '2',
+      FINANCE_MANAGEMENT: '3',
+      STORAGE_MANAGEMENT: '4'
     })
-    .constant('PAGE_SIZE_OPTIONS',[10,20,50,100])
+    .constant('PAGE_SIZE_OPTIONS', [10, 20, 50, 100])
     .factory('authInterceptor', function ($rootScope, $q,
       AUTH_EVENTS) {
       return {
@@ -85,46 +85,61 @@
         });
       };
     })
+    .service('passwordGenerator', function () {
+      this.createRandomPassword = function (length) {
+        var text = ['abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '1234567890', '~!@#$%^&*+?'];
+        var rand = function (min, max) { return Math.floor(Math.max(min, Math.random() * (max + 1))); }
+        var len = length;
+        var pw = '';
+        for (var i = 0; i < len; ++i) {
+          var strpos = rand(0, 3);
+          pw += text[strpos].charAt(rand(0, text[strpos].length));
+        }
+        return pw;
+      }
+    })
     .service('userService', function ($http) {
       this.getAllUsers = function (page, pageSize) {
-        var url = '/api/users?page='+page+'&pageSize='+pageSize;
+        var url = '/api/users?page=' + page + '&pageSize=' + pageSize;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
           return error;
         });
-      };
+      }
 
-      this.addUser = function (userData) {
+      this.setPersonInfo = function (userData) {
+        return $http.put('/api/users', userData).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        })
+      }
+
+      this.syncUserData = function (userData) {
         return $http.post('/api/users', userData).then(function (res) {
           return res;
         }, function (error) {
           return error;
         });
-      };
+      }
 
-      this.updateUser = function (userData) {
-        return $http.put('/api/users', userData).then(function (res) {
-          return res;
-        }, function (error) {
-          return error;
-        });
-      };
-      this.deleteUser = function (userData) {
-        var url = '/api/users?UserName=' + userData.UserName;
-        return $http.delete(url).then(function (res) {
+      this.resetPassword = function (passwordData) {
+        return $http.post('/api/password', passwordData).then(function (res) {
           return res;
         }, function (error) {
           return error;
         });
       }
+
     })
     .factory('authService', function ($q, $http, sessionService) {
       var authService = {};
       authService.logIn = function (credentials) {
         return $http.post('/api/login', credentials).then(function (res) {
           sessionService.createUserInfo(0, res.data.data[0].UserName, res.data.data[0].UserTypeID);
-          return { userID: res.data.data[0].UserName, userRole: res.data.data[0].UserTypeID };
+          var bNewUser = res.data.data[0].LastLoginTime == undefined ? true:false;
+          return { userID: res.data.data[0].UserName, userRole: res.data.data[0].UserTypeID, bNewUser: bNewUser};
         }, function (error) {
           return error;
         });
@@ -134,15 +149,6 @@
         return $http.post('/api/logoff').then(function (res) {
           sessionService.destroy();
           return { res };
-        }, function (error) {
-          return error;
-        });
-      }
-
-      authService.getUserInfo = function () {
-        return $http.post('/api/', credentials).then(function (res) {
-          sessionService.createUserInfo(0, res.data.data[0].UserName, res.data.data[0].UserTypeID);
-          return { userID: res.data.data[0].UserName, userRole: res.data.data[0].UserTypeID };
         }, function (error) {
           return error;
         });
@@ -161,13 +167,43 @@
       };
       return authService;
     })
+    .service('toastService', function () {
+        this.toast = function (level, message, title) {
+          toastr.options = {
+            closeButton: false,
+            debug: false,
+            progressBar: false,
+            positionClass: "toast-top-center",
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "5000",
+            extendedTimeOut: "1000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut"
+          };
+
+        var $toast = toastr[level](message, title);  
+        }
+
+    })
     .directive('wbLogin', function (AUTH_EVENTS) {
       return {
         restrict: 'E',
         templateUrl: 'views/wbLogin.html',
         scope: {
-          userData: '=',
-          loginFunc: '&'
+          appVm: '='
+        }
+      };
+    })
+    .directive('wbResetPassword', function () {
+      return {
+        restrict: 'E',
+        templateUrl: 'views/wbResetPassword.html',
+        scope: {
+          appVm: '='
         }
       };
     })
@@ -190,6 +226,14 @@
         templateUrl: 'views/wbStorageManagement.html'
       });
 
+      $routeProvider.when('/personInfo', {
+        controller: 'storageManageController',
+        controllerAs: 'vm',
+        templateUrl: 'views/wbStorageManagement.html'
+      });
+
+      
+
       $routeProvider.otherwise({ redirectTo: "/" });
 
       $httpProvider.defaults.withCredentials = true;
@@ -200,7 +244,7 @@
         }
       ]);
     }])
-    .run(function (sessionService, menuService, AUTH_EVENTS,MENU_EVENT, $rootScope, $cookieStore, $cookies) {
+    .run(function (sessionService, menuService, AUTH_EVENTS, MENU_EVENT, $rootScope, $cookieStore, $cookies) {
 
       var currentUser = $cookies.get('username');
       if (!currentUser) {
@@ -210,7 +254,7 @@
 
       menuService.getMenu().then(function (res) {
         menuService.menus = res.data.data;
-        $rootScope.$broadcast(MENU_EVENT.menuList, { menuList: menuService.menus});
+        $rootScope.$broadcast(MENU_EVENT.menuList, { menuList: menuService.menus });
       }, function (error) {
         $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
       });

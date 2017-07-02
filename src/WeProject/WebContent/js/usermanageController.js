@@ -1,66 +1,151 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('userManageController', ['$scope', 'userService', 'PAGE_SIZE_OPTIONS',userManageController])
+  angular.module('app-web').controller('userManageController', ['$scope', 'userService', 'toastService', 'passwordGenerator', 'PAGE_SIZE_OPTIONS', userManageController])
 
-  function userManageController($scope, userService, PAGE_SIZE_OPTIONS) {
+  function userManageController($scope, userService,toastService, passwordGenerator, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onAddUser = function () {
-      vm.userModalTittle = vm.language.USER_NEW;
-      $('#userModal').modal()
-    }
+      var currentCount = 0;
+      for (var i = 0; i < vm.users.length; i++) {
+        var user = vm.users[i];
+        if (!user.bDelete) {
+          currentCount++;
+        }
+      }
+      if (currentCount >= vm.pageSize + 1) {
+        toastService.toast('warning', vm.language.WARNING_MESSAGE_SAVE_USERS, vm.language.WARNING_TITTLE);
+        return;
+      }
 
-    vm.onEditUser = function (user) {
-      vm.userModalTittle = vm.language.USER_EDIT;
-      vm.editUser = user;
-      $('#userModal').modal();
+      var newPassword = passwordGenerator.createRandomPassword(8);
+      var newUser = {
+        ID: '',
+        UserName: '',
+        UserTypeID: { value: 4, bDirty: false },
+        RealName: { value: '', bDirty: false },
+        Tel: { value: '', bDirty: false },
+        Password: newPassword,
+        Address: { value: '', bDirty: false },
+        bSelect: false,
+        bDelete: false,
+        bResetPassword: false,
+        bDirty: false
+      };
+
+      vm.users.push(newUser);
+      vm.dataDirty = true;
+      vm.refreshPaginator();
     }
 
     vm.onDeleteUser = function () {
-      var startIndex = (vm.currentPage - 1) * vm.pageSize;
-      var endIndex = vm.currentPage * vm.pageSize;
-
-      for (var i = startIndex; i < endIndex; i++) {
+      for (var i = 0; i < vm.users.length; i++) {
         var user = vm.users[i];
         if (user.bSelect) {
-          userService.deleteUser(user).then(function (res) {
-            vm.refreshPage();
-          }, function (error) {
-
-          });
+          user.bDelete = true;
         }
       }
-      
+
+      var bUpdateUsers = false;
+      var newUsers = [];
+      for (var i = 0; i < vm.users.length; i++) {
+        var user = vm.users[i];
+        if (!user.bDelete || user.ID != '') {
+          newUsers.push(user);
+        } else {
+          bUpdateUsers = true;
+        }
+
+      }
+
+      vm.users = newUsers;
+
+      vm.bSelectCurrentPage = false;
+      vm.dataDirty = true;
+      vm.refreshPaginator();
     }
 
-    vm.saveUserChange = function () {
-      if (vm.userModalTittle == vm.language.USER_NEW) {
-        vm.editUser.UserTypeID = vm.editUser.UserType.id;
-        userService.addUser(vm.editUser).then(function (res) {
-          vm.refreshPage();
-        }, function (error) {
-
-        });
-      }
-      else if (vm.userModalTittle == vm.language.USER_EDIT) {
-        vm.editUser.UserTypeID = vm.editUser.UserType.id;
-        userService.updateUser(vm.editUser).then(function (res) {
-          vm.refreshPage();
-        }, function (error) {
-
-        });
-      }
-      vm.editUser = {};
-      $('#userModal').modal('hide');
+    vm.onUserChange = function (user, userInfo) {
+      userInfo.bDirty = true;
+      user.bDirty = true;
+      vm.dataDirty = true;
     }
 
-    vm.createPages = function () {
+    vm.onRefresh = function () {
+      vm.gotoPage(vm.currentPage);
+    }
+
+    vm.onSync = function () {
+      var addItems = [];
+      var editItems = [];
+      var deleteItems = [];
+
+      for (var i = 0; i < vm.users.length; i++) {
+        var user = vm.users[i];
+        if (user.ID == '') {
+          var newUser = {UserName:user.UserName, Password: user.Password, Tel: user.Tel.value, RealName: user.RealName.value, UserTypeID:user.UserTypeID.value, Address: user.Address.value};
+          addItems.push(newUser);
+        }
+        else if (user.bDelete) {
+          var deleteUser = new Object();
+          deleteUser.ID = user.ID;
+          deleteItems.push(deleteUser);
+        }
+        else if (user.bDirty) {
+          var changedUser = new Object();
+          if (user.UserTypeID.bDirty) {
+            changedUser.UserTypeID = user.UserTypeID.value;
+          }
+          if (user.RealName.bDirty) {
+            changedUser.RealName = user.RealName.value;
+          }
+          if (user.Tel.bDirty) {
+            changedUser.Tel = user.Tel.value;
+          }
+          if (user.Address.bDirty) {
+            changedUser.Address = user.Address.value;
+          }
+          if (user.bResetPassword) {
+            changedUser.bResetPassword = true;
+            changedUser.Password = user.Password;
+          }
+
+          changedUser.ID = user.ID;
+          editItems.push(changedUser);
+        }
+      }
+
+      var userData = { Add: addItems, Edit: editItems, Delete: deleteItems };
+      userService.syncUserData(userData).then(function (res) {
+        vm.onRefresh();
+        toastService.toast('success', vm.language.SUCCESS_MESAAGE_SYNC_USERS, vm.language.SUCCESS_TITTLE);
+      }, function (error) {
+
+      });
+    }
+
+    vm.onResetPassword = function (user) {
+      var newPassword = passwordGenerator.createRandomPassword(8);
+      user.Password = newPassword;
+      user.bResetPassword = true;
+      user.bDirty = true;
+    }
+
+    vm.refreshPaginator = function () {
+
       vm.pages = [];
-      vm.totalPage =Math.ceil(vm.dataTotal / vm.pageSize);
-      for (var i = 1; i <= vm.totalPage; i++) {
-        vm.pages.push(i);
+      if (vm.dataTotal <= vm.pageSize) {
+        vm.pages.push(1);
       }
+      else {
+        vm.totalPage = Math.ceil(vm.dataTotal / vm.pageSize);
+        for (var i = 1; i <= vm.totalPage; i++) {
+          vm.pages.push(i);
+        }
+      }
+
+
     }
 
     vm.prevPage = function () {
@@ -87,15 +172,31 @@
       }
 
       vm.currentPage = page;
-
+      vm.users = [];
       userService.getAllUsers(vm.currentPage, vm.pageSize).then(function (res) {
-        vm.users = res.data.data;
-        for (var i = 0; i < vm.users.length; i++) {
-          var user = vm.users[i];
-          user.bSelect = false;
-          user.UserType = {name:vm.userTypes[user.UserTypeID - 1].name, id:user.UserTypeID};
+        for (var i = 0; i < res.data.data.length; i++) {
+          var user = res.data.data[i];
+          var newUser = {
+            ID: user.ID,
+            UserName: user.UserName,
+            UserTypeID: { value:user.UserTypeID, bDirty: false },
+            RealName: { value: user.RealName, bDirty: false },
+            Tel: { value: user.Tel, bDirty: false },
+            Password: user.Password,
+            Address: { value: user.Address, bDirty: false },
+            LastLoginTime: user.LastLoginTime,
+            bSelect: false,
+            bDelete: false,
+            bResetPassword: false,
+            bDirty: false
+          };
+
+          vm.users.push(newUser);
+
           vm.dataTotal = res.data.total;
-          vm.createPages();
+          vm.dataDirty = false;
+          vm.bSelectCurrentPage = false;
+          vm.refreshPaginator();
         }
       }, function (error) {
 
@@ -107,43 +208,38 @@
     }
 
     vm.selectPage = function () {
-      var startIndex = (vm.currentPage - 1) * vm.pageSize;
-      var endIndex = vm.currentPage * vm.pageSize;
-
-      for (var i = startIndex; i < endIndex; i++) {
+      for (var i = 0; i < vm.users.length; i++) {
         var user = vm.users[i];
-        user.bSelect = vm.bSelectCurrentPage;
+        if (!user.bDelete) {
+          user.bSelect = !user.bSelect;
+        }
       }
     }
     vm.init = function () {
 
       vm.language = new LanguageUtility();
 
-      vm.userCount = 100;
       vm.pageSizeOptions = PAGE_SIZE_OPTIONS;
       vm.pageSize = PAGE_SIZE_OPTIONS[0];
       vm.pages = [];
       vm.currentPage = 1;
       vm.totalPage = 1;
 
-      vm.dataTotal = 100;
-      vm.dataBegin = 1;
-      vm.dataEnd = 5;
-
-      vm.userModalTittle = vm.language.USER_NEW;
-      vm.editUser = { UserName: '', Password: '', UserType: {name:'', UserTypeID:''}, UserTypeID:'', Tel: '', RealName: '', Address: '' };
+      vm.dataTotal = 0;
+      vm.currentPageSize = 0;
 
       vm.bSelectCurrentPage = false;
-
+      vm.dataDirty = false;
 
       vm.columnHeaders = [vm.language.USER_ID,
       vm.language.USER_NAME,
       vm.language.USER_TYPE,
-      vm.language.USER_TEL,
       vm.language.USER_REAL_NAME,
+      vm.language.USER_TEL,
       vm.language.USER_ADDRESS,
-      vm.language.USER_CREATE_TIME,
-      vm.language.USER_LAST_LOGIN_TIME];
+      vm.language.USER_PASSWORD,
+      vm.language.USER_LAST_LOGIN_TIME,
+      vm.language.USER_SUPERIOR_USER];
 
       vm.userTypes = [{ name: vm.language.USER_ROLE_ADMIN, id: 1 },
       { name: vm.language.USER_ROLE_ASSISTENT, id: 2 },
@@ -152,6 +248,10 @@
       { name: vm.language.USER_ROLE_AGENCY_PRIMARY, id: 5 },
       { name: vm.language.USER_ROLE_AGENCY_SECONDAY, id: 6 },
       { name: vm.language.USER_ROLE_SUPER_ADMIN, id: 7 }];
+
+      vm.users = [];
+
+
 
       // vm.users = [{ UserName: 'bobby', UserTypeID: 'administrator', telephone: '123456', realName: 'DongHH', address: 'Dalian', CreateTime: '2017-06-01', LastLoginTime: '2017-06-02', bSelect: false},
       // { UserName: 'Spencer', UserTypeID: 'administrator', telephone: '234567', realName: 'WangH', address: 'Dalian', CreateTime: '2017-06-01', LastLoginTime: '2017-06-02', bSelect: false},

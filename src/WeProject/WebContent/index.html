@@ -8,22 +8,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
+  <link rel="stylesheet" href="bower_components/bootstrapvalidator/dist/css/bootstrapValidator.css">
   <link rel="stylesheet" href="bower_components/Font-Awesome/css/font-awesome.css">
   <link rel="stylesheet" href="plugins/DataTables-1.10.15/media/css/jquery.dataTables.css">
-  <link rel="stylesheet" href="plugins/DataTables-1.10.15/media/css/dataTables.bootstrap.css">
-  <link rel="stylesheet" href="plugins/angular-datatables/plugins/bootstrap/datatables.bootstrap.min.css">
   <link rel="stylesheet" href="plugins/angular-datatables/css/angular-datatables.css">
+  <link rel="stylesheet" href="bower_components/toastr/toastr.css">
   <link rel="stylesheet" href="css/site.css" />
 </head>
 
 <body data-ng-app="app-web" data-ng-controller="appController as appVm">
-  <div data-ng-cloak ng-if="!appVm.isUserAuth()">
-    <wb-login user-data="appVm.credential" login-func="appVm.login()"></wb-login>
+  <div data-ng-cloak ng-if="appVm.showLogin()">
+    <wb-login app-vm="appVm"></wb-login>
+  </div>
+  <div data-ng-cloak ng-if="appVm.showResetPassword()">
+    <wb-reset-password app-vm="appVm"></wb-login>
   </div>
 
-  <div data-ng-if="appVm.isUserAuth()">
+  <div data-ng-if="appVm.showMainWindow()">
     <header data-ng-controller="headerController as headerVm">
-      <nav class="navbar navbar-inverse" role="navigation">
+      <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-nav-collapse" aria-expanded="false">
@@ -43,55 +46,12 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-bell-o"></i>
-                  <span class="label label-warning">10</span>
-                </a>
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{appVm.language.WELCOME + appVm.credential.username}}<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li class="header">您有10条消息</li>
-                  <li>
-                    <ul class="menu">
-                      <li>
-                        <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5个新的代理加入
-                    </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="footer"><a href="#">查看所有</a></li>
-                </ul>
-              </li>
-              <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="img/user2-160x160.jpg" class="userImg" alt="User Image">
-                  <span>{{appVm.currentUser.userID}}</span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <img src="img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                    <p>
-                      {{appVm.currentUser.userID}} - {{appVm.currentUser.userRole}}
-                      <small>2017年加入</small>
-                    </p>
-                  </li>
-                  <li>
-                    <div class="row">
-                      <div class="col-xs-4 text-center">
-                        <a href="#">二级代理</a>
-                      </div>
-                      <div class="col-xs-4 text-center">
-                        <a href="#">客户资源</a>
-                      </div>
-                      <div class="col-xs-4 text-center">
-                        <a href="#">销售统计</a>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="">
-                    <div class="pull-right">
-                      <a href="#" class="btn btn-default btn-flat" ng-click="appVm.logOff()">登出</a>
-                    </div>
-                  </li>
+                  <li><a href="#!/myBussiness">{{appVm.language.MY_BUSINESS}}</a></li>
+                  <li><a ng-click="appVm.setPersonalInfo()">{{appVm.language.SET_PERSONAL_INFO}}</a></li>
+                  <li><a ng-click="appVm.ChangePassword()">{{appVm.language.CHANGE_PASSWORD}}</a></li>
+                  <li><a ng-click="appVm.logOff()">{{appVm.language.LOGOUT}}</a></li>
                 </ul>
               </li>
             </ul>
@@ -118,9 +78,11 @@
   <script src="bower_components/angular-cookies/angular-cookies.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
   <script src="plugins/angular-datatables/js/angular-datatables.js"></script>
   <script src="plugins/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.js"></script>
   <script src="plugins/DataTables-1.10.15/media/js/dataTables.bootstrap.js"></script>
+  <script src="bower_components/toastr/toastr.js"></script>
 
   <script src="js/toolUtility_ZH.js"></script>
   <script src="js/app-web.js"></script>

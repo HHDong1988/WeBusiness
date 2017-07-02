@@ -6,6 +6,14 @@
   padding-top: 5px;
   padding-bottom: 5px;
 }
+
+.usersTable tbody tr td{
+  height: 10px;
+}
+
+.usersTable tbody tr th{
+  height: 10px;
+}
 /*
 *{ 
   outline: none !important;	

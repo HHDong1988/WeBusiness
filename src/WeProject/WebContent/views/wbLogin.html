@@ -1,22 +1,28 @@
-<div class="modal show" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">用户登录</h4>
+<div ng-cloak>
+  <div class="row">
+    <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4">
+      <div>
+        <h2 class="text-center">{{appVm.language.LOGIN_TITTLE}}</h2>
       </div>
-      <div class="modal-body">
-        <form action="" class="center-block login-form" novalidate>
-          <div class="form-group">
-            <input type="text" class="form-control input-lg" data-ng-model="userData.username" placeholder="用户名">
-          </div>
-          <div class="form-group">
-            <input type="password" class="form-control input-lg" data-ng-model="userData.password" placeholder="密码">
-          </div>
-        </form>
+      <ng-form name="loginForm" class="center-block" novalidate>
         <div class="form-group">
-          <button type="submit" class="btn btn-success btn-lg btn-block" data-ng-click="loginFunc()">登录</button>
+          <label for="username">{{appVm.language.USER_NAME}}</label>
+          <input type="text" name="username" class="form-control" ng-model="appVm.credential.username" required>
+          <span style="color:red" ng-show="loginForm.username.$dirty && loginForm.username.$invalid">
+        <span ng-show="loginForm.username.$error.required">{{appVm.language.USERNAME_RULE}}</span>
+          </span>
         </div>
-      </div>
+        <div class="form-group">
+          <label for="password">{{appVm.language.USER_PASSWORD}}</label>
+          <input type="password" name="password" class="form-control" ng-model="appVm.credential.password" required>
+          <span style="color:red" ng-show="loginForm.password.$dirty && loginForm.password.$invalid">
+        <span ng-show="loginForm.password.$error.required">{{appVm.language.PASSWORD_REQUIRED}}</span>
+          </span>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-success btn-block" ng-disabled="loginForm.$invalid" ng-click="appVm.login()">{{appVm.language.LOGIN}}</button>
+        </div>
+      </ng-form>
     </div>
   </div>
 </div>

@@ -1,0 +1,28 @@
+<div ng-cloak>
+  <div class="row">
+    <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4">
+      <div>
+        <h2 class="text-center">{{appVm.language.SET_PERSONAL_INFO}}</h2>
+      </div>
+      <ng-form name="personInfoForm" class="center-block" novalidate>
+        <div class="form-group">
+          <label for="realName">{{appVm.language.USER_REAL_NAME}}</label>
+          <input type="Text" name="realName" class="form-control" ng-model="appVm.userInfo.RealName" required>
+        </div>
+        <div class="form-group">
+          <label for="tel">{{appVm.language.USER_TEL}}</label>
+          <input type="number" name="tel" class="form-control" ng-model="appVm.userInfo.Tel" required>
+        </div>
+        </div>
+        <div class="form-group">
+          <label for="address">{{appVm.language.USER_ADDRESS}}</label>
+          <input type="Text" name="address" class="form-control" ng-model="appVm.userInfo.Address" required>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-success btn-block" ng-disabled="loginForm.$invalid" ng-click="appVm.setPersonalInfo()">{{appVm.language.SAVE}}</button>
+        </div>
+      </ng-form>
+    </div>
+  </div>
+</div>
