@@ -60,7 +60,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
   </servlet>
   <servlet-mapping>
     <servlet-name>ResetPassword</servlet-name>
-    <url-pattern>/api/resetpassword</url-pattern>
+    <url-pattern>/api/password</url-pattern>
   </servlet-mapping>
   
  
