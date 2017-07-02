@@ -75,41 +75,67 @@ public class Account extends HttpServlet{
 		return false;
 	}
 	
-	private Boolean DeleteUsers(Connection conn,ArrayList<String> userList) 
+	private Boolean DeleteUsers(Connection conn,JSONArray userList) 
 			throws JSONException{
 		JSONArray array = new JSONArray();
-		for(int i=0;i<userList.size();i++){
-			JSONObject object = new JSONObject();
-			object.put("UserName", userList.get(i));
+		for(int i=0;i<userList.length();i++){
+			JSONObject object = (JSONObject) userList.get(i);
 			object.put("AliveUser", 0);
 			
 		}
-		DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", array, "UserName");
+		DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", array, "ID");
 		return true;
 	}
 	
-	private Boolean InsertUsers(Connection conn,JSONArray array) 
+	private JSONArray InsertUsers(Connection conn,JSONArray array) 
 			throws JSONException{
+		JSONArray occpupylist=new JSONArray();
 		for(int i=0;i<array.length();i++)
 		{
 			JSONObject object = (JSONObject)array.get(i);
-			if(object==null)return false;
+			if(object==null)return null;
 			String userName = ((String) object.get("UserName")).trim();
 			PreparedStatement ps;
 			try {
 				ps = conn.prepareStatement(Constant.SQL_CHECK_USERNAME);
 				ps.setString(1, userName);
 				JSONArray result = DBController.getJsonArray(ps, conn);
-				if(result.length()>0)return false;
+				if(result.length()>0){
+					array.remove(i);
+					i--;
+					occpupylist.put(userName);
+				}
 			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+		Date date = new Date();
+		java.sql.Timestamp sqlDate=new java.sql.Timestamp(date.getTime());
+		Boolean result = DBController.ExecuteMultipleInsert(conn, "sys_conf_userinfo", array, sqlDate);
+		if(result)return occpupylist;
+		else return null;
+	}
+	
+	private Boolean UpdateUsers(Connection conn,JSONArray array) {
+		for(int i=0;i<array.length();i++)
+		{
+			try {
+				JSONObject object = array.getJSONObject(i);
+				if(object.has("bResetPassword")){
+					object.put(Constant.LastLogInTimeColumn, "");
+				}
+					
+			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
 			}
-
 		}
-		
-		return DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", array, "UserName");
+		Boolean result = DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", array, "UserName");
+		return result;
 	}
 	
 	// Update
@@ -366,31 +392,13 @@ public class Account extends HttpServlet{
 		
 		String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
 		JSONObject object;
-		String userName = null;
-		String psd = null;
-		int usertypeId ;
-		String tel=null;
-		String realName=null;
-		String address=null;
+		
 		try {
 			object = new JSONObject(pJasonStr);
-			/*
-			 * Jasaon: {"userName": ''", 
-	"password":"", 
-	"userType":"",
-	"telephone":"",
-	"realName":"",
-	"address":""}
-			 * */
 			conn = DBController.getConnection();
-			userName = ((String) object.get("UserName")).trim();
-			psd = ((String) object.get("Password")).trim();
-			tel = ((String) object.get("Tel")).trim();
-			realName = ((String) object.get("RealName")).trim();
-			address = ((String) object.get("Address")).trim();
-			usertypeId = object.getInt("UserTypeID");
 			
-			if(!HasAuthority(req,conn,userName,OperationType.Insert)){
+			
+			if(!HasAuthority(req,conn,null,OperationType.Insert)){
 				endDate = new Date();
 				jObject = HttpUtil.getResponseJson(false, null,
 						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
@@ -399,44 +407,39 @@ public class Account extends HttpServlet{
 				conn.close();
 				return;
 			}
-		
-			ps = conn.prepareStatement(Constant.SQL_CHECK_USERNAME);
-			ps.setString(1, userName);
-			//rs = ps.executeQuery();
-			JSONArray array = DBController.getJsonArray(ps, conn);
-			array.length();
-			endDate = new Date();
-			// If has same user name
-			if (array.length()>0) {
-				jObject = HttpUtil.getResponseJson(false, null,
+			JSONArray tempArray;
+			JSONArray nameOccupyList=new JSONArray();
+			Boolean editResult=true;
+			Boolean deleteResult=true;
+			if(object.has("Add")){
+				tempArray = object.getJSONArray("Add");
+				if(tempArray!=null){
+					nameOccupyList = InsertUsers(conn,tempArray); 
+				}
+				
+			}
+			if(object.has("Edit")){
+				tempArray = object.getJSONArray("Edit");
+				if(tempArray!=null){
+					editResult = UpdateUsers(conn, tempArray); 
+				}
+			}
+			if(object.has("Delete")){
+				tempArray = object.getJSONArray("Add");
+				if(tempArray!=null){
+					deleteResult = DeleteUsers(conn, tempArray); 
+				}
+			}
+			endDate=new Date();
+			if(deleteResult&&editResult&&nameOccupyList!=null){
+				jObject = HttpUtil.getResponseJson(false, nameOccupyList,
 						endDate.getTime() - beginDate.getTime(), Constant.USERNAME_ERROR,0,1,-1);
 				writer.append(jObject.toString());
-			} else {
-				ps = conn.prepareStatement(Constant.SQL_ADD_USER);
-				ps.setString(1, userName);
-				ps.setInt(2, usertypeId);
-				ps.setString(3, psd);
-				ps.setString(4, realName);
-				ps.setString(5, tel);
-				ps.setString(6, address);
-				Date createDate = new Date();
-				java.sql.Timestamp sqlDate=new java.sql.Timestamp(createDate.getTime());
-				ps.setObject(7, sqlDate);
-				ps.setObject(8, sqlDate);
-				int itemCount = ps.executeUpdate();
-				endDate = new Date();
-				if(itemCount<=0){
-					jObject = HttpUtil.getResponseJson(false, null,
-							endDate.getTime() - beginDate.getTime(), Constant.USERNAME_ERROR,0,1,-1);
-					writer.append(jObject.toString());
-				}else
-				{
-					jObject = HttpUtil.getResponseJson(true, null, endDate.getTime() - beginDate.getTime(), null,0,1,-1);
-					writer.append(jObject.toString());
-				}
-					
+			}else
+			{
+				jObject = HttpUtil.getResponseJson(true, null, endDate.getTime() - beginDate.getTime(), null,0,1,-1);
+				writer.append(jObject.toString());
 			}
-			
 			writer.close();
 			conn.close();
 		} catch (SQLException |JSONException e) {

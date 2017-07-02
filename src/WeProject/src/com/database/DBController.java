@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.constant.Constant;
+
 public class DBController {
 	private static String driverName = "com.mysql.jdbc.Driver"; // 定义私有字符串常量并初始化
 	private static String username = "root"; // 定义的数据库用户名
@@ -56,7 +58,16 @@ public class DBController {
 			        	sqlstatementBuilder.append("= ?");
 			        }
 			        setAreaCount++;
-			        targetValues.add(value);
+			        if(key.equals(Constant.LastLogInTimeColumn)){
+			        	if(value.equals("")||value.equals("null")){
+			        		targetValues.add(null);
+			        	}else{
+			        		targetValues.add(value);
+			        	}
+			        }else{
+			        	targetValues.add(value);
+			        }
+			        
 				}
 				if(whereValue==null)return false;
 				String wherestatement = " WHERE "+keyId+"=?";

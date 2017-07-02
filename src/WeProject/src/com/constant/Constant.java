@@ -40,12 +40,15 @@ public final class Constant {
 			+ " FROM data_storage_products "
 			+ " ORDER BY ID LIMIT ?,?";
 	
+	public static final String LastLogInTimeColumn="LastLogInTime";
+	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
 	public static final String USERNAME_ERROR = "User name is occupied.";
 	public static final String DATEBASEEMPTY_ERROR = "Database is empty.";
 	public static final String DATEBASE_ERROR = "SQL operation has something wrong.";
 	public static final String COMMON_ERROR = "Don't have the right permissions!";
 	public static final String ERROR_WRONGPARAM = "Parameter wrong!";
+	public static final String FORMAT_ERROR = "Format is not correct.";
 	
 	// public 
 	public static final String SQL_SELECT_USER_LIST = "SELECT ID, UserName FROM data_user";
