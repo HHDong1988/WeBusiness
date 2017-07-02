@@ -133,7 +133,7 @@ public class Account extends HttpServlet{
 				return false;
 			}
 		}
-		Boolean result = DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", array, "UserName");
+		Boolean result = DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", array, "ID");
 		return result;
 	}
 	
