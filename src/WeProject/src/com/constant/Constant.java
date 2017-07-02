@@ -40,7 +40,7 @@ public final class Constant {
 			+ " FROM data_storage_products "
 			+ " ORDER BY ID LIMIT ?,?";
 	
-	public static final String LastLogInTimeColumn="LastLogInTime";
+	public static final String LastLogInTimeColumn="LastLoginTime";
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
 	public static final String USERNAME_ERROR = "User name is occupied.";

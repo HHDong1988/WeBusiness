@@ -125,6 +125,7 @@ public class Account extends HttpServlet{
 				JSONObject object = array.getJSONObject(i);
 				if(object.has("bResetPassword")){
 					object.put(Constant.LastLogInTimeColumn, "");
+					object.remove("bResetPassword");
 				}
 					
 			} catch (JSONException e) {
