@@ -88,6 +88,7 @@ public class LogInSystem extends HttpServlet {
 				resp.addCookie(HttpUtil.GetCookie("token", tokenstr, 600));
 				
 				HttpSession session = req.getSession(true);
+				session.setMaxInactiveInterval(900);
 				session.setAttribute(userName, tokenstr);
 				
 				writer.append(jObject.toString());

@@ -22,12 +22,23 @@ public final class Constant {
 			+ "WHERE UserName = ?";
 	public static final String SQL_GET_USERBYPAGE="SELECT ID, Password, UserName, UserTypeID, CreateTime, LastLoginTime, RealName, Tel, Address"
 			+ " FROM sys_conf_userinfo "
+			+ " WHERE AliveUser=1"
 			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_RESET_PASSWORD="UPDATE sys_conf_userinfo "
+			+ "SET Password = ?, LastLoginTime = null "
+			+ "WHERE UserName = ?";
+			
 	public static final String SQL_GET_USERTOTALCOUNT="SELECT COUNT(ID) as total, UserName"
-			+ " FROM sys_conf_userinfo ";
+			+ " FROM sys_conf_userinfo "
+			+ " WHERE AliveUser=1";
 	public static final String SQL_UPDATE_USERLOGINTIME = "UPDATE sys_conf_userinfo "
 			+ "SET LastLoginTime = ? "
 			+ "WHERE UserName = ?";
+	public static final String SQL_GET_STORAGEITEMCOUNT="SELECT COUNT(ID) as total, UserName"
+			+ " FROM data_storage_products ";	
+	public static final String SQL_GET_STORAGEBYPAGE="SELECT ID, Name, CurrentAmount, SoldAmount"
+			+ " FROM data_storage_products "
+			+ " ORDER BY ID LIMIT ?,?";
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
 	public static final String USERNAME_ERROR = "User name is occupied.";

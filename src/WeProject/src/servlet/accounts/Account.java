@@ -6,7 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -71,6 +73,43 @@ public class Account extends HttpServlet{
 				
 		}
 		return false;
+	}
+	
+	private Boolean DeleteUsers(Connection conn,ArrayList<String> userList) 
+			throws JSONException{
+		JSONArray array = new JSONArray();
+		for(int i=0;i<userList.size();i++){
+			JSONObject object = new JSONObject();
+			object.put("UserName", userList.get(i));
+			object.put("AliveUser", 0);
+			
+		}
+		DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", array, "UserName");
+		return true;
+	}
+	
+	private Boolean InsertUsers(Connection conn,JSONArray array) 
+			throws JSONException{
+		for(int i=0;i<array.length();i++)
+		{
+			JSONObject object = (JSONObject)array.get(i);
+			if(object==null)return false;
+			String userName = ((String) object.get("UserName")).trim();
+			PreparedStatement ps;
+			try {
+				ps = conn.prepareStatement(Constant.SQL_CHECK_USERNAME);
+				ps.setString(1, userName);
+				JSONArray result = DBController.getJsonArray(ps, conn);
+				if(result.length()>0)return false;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+
+		}
+		
+		return DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", array, "UserName");
 	}
 	
 	// Update
