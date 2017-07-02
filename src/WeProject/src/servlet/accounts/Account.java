@@ -77,14 +77,13 @@ public class Account extends HttpServlet{
 	
 	private Boolean DeleteUsers(Connection conn,JSONArray userList) 
 			throws JSONException{
-		JSONArray array = new JSONArray();
 		for(int i=0;i<userList.length();i++){
 			JSONObject object = (JSONObject) userList.get(i);
 			object.put("AliveUser", 0);
 			
 		}
-		DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", array, "ID");
-		return true;
+		Boolean result = DBController.ExecuteMultipleUpdate(conn, "sys_conf_userinfo", userList, "ID");
+		return result;
 	}
 	
 	private JSONArray InsertUsers(Connection conn,JSONArray array) 
@@ -303,72 +302,7 @@ public class Account extends HttpServlet{
 		}
 	}
 	
-    //delete
-	@Override
-	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		Date beginDate = new Date();
-		Date endDate = null;
-		resp.setContentType("application/json; charset=utf-8");
-		resp.setCharacterEncoding("UTF-8");
-		Connection conn = null;
-		PreparedStatement ps = null;
-		PrintWriter writer = resp.getWriter();
-		JSONObject jObject = null;
-		if(!HttpUtil.doBeforeProcessing(req)){
-			endDate = new Date();
-			jObject = HttpUtil.getResponseJson(false, null,
-					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-			writer.append(jObject.toString());
-			writer.close();
-			return;
-		}
-
-		String userName = null;
-		try {
-			conn = DBController.getConnection();
-			/*
-			 * Jasaon: {"userName": ''", 
-	"password":"", 
-	"userType":"",
-	"telephone":"",
-	"realName":"",
-	"address":""}
-			 * */
-			userName = req.getParameter("UserName").trim();
-			
-			if(!HasAuthority(req,conn,userName,OperationType.Delete)){
-				endDate = new Date();
-				jObject = HttpUtil.getResponseJson(false, null,
-						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-				writer.append(jObject.toString());
-				writer.close();
-				conn.close();
-				return;
-			}
-			ps = conn.prepareStatement(Constant.SQL_DELETE_USER);;
-			ps.setString(1, userName);
-
-			int itemCount = ps.executeUpdate();
-			endDate = new Date();
-			if(itemCount<=0){
-				jObject = HttpUtil.getResponseJson(false, null,
-						endDate.getTime() - beginDate.getTime(), Constant.USERNAME_ERROR,0,1,-1);
-				writer.append(jObject.toString());
-			}else
-			{
-				jObject = HttpUtil.getResponseJson(true, null, endDate.getTime() - beginDate.getTime(), null,0,1,-1);
-				writer.append(jObject.toString());
-			}
-
-			writer.close();
-			conn.close();
-		} catch (SQLException  e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
+    
     // Insert
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -425,7 +359,7 @@ public class Account extends HttpServlet{
 				}
 			}
 			if(object.has("Delete")){
-				tempArray = object.getJSONArray("Add");
+				tempArray = object.getJSONArray("Delete");
 				if(tempArray!=null){
 					deleteResult = DeleteUsers(conn, tempArray); 
 				}
