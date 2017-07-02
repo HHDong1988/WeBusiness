@@ -381,14 +381,14 @@ public class Account extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-//		if(!HttpUtil.doBeforeProcessing(req)){
-//			endDate = new Date();
-//			jObject = HttpUtil.getResponseJson(false, null,
-//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//			writer.append(jObject.toString());
-//			writer.close();
-//			return;
-//		}
+		if(!HttpUtil.doBeforeProcessing(req)){
+			endDate = new Date();
+			jObject = HttpUtil.getResponseJson(false, null,
+					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+			writer.append(jObject.toString());
+			writer.close();
+			return;
+		}
 		
 		String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
 		JSONObject object;
@@ -398,15 +398,15 @@ public class Account extends HttpServlet{
 			conn = DBController.getConnection();
 			
 			
-//			if(!HasAuthority(req,conn,null,OperationType.Insert)){
-//				endDate = new Date();
-//				jObject = HttpUtil.getResponseJson(false, null,
-//						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//				writer.append(jObject.toString());
-//				writer.close();
-//				conn.close();
-//				return;
-//			}
+			if(!HasAuthority(req,conn,null,OperationType.Insert)){
+				endDate = new Date();
+				jObject = HttpUtil.getResponseJson(false, null,
+						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+				writer.append(jObject.toString());
+				writer.close();
+				conn.close();
+				return;
+			}
 			JSONArray tempArray;
 			JSONArray nameOccupyList=new JSONArray();
 			Boolean editResult=true;
