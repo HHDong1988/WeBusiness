@@ -124,7 +124,7 @@ public class Account extends HttpServlet{
 			try {
 				JSONObject object = array.getJSONObject(i);
 				if(object.has("bResetPassword")){
-					object.put(Constant.LastLogInTimeColumn, "");
+					//object.put(Constant.LastLogInTimeColumn, "");
 					object.remove("bResetPassword");
 				}
 					
@@ -226,6 +226,7 @@ public class Account extends HttpServlet{
 		}
 		int iPageNum = Integer.parseInt(req.getParameter("page").trim());
 		int iPagesize = Integer.parseInt(req.getParameter("pageSize").trim());
+		String wherestatement = req.getParameter("searchText");
 		int total=0;
 		try {
 			conn = DBController.getConnection();
@@ -256,7 +257,16 @@ public class Account extends HttpServlet{
             int startPoint =iPagesize * (iPageNum-1);
 			//iPagesize * (iPageNum-1) +" ," + iPagesize
 			
-			ps = conn.prepareStatement(Constant.SQL_GET_USERBYPAGE);
+			String sqlstatement = Constant.SQL_GET_USERS;
+			String OrderbyStatement = " ORDER BY ID LIMIT ?,?";
+			if(wherestatement!=null){
+				wherestatement = wherestatement.replace(" ", "");
+				wherestatement = wherestatement.replace("\'", "");
+				wherestatement = wherestatement.replace("\"", "");
+				sqlstatement+="WHERE "+wherestatement;
+			}
+			sqlstatement+=OrderbyStatement;
+			ps = conn.prepareStatement(sqlstatement);
 			
 			ps.setInt(1, startPoint);
 			ps.setInt(2, iPagesize);
