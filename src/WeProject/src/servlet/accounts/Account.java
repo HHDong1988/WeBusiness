@@ -265,11 +265,17 @@ public class Account extends HttpServlet{
 				wherestatement = wherestatement.replace("\"", "");
 				sqlstatement+="WHERE "+wherestatement;
 			}
-			sqlstatement+=OrderbyStatement;
-			ps = conn.prepareStatement(sqlstatement);
+			if(iPagesize>0){
+				sqlstatement+=OrderbyStatement;
+			}
 			
-			ps.setInt(1, startPoint);
-			ps.setInt(2, iPagesize);
+			ps = conn.prepareStatement(sqlstatement);
+			if(iPagesize>0){
+				sqlstatement+=OrderbyStatement;
+				ps.setInt(1, startPoint);
+				ps.setInt(2, iPagesize);
+			}
+			
 			JSONArray array = DBController.getJsonArray(ps, conn);
 
 			endDate = new Date();
