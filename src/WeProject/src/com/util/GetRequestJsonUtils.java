@@ -70,7 +70,9 @@ public class GetRequestJsonUtils {
         if (charEncoding == null) {
             charEncoding = "UTF-8";
         }
-        return new String(buffer, charEncoding);
+        String result =new String(buffer, charEncoding);
+        result = result.replace(" ", "");
+        return result;
     }
 
 }
