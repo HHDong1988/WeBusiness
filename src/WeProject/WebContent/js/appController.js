@@ -20,9 +20,18 @@
 
     vm.login = function () {
       authService.logIn(vm.credential).then(function (user) {
-        vm.currentUser = user;
-        $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, user);
+        if (user.userID == '') {
+          vm.errorMessage = user.message;
+          $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+        }
+        else{
+          vm.currentUser = user;
+          vm.errorMessage = '';
+          userService.getAllPrimaryAgencies();
+          $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, user);
+        }
       }, function (error) {
+        vm.errorMessage = error;
         $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
       });
     };
@@ -66,9 +75,13 @@
       vm.userInfo = {Tel:'',RealName:'',Address:''};
       vm.userRoles = USER_ROLES;
       vm.passwordReset = { oldPassword: '', newPassword: '', confirmPassword: '' };
+      vm.errorMessage = '';
       vm.isUserAuth = authService.isAuthenticated;
+      // vm.isUserAuth = function () {
+      //   return true;
+      // }
       vm.isNewUser = function () {
-        return vm.currentUser.bNewUser;
+       return vm.currentUser.bNewUser;
       }
 
       vm.showLogin = function () {

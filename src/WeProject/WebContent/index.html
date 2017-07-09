@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="plugins/DataTables-1.10.15/media/css/jquery.dataTables.css">
   <link rel="stylesheet" href="plugins/angular-datatables/css/angular-datatables.css">
   <link rel="stylesheet" href="bower_components/toastr/toastr.css">
+  <link rel="stylesheet" href="bower_components/jquery-editable-select/dist/jquery-editable-select.css">
   <link rel="stylesheet" href="css/site.css" />
 </head>
 
@@ -21,7 +22,7 @@
     <wb-login app-vm="appVm"></wb-login>
   </div>
   <div data-ng-cloak ng-if="appVm.showResetPassword()">
-    <wb-reset-password app-vm="appVm"></wb-login>
+    <wb-reset-password app-vm="appVm"></wb-reset-password>
   </div>
 
   <div data-ng-if="appVm.showMainWindow()">
@@ -49,8 +50,8 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{appVm.language.WELCOME + appVm.credential.username}}<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="#!/myBussiness">{{appVm.language.MY_BUSINESS}}</a></li>
-                  <li><a ng-click="appVm.setPersonalInfo()">{{appVm.language.SET_PERSONAL_INFO}}</a></li>
-                  <li><a ng-click="appVm.ChangePassword()">{{appVm.language.CHANGE_PASSWORD}}</a></li>
+                  <li><a href="#!/setPersonalInfo">{{appVm.language.SET_PERSONAL_INFO}}</a></li>
+                  <li><a href="#!/resetpassword">{{appVm.language.CHANGE_PASSWORD}}</a></li>
                   <li><a ng-click="appVm.logOff()">{{appVm.language.LOGOUT}}</a></li>
                 </ul>
               </li>
@@ -83,6 +84,7 @@
   <script src="plugins/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.js"></script>
   <script src="plugins/DataTables-1.10.15/media/js/dataTables.bootstrap.js"></script>
   <script src="bower_components/toastr/toastr.js"></script>
+  <script src="bower_components/jquery-editable-select/dist/jquery-editable-select.js"></script>
 
   <script src="js/toolUtility_ZH.js"></script>
   <script src="js/app-web.js"></script>
@@ -90,6 +92,7 @@
   <script src="js/homeController.js"></script>
   <script src="js/userManageController.js"></script>
   <script src="js/storageManageController.js"></script>
+  <script src="js/personalInfoController.js"></script>
   <script src="js/headerController.js"></script>
   <script src="js/site.js"></script>
 </body>

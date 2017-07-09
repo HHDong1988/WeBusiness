@@ -38,6 +38,8 @@ function LanguageUtility() {
   this.CANCEL = '取消';
   this.CLOSE = '关闭';
   this.RESET = '重置';
+  this.CONFIRM_DELETE_MESSAGE = '将要删除已选用户， 是否确认?'
+  this.CONFIRM_DELETE = '确认删除';
   this.USER_ID = '序号';
   this.USER_NAME = '用户名';
   this.USER_PASSWORD = '密码';
@@ -58,5 +60,9 @@ function LanguageUtility() {
   this.WARNING_TITTLE = '警告';
   this.WARNING_MESSAGE_SAVE_USERS = '继续添加之前，请保存当前修改';
   this.SUCCESS_TITTLE = '操作成功';
-  this.SUCCESS_MESAAGE_SYNC_USERS = '保存用户成功';  
+  this.SUCCESS_MESAAGE_SYNC_USERS = '保存用户成功';
+  this.SUCCESS_MESSAGE_SET_PERSON_INFO=  '设置用户信息成功';
+  this.ERROR_TITTLE_USERINFO = '用户信息格式错误';
+  this.ERROR_MESSAGE_INVALID_USERNAME = '用户名长度为6到12个字符，只能包含数字，英文字母或下划线，首字母不能为数字';
+  this.ERROR_MESSAGE_INVALID_TEL = '联系电话为11位手机号';
 }

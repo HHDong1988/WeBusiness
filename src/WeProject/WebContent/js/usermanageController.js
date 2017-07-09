@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('userManageController', ['$scope', 'userService', 'toastService', 'passwordGenerator', 'PAGE_SIZE_OPTIONS', userManageController])
+  angular.module('app-web').controller('userManageController', ['$scope', 'userService', 'USER_ROLES', 'toastService', 'passwordGenerator', 'PAGE_SIZE_OPTIONS', userManageController])
 
-  function userManageController($scope, userService,toastService, passwordGenerator, PAGE_SIZE_OPTIONS) {
+  function userManageController($scope, userService, USER_ROLES, toastService, passwordGenerator, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onAddUser = function () {
@@ -28,8 +28,9 @@
         Tel: { value: '', bDirty: false },
         Password: newPassword,
         Address: { value: '', bDirty: false },
+        UpperID: { value: 0, bDirty: false },
+        AliveUser: true,
         bSelect: false,
-        bDelete: false,
         bResetPassword: false,
         bDirty: false
       };
@@ -40,27 +41,18 @@
     }
 
     vm.onDeleteUser = function () {
+      $('#deleteUserModal').modal();
+
+    }
+
+    vm.deleteUser = function () {
+      $('#deleteUserModal').modal('hide');
       for (var i = 0; i < vm.users.length; i++) {
         var user = vm.users[i];
         if (user.bSelect) {
-          user.bDelete = true;
+          user.AliveUser = false;
         }
       }
-
-      var bUpdateUsers = false;
-      var newUsers = [];
-      for (var i = 0; i < vm.users.length; i++) {
-        var user = vm.users[i];
-        if (!user.bDelete || user.ID != '') {
-          newUsers.push(user);
-        } else {
-          bUpdateUsers = true;
-        }
-
-      }
-
-      vm.users = newUsers;
-
       vm.bSelectCurrentPage = false;
       vm.dataDirty = true;
       vm.refreshPaginator();
@@ -84,10 +76,20 @@
       for (var i = 0; i < vm.users.length; i++) {
         var user = vm.users[i];
         if (user.ID == '') {
-          var newUser = {UserName:user.UserName, Password: user.Password, Tel: user.Tel.value, RealName: user.RealName.value, UserTypeID:user.UserTypeID.value, Address: user.Address.value};
+          var newUser = {
+            UserName: user.UserName,
+            Password: user.Password,
+            Tel: user.Tel.value,
+            RealName: user.RealName.value,
+            UserTypeID: user.UserTypeID.value,
+            Address: user.Address.value,
+            UpperID: user.UpperID.value,
+            AliveUser: true
+          };
+
           addItems.push(newUser);
         }
-        else if (user.bDelete) {
+        else if (!user.AliveUser) {
           var deleteUser = new Object();
           deleteUser.ID = user.ID;
           deleteItems.push(deleteUser);
@@ -105,6 +107,9 @@
           }
           if (user.Address.bDirty) {
             changedUser.Address = user.Address.value;
+          }
+          if (user.UpperID.bDirty) {
+            changedUser.UpperID = user.UpperID.value;
           }
           if (user.bResetPassword) {
             changedUser.bResetPassword = true;
@@ -130,6 +135,7 @@
       user.Password = newPassword;
       user.bResetPassword = true;
       user.bDirty = true;
+      vm.dataDirty = true;
     }
 
     vm.refreshPaginator = function () {
@@ -144,7 +150,8 @@
           vm.pages.push(i);
         }
       }
-
+      vm.dataBegin = (vm.currentPage - 1) * vm.pageSize + 1;
+      vm.dataEnd = vm.users.length + (vm.currentPage - 1) * vm.pageSize;
 
     }
 
@@ -179,14 +186,15 @@
           var newUser = {
             ID: user.ID,
             UserName: user.UserName,
-            UserTypeID: { value:user.UserTypeID, bDirty: false },
+            UserTypeID: { value: user.UserTypeID, bDirty: false },
             RealName: { value: user.RealName, bDirty: false },
             Tel: { value: user.Tel, bDirty: false },
             Password: user.Password,
             Address: { value: user.Address, bDirty: false },
+            UpperID: { value: user.UpperID, bDirty: false },
             LastLoginTime: user.LastLoginTime,
+            AliveUser: user.AliveUser,
             bSelect: false,
-            bDelete: false,
             bResetPassword: false,
             bDirty: false
           };
@@ -215,6 +223,27 @@
         }
       }
     }
+
+    vm.IsSecondaryAgency = function (user) {
+      if (user.UserTypeID.value == USER_ROLES.secondaryAgency) {
+        return true;
+      }
+
+      return false;
+    }
+
+    vm.onUserNameChange = function (valid) {
+      if (!valid) {
+        toastService.toast('error', vm.language.ERROR_MESSAGE_INVALID_USERNAME, vm.language.ERROR_TITTLE_USERINFO);
+      }
+    }
+
+    vm.onTelChange = function (valid) {
+      if (!valid) {
+        toastService.toast('error', vm.language.ERROR_MESSAGE_INVALID_TEL, vm.language.ERROR_TITTLE_USERINFO);
+      }
+    }
+
     vm.init = function () {
 
       vm.language = new LanguageUtility();
@@ -226,6 +255,9 @@
       vm.totalPage = 1;
 
       vm.dataTotal = 0;
+      vm.currentDataCount = 0;
+      vm.dataBegin = 0;
+      vm.dataEnd = 0;
       vm.currentPageSize = 0;
 
       vm.bSelectCurrentPage = false;
@@ -249,16 +281,11 @@
       { name: vm.language.USER_ROLE_AGENCY_SECONDAY, id: 6 },
       { name: vm.language.USER_ROLE_SUPER_ADMIN, id: 7 }];
 
+
+      vm.primaryAgencies = [];
+      angular.copy(userService.allPrimaryAgencies, vm.primaryAgencies);
       vm.users = [];
-
-
-
-      // vm.users = [{ UserName: 'bobby', UserTypeID: 'administrator', telephone: '123456', realName: 'DongHH', address: 'Dalian', CreateTime: '2017-06-01', LastLoginTime: '2017-06-02', bSelect: false},
-      // { UserName: 'Spencer', UserTypeID: 'administrator', telephone: '234567', realName: 'WangH', address: 'Dalian', CreateTime: '2017-06-01', LastLoginTime: '2017-06-02', bSelect: false},
-      // { UserName: 'Dennis', UserTypeID: 'administrator', telephone: '345678', realName: 'Dennis', address: 'Dalian', CreateTime: '2017-06-01', LastLoginTime: '2017-06-02', bSelect: false},
-      // { UserName: 'Dennis', UserTypeID: 'administrator', telephone: '345678', realName: 'Dennis', address: 'Dalian', CreateTime: '2017-06-01', LastLoginTime: '2017-06-02', bSelect: false},
-      // { UserName: 'Dennis', UserTypeID: 'administrator', telephone: '345678', realName: 'Dennis', address: 'Dalian', CreateTime: '2017-06-01', LastLoginTime: '2017-06-02', bSelect: false}];
-
+      vm.primaryAgencyFilter = '';
       vm.gotoPage(vm.currentPage);
     };
 

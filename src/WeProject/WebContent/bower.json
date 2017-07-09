@@ -14,7 +14,8 @@
     "bootstrap-offcanvas": "^2.4.0",
     "angular-datatables": "^4.1.1",
     "bootstrapvalidator": "bootstrapValidator#^0.5.3",
-    "toastr": "^2.1.3"
+    "toastr": "^2.1.3",
+    "jquery-editable-select": "^2.2.5"
   },
   "description": "front end pages",
   "main": "",

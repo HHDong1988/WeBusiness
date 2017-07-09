@@ -12,14 +12,18 @@
       notAuthorized: 'auth-not-authorized',
       gotCookie: 'gotCookie'
     })
+    .constant('AUTH_MESSAGE_ZH', {
+      loginSuccess: '登陆成功',
+      loginError: '登陆失败，用户名或密码错误'
+    })
     .constant('USER_ROLES', {
-      admin: '1',
-      assistant: '2',
-      accountant: '3',
-      storeKeeper: '4',
-      primaryAgency: '5',
-      secondaryAgency: '6',
-      superAdmin: '7'
+      admin: 1,
+      assistant: 2,
+      accountant: 3,
+      storeKeeper: 4,
+      primaryAgency: 5,
+      secondaryAgency: 6,
+      superAdmin: 7
     })
     .constant('MENU_EVENT', {
       menuList: '1'
@@ -79,9 +83,9 @@
       this.menus = [];
       this.getMenu = function () {
         return $http.get('/api/menu').then(function (res) {
-          return res;
+            angular.copy(res.data,this.menus);
         }, function (error) {
-          return error;
+
         });
       };
     })
@@ -99,16 +103,30 @@
       }
     })
     .service('userService', function ($http) {
-      this.getAllUsers = function (page, pageSize) {
+      var userService = this;
+      userService.allPrimaryAgencies = [];
+      userService.getAllUsers = function (page, pageSize, searchText) {
         var url = '/api/users?page=' + page + '&pageSize=' + pageSize;
+        if (searchText) {
+          url = url + "&searchText=" + '"' + searchText + '"';
+        }
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
           return error;
         });
       }
-
-      this.setPersonInfo = function (userData) {
+      userService.getAllPrimaryAgencies = function () {
+        userService.getAllUsers(1, -1, "UserTypeID=5").then(function (res) {
+          for (var i = 0; i < res.data.data.length; i++) {
+            var user = res.data.data[i];
+            userService.allPrimaryAgencies.push({ID:user.ID,UserName:user.UserName});
+          }
+        }, function (error) {
+        
+        })
+      }
+      userService.setPersonInfo = function (userData) {
         return $http.put('/api/users', userData).then(function (res) {
           return res;
         }, function (error) {
@@ -116,7 +134,7 @@
         })
       }
 
-      this.syncUserData = function (userData) {
+      userService.syncUserData = function (userData) {
         return $http.post('/api/users', userData).then(function (res) {
           return res;
         }, function (error) {
@@ -124,7 +142,7 @@
         });
       }
 
-      this.resetPassword = function (passwordData) {
+      userService.resetPassword = function (passwordData) {
         return $http.post('/api/password', passwordData).then(function (res) {
           return res;
         }, function (error) {
@@ -133,13 +151,16 @@
       }
 
     })
-    .factory('authService', function ($q, $http, sessionService) {
+    .factory('authService', function ($q, $http, sessionService, AUTH_MESSAGE_ZH) {
       var authService = {};
       authService.logIn = function (credentials) {
         return $http.post('/api/login', credentials).then(function (res) {
+          if (res.data.data.length == 0) {
+            return { userID: '', userRole: '', bNewUser: false, message: AUTH_MESSAGE_ZH.loginError };
+          }
           sessionService.createUserInfo(0, res.data.data[0].UserName, res.data.data[0].UserTypeID);
-          var bNewUser = res.data.data[0].LastLoginTime == undefined ? true:false;
-          return { userID: res.data.data[0].UserName, userRole: res.data.data[0].UserTypeID, bNewUser: bNewUser};
+          var bNewUser = res.data.data[0].LastLoginTime == undefined ? true : false;
+          return { userID: res.data.data[0].UserName, userRole: res.data.data[0].UserTypeID, bNewUser: bNewUser, message: AUTH_MESSAGE_ZH.loginSuccess };
         }, function (error) {
           return error;
         });
@@ -168,25 +189,25 @@
       return authService;
     })
     .service('toastService', function () {
-        this.toast = function (level, message, title) {
-          toastr.options = {
-            closeButton: false,
-            debug: false,
-            progressBar: false,
-            positionClass: "toast-top-center",
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "5000",
-            extendedTimeOut: "1000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-          };
+      this.toast = function (level, message, title) {
+        toastr.options = {
+          closeButton: false,
+          debug: false,
+          progressBar: false,
+          positionClass: "toast-top-center",
+          onclick: null,
+          showDuration: "300",
+          hideDuration: "1000",
+          timeOut: "5000",
+          extendedTimeOut: "1000",
+          showEasing: "swing",
+          hideEasing: "linear",
+          showMethod: "fadeIn",
+          hideMethod: "fadeOut"
+        };
 
-        var $toast = toastr[level](message, title);  
-        }
+        var $toast = toastr[level](message, title);
+      }
 
     })
     .directive('wbLogin', function (AUTH_EVENTS) {
@@ -226,13 +247,18 @@
         templateUrl: 'views/wbStorageManagement.html'
       });
 
-      $routeProvider.when('/personInfo', {
-        controller: 'storageManageController',
-        controllerAs: 'vm',
-        templateUrl: 'views/wbStorageManagement.html'
+      $routeProvider.when('/resetpassword', {
+        controller: 'personalInfoController',
+        controllerAs: 'appVm',
+        templateUrl: 'views/wbResetPassword.html'
       });
 
-      
+
+      $routeProvider.when('/setPersonalInfo', {
+        controller: 'personalInfoController',
+        controllerAs: 'appVm',
+        templateUrl: 'views/wbSetPersonalInfo.html'
+      });
 
       $routeProvider.otherwise({ redirectTo: "/" });
 
@@ -244,7 +270,7 @@
         }
       ]);
     }])
-    .run(function (sessionService, menuService, AUTH_EVENTS, MENU_EVENT, $rootScope, $cookieStore, $cookies) {
+    .run(function (sessionService,userService, menuService, AUTH_EVENTS, MENU_EVENT, $rootScope, $cookieStore, $cookies) {
 
       var currentUser = $cookies.get('username');
       if (!currentUser) {
@@ -252,12 +278,16 @@
         return;
       }
 
+      userService.getAllPrimaryAgencies();
+
       menuService.getMenu().then(function (res) {
         menuService.menus = res.data.data;
         $rootScope.$broadcast(MENU_EVENT.menuList, { menuList: menuService.menus });
       }, function (error) {
         $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
       });
+
+
 
       var currentUserRole = $cookies.get('usertypeid')
       sessionService.createUserInfo(0, currentUser, currentUserRole);
