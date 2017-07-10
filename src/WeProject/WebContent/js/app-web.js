@@ -120,7 +120,7 @@
         userService.getAllUsers(1, -1, "UserTypeID=5").then(function (res) {
           for (var i = 0; i < res.data.data.length; i++) {
             var user = res.data.data[i];
-            userService.allPrimaryAgencies.push({ID:user.ID,UserName:user.UserName});
+            userService.allPrimaryAgencies.push({ID:user.ID.toString(),UserName:user.UserName});
           }
         }, function (error) {
         
