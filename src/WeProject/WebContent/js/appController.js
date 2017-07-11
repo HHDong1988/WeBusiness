@@ -28,6 +28,7 @@
           vm.currentUser = user;
           vm.errorMessage = '';
           userService.getAllPrimaryAgencies();
+          menuService.getMenus();
           $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, user);
         }
       }, function (error) {
@@ -77,11 +78,15 @@
       vm.passwordReset = { oldPassword: '', newPassword: '', confirmPassword: '' };
       vm.errorMessage = '';
       vm.isUserAuth = authService.isAuthenticated;
-      // vm.isUserAuth = function () {
-      //   return true;
-      // }
+      vm.isUserAuth = function () {
+        return true;
+      }
       vm.isNewUser = function () {
        return vm.currentUser.bNewUser;
+      }
+
+      vm.isNewUser = function () {
+       return false;
       }
 
       vm.showLogin = function () {
@@ -100,7 +105,7 @@
       vm.menuList = [{ value: vm.language.USER_MANAGEMENT, href: '#!/userManagement' },
       { value: vm.language.PRODUCTS_MANAGEMENT, href: '#!/productsManagement' },
       { value: vm.language.FINANCE_MANAGEMENT, href: '#!/financeManagement' },
-      { value: vm.language.STORAGE_MANAGEMENT, href: '#!/storageManagement' }];
+      { value: vm.language.STOCK_MANAGEMENT, href: '#!/stockManagement' }];
       vm.menus = vm.menuList;
     };
 

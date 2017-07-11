@@ -32,7 +32,7 @@
       USER_MANAGEMENT: '1',
       PRODUCT_MANAGEMENT: '2',
       FINANCE_MANAGEMENT: '3',
-      STORAGE_MANAGEMENT: '4'
+      STOCK_MANAGEMENT: '4'
     })
     .constant('PAGE_SIZE_OPTIONS', [10, 20, 50, 100])
     .factory('authInterceptor', function ($rootScope, $q,
@@ -80,10 +80,11 @@
       return this;
     })
     .service('menuService', function ($http) {
-      this.menus = [];
-      this.getMenu = function () {
+      var menuService = this;
+      menuService.menus = [];
+      menuService.getMenus = function () {
         return $http.get('/api/menu').then(function (res) {
-            angular.copy(res.data,this.menus);
+          angular.copy(res.data, menuService.menus);
         }, function (error) {
 
         });
@@ -120,10 +121,10 @@
         userService.getAllUsers(1, -1, "UserTypeID=5").then(function (res) {
           for (var i = 0; i < res.data.data.length; i++) {
             var user = res.data.data[i];
-            userService.allPrimaryAgencies.push({ID:user.ID.toString(),UserName:user.UserName});
+            userService.allPrimaryAgencies.push({ ID: user.ID.toString(), UserName: user.UserName });
           }
         }, function (error) {
-        
+
         })
       }
       userService.setPersonInfo = function (userData) {
@@ -228,6 +229,47 @@
         }
       };
     })
+    .directive('treeView', function () {
+      return {
+        restrict: 'E',
+        templateUrl: 'views/treeView.html',
+        scope: {
+          treeData: '=',
+          canChecked: '=',
+          textField: '@',
+          itemClicked: '&',
+          itemCheckedChanged: '&',
+          itemTemplateUrl: '@'
+        },
+        controller: ['$scope', function ($scope) {
+          $scope.itemExpended = function (item, $event) {
+            item.$$isExpend = !item.$$isExpend;
+            $event.stopPropagation();
+          };
+
+          $scope.getItemIcon = function (item) {
+            var isLeaf = $scope.isLeaf(item);
+
+            if (isLeaf) {
+              return 'fa fa-leaf';
+            }
+
+            return item.$$isExpend ? 'fa fa-minus' : 'fa fa-plus';
+          };
+
+          $scope.isLeaf = function (item) {
+            return !item.children || !item.children.length;
+          };
+
+          $scope.warpCallback = function (callback, item, $event) {
+            ($scope[callback] || angular.noop)({
+              $item: item,
+              $event: $event
+            });
+          };
+        }]
+      };
+    })
     .config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
       $routeProvider.when('/', {
         controller: 'homeController',
@@ -241,10 +283,16 @@
         templateUrl: 'views/wbUserManagement.html'
       });
 
-      $routeProvider.when('/storageManagement', {
-        controller: 'storageManageController',
+      $routeProvider.when('/stockManagement', {
+        controller: 'stockManageController',
         controllerAs: 'vm',
-        templateUrl: 'views/wbStorageManagement.html'
+        templateUrl: 'views/wbStockManagement.html'
+      });
+
+      $routeProvider.when('/financeManagement', {
+        controller: 'financeManageController',
+        controllerAs: 'vm',
+        templateUrl: 'views/wbFinanceManage.html'
       });
 
       $routeProvider.when('/resetpassword', {
@@ -270,7 +318,7 @@
         }
       ]);
     }])
-    .run(function (sessionService,userService, menuService, AUTH_EVENTS, MENU_EVENT, $rootScope, $cookieStore, $cookies) {
+    .run(function (sessionService, userService, menuService, AUTH_EVENTS, MENU_EVENT, $rootScope, $cookieStore, $cookies) {
 
       var currentUser = $cookies.get('username');
       if (!currentUser) {
@@ -279,16 +327,6 @@
       }
 
       userService.getAllPrimaryAgencies();
-
-      menuService.getMenu().then(function (res) {
-        menuService.menus = res.data.data;
-        $rootScope.$broadcast(MENU_EVENT.menuList, { menuList: menuService.menus });
-      }, function (error) {
-        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-      });
-
-
-
       var currentUserRole = $cookies.get('usertypeid')
       sessionService.createUserInfo(0, currentUser, currentUserRole);
 
