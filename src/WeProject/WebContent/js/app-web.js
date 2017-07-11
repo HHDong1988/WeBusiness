@@ -249,12 +249,7 @@
 
           $scope.getItemIcon = function (item) {
             var isLeaf = $scope.isLeaf(item);
-
-            if (isLeaf) {
-              return 'fa fa-leaf';
-            }
-
-            return item.$$isExpend ? 'fa fa-minus' : 'fa fa-plus';
+            return item.icon;
           };
 
           $scope.isLeaf = function (item) {
