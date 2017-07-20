@@ -38,9 +38,10 @@ function LanguageUtility() {
   this.CANCEL = '取消';
   this.CLOSE = '关闭';
   this.RESET = '重置';
+  this.VIEW = "查看";
   this.CONFIRM_DELETE_MESSAGE = '将要删除已选条目， 是否确认?'
   this.CONFIRM_DELETE = '确认删除';
-  this.USER_ID = '序号';
+  this.ITEM_ID = '序号';
   this.USER_NAME = '用户名';
   this.USER_PASSWORD = '密码';
   this.USER_OLD_PASSWORD = '旧密码';
@@ -71,6 +72,24 @@ function LanguageUtility() {
   this.STOCK_PURCHASE_COUNT = '采购总数';
   this.STOCK_STOCK_COUNT = '库存数量';
   this.STOCK_INFORMATION = '库存信息';
+  this.STOCK_PURCHASE_INFORMATION = '采购信息';
   this.STOCK_SALES_INFORMATION = '销售信息';
   this.STOCK_SALES_STATICS = '销售统计';
+  this.PURCHASE_REST_COUNT = '剩余数量';
+  this.PURCHASE_PRICE = '采购价格';
+  this.PURCHASE_VENDOR = '供货商';
+  this.PURCHASE_PRODUCTION_DATE = '生产日期';
+  this.PURCHASE_SHELF_LIFE = '保质期';
+  this.PURCHASE_BATCH_NUMBER = '批号';
+  this.PURCHASE_PACKING = '包装';
+  this.PURCHASE_SPECIFICATION = '规格';
+  this.PURCHASE_BUYER = '采购人员';
+  this.SALES_COUNT = '销售数量';
+  this.SALES_PRICE = '销售价格';
+  this.SALES_DATE = '销售日期';
+  this.SALES_BUYER = '购买人';
+  this.SALES_MAIL_ADDRESS = '邮寄地址';
+  this.SALES_SHIPMENT_VENDOR = '物流商';
+  this.SALES_TRACKING_NUMBER = '运单号';
+  this.SALES_BATCH_NUMBER = '商品批号';
 }

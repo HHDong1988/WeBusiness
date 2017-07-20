@@ -1,18 +1,25 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('stockManageController', ['$scope', 'PAGE_SIZE_OPTIONS', stockManageController])
+  angular.module('app-web').controller('purchaseInfoController', ['$scope', 'PAGE_SIZE_OPTIONS', purchaseInfoController])
 
-  function stockManageController($scope, PAGE_SIZE_OPTIONS) {
+  function purchaseInfoController($scope, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onAdd = function () {
       var newStock = {
-        ID:'',
+        ID: '',
         Name: { value: '', bDirty: false },
-        purchaseCount: { value: 0,bDirty: false },
-        currentCount: { value: 0, bDirty: false },
-        imgUrl:'',
+        purchaseCount: { value: 0, bDirty: false },
+        restCount: { value: 0, bDirty: false },
+        price: { value: 0, bDirty: false },
+        vendor: { value: '', bDirty: false },
+        productionDate: { value: '', bDirty: false },
+        shelfLife: { value: '', bDirty: false },
+        batchNumber: { value: '', bDirty: false },
+        packing: { value: '', bDirty: false },
+        specification: { value: '', bDirty: false },
+        buyer: { value: '', bDirty: false },
         bDirty: false,
       };
 
@@ -77,15 +84,15 @@
     }
 
     vm.onViewPurchaseInfo = function (stock) {
-      
+
     }
 
     vm.onViewSalesInfo = function (stock) {
-      
+
     }
 
     vm.onViewSalesStatics = function () {
-      
+
     }
 
     vm.init = function () {
@@ -107,47 +114,22 @@
       vm.bSelectCurrentPage = false;
       vm.dataDirty = false;
 
+
       vm.columnHeaders = [vm.language.ITEM_ID,
       vm.language.STOCK_NAME,
-      vm.language.STOCK_THUMBNAIL,
       vm.language.STOCK_PURCHASE_COUNT,
-      vm.language.STOCK_STOCK_COUNT,
-      vm.language.STOCK_PURCHASE_INFORMATION,
-      vm.language.STOCK_SALES_INFORMATION,
-      vm.language.STOCK_SALES_STATICS];
+      vm.language.PURCHASE_REST_COUNT,
+      vm.language.PURCHASE_PRICE,
+      vm.language.PURCHASE_VENDOR,
+      vm.language.PURCHASE_PRODUCTION_DATE,
+      vm.language.PURCHASE_SHELF_LIFE,
+      vm.language.PURCHASE_BATCH_NUMBER,
+      vm.language.PURCHASE_PACKING,
+      vm.language.PURCHASE_SPECIFICATION,
+      vm.language.PURCHASE_BUYER];
 
-      vm.stocks = [{
-        ID:1,
-        Name: { value: "西班牙等离子鸭蛋", bDirty: false },
-        purchaseCount: { value: 3000, bDirty: false },
-        currentCount: { value: 2000, bDirty: false },
-        imgUrl:'',
-        bDirty: false
-      },
-      {
-        ID:2,
-        Name: { value: "日本北海道鞋垫", bDirty: false },
-        purchaseCount: { value: 2000, bDirty: false },
-        currentCount: { value: 1500, bDirty: false },
-        imgUrl:'',
-        bDirty: false
-      },
-      {
-        ID:3,
-        Name: { value: "南美肌肉拖鞋", bDirty: false },
-        purchaseCount: { value: 3000, bDirty: false },
-        currentCount: { value: 2000, bDirty: false },
-        imgUrl:'',
-        bDirty: false
-      },
-      {
-        ID:4,
-        Name: { value: "菲律宾跳楼槟榔", bDirty: false },
-        purchaseCount: { value: 3000, bDirty: false },
-        currentCount: { value: 2000, bDirty: false },
-        imgUrl:'',
-        bDirty: false
-      }];
+      vm.stocks = [];
+
 
       vm.gotoPage(vm.currentPage);
     };

@@ -263,7 +263,7 @@
       vm.bSelectCurrentPage = false;
       vm.dataDirty = false;
 
-      vm.columnHeaders = [vm.language.USER_ID,
+      vm.columnHeaders = [vm.language.ITEM_ID,
       vm.language.USER_NAME,
       vm.language.USER_TYPE,
       vm.language.USER_REAL_NAME,

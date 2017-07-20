@@ -283,11 +283,26 @@
         controllerAs: 'vm',
         templateUrl: 'views/wbStockManagement.html'
       });
-
-      $routeProvider.when('/financeManagement', {
-        controller: 'financeManageController',
+      $routeProvider.when('/stockManagement', {
+        controller: 'stockManageController',
         controllerAs: 'vm',
-        templateUrl: 'views/wbFinanceManage.html'
+        templateUrl: 'views/wbStockManagement.html'
+      });
+      $routeProvider.when('/purchaseInfo', {
+        controller: 'purchaseInfoController',
+        controllerAs: 'vm',
+        templateUrl: 'views/purchaseInfo.html'
+      });
+      $routeProvider.when('/salesInfo', {
+        controller: 'salesInfoController',
+        controllerAs: 'vm',
+        templateUrl: 'views/salesInfo.html'
+      });
+
+      $routeProvider.when('/salesStatics', {
+        controller: 'salesStaticsController',
+        controllerAs: 'vm',
+        templateUrl: 'views/salesStatics.html'
       });
 
       $routeProvider.when('/resetpassword', {

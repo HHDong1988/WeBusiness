@@ -1,0 +1,136 @@
+<div class="row">
+  <div class="col-md-3">
+    <ul class="nav nav-pills nav-stacked">
+      <li role="presentation" class="active"><a href="#">商品入库</a></li>
+      <li role="presentation"><a href="#">采购信息</a></li>
+      <li role="presentation"><a href="#">销售信息</a></li>
+      <li role="presentation"><a href="#">销售统计</a></li>
+    </ul>
+  </div>
+  <div class="col-md-9">
+    <div class="tableContainer">
+
+      <div class="row">
+
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-left">
+          <form class="form-inline">
+            <div class="form-group">
+              <span>每页显示</span>
+              <select class="form-control" ng-model="vm.pageSize" ng-options="size for size in vm.pageSizeOptions"></select>
+              <span>条数据</span>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
+          <div class="btn-group">
+            <button type="button" class="btn btn-default" ng-click="vm.onAdd()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+            <button type="button" class="btn btn-default" ng-click="vm.onRefresh()"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+            <button type="button" class="btn btn-default" ng-click="vm.onSync()" ng-disabled="!vm.dataDirty"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <ng-form name="stockForm">
+            <table class="table table-striped table-bordered table-hover storageTable">
+              <tr>
+                <th ng-repeat="colHeader in vm.columnHeaders" class="text-center">{{colHeader}}</th>
+              </tr>
+              <tr ng-repeat="stock in vm.stocks  | limitTo: vm.pageSize + 1">
+                <td>{{$index + vm.pageSize*(vm.currentPage - 1) + 1}}</td>
+                <td>
+                  <div ng-class="stockForm['stockName_' + $index].$valid ? '':'invalidData'">
+                    <input type="text" name="stockName_{{$index}}" class="form-control" ng-model="stock.Name.value" ng-change="vm.onStockChange(stock, stock.Name)"
+                      ng-blur="vm.onNameChange(stockForm['stockName_' + $index].$valid)" required>
+                    <div ng-if="stock.Name.bDirty"></div>
+                  </div>
+                </td>
+                <td>
+                  <div ng-class="stockForm['purchaseCount_' + $index].$valid ? '':'invalidData'">
+                    <input type="number" name="purchaseCount_{{$index}}" class="form-control" ng-model="stock.purchaseCount.value" ng-change="vm.onStockChange(stock, stock.purchaseCount)">
+                    <div ng-if="stock.purchaseCount.bDirty"></div>
+                  </div>
+                </td>
+                <td>
+                  <div ng-class="stockForm['restCount_' + $index].$valid ? '':'invalidData'">
+                    <input type="number" name="restCount_{{$index}}" class="form-control" ng-model="stock.restCount.value" ng-change="vm.onStockChange(stock, stock.restCount)">
+                    <div ng-if="stock.restCount.bDirty"></div>
+                  </div>
+                </td>
+                <td>
+                  <div ng-class="stockForm['price_' + $index].$valid ? '':'invalidData'">
+                    <input type="number" name="price_{{$index}}" class="form-control" ng-model="stock.price.value" ng-change="vm.onStockChange(stock, stock.price)">
+                    <div ng-if="stock.price.bDirty"></div>
+                  </div>
+                </td>
+                <td>
+                  <div ng-class="stockForm['vendor_' + $index].$valid ? '':'invalidData'">
+                    <input type="text" name="vendor_{{$index}}" class="form-control" ng-model="stock.vendor.value" ng-change="vm.onStockChange(stock, stock.vendor)">
+                    <div ng-if="stock.vendor.bDirty"></div>
+                  </div>
+                </td>
+                <td>
+                  <div ng-class="stockForm['productionDate_' + $index].$valid ? '':'invalidData'">
+                    <input type="date" name="productionDate_{{$index}}" class="form-control" ng-model="stock.productionDate.value" ng-change="vm.onStockChange(stock, stock.productionDate)">
+                    <div ng-if="stock.productionDate.bDirty"></div>
+                  </div>
+                </td>
+                <td>
+                  <div ng-class="stockForm['shelfLife_' + $index].$valid ? '':'invalidData'">
+                    <input type="date" name="shelfLife_{{$index}}" class="form-control" ng-model="stock.shlefLife.value" ng-change="vm.onStockChange(stock, stock.shlefLife)">
+                    <div ng-if="stock.shlefLife.bDirty"></div>
+                  </div>
+                </td>
+                <td>
+                  <div ng-class="stockForm['batchNumber_' + $index].$valid ? '':'invalidData'">
+                    <input type="text" name="batchNumber_{{$index}}" class="form-control" ng-model="stock.batchNumber.value" ng-change="vm.onStockChange(stock, stock.batchNumber)">
+                    <div ng-if="stock.batchNumber.bDirty"></div>
+                  </div>
+                </td>
+                <td>
+                  <div ng-class="stockForm['packing_' + $index].$valid ? '':'invalidData'">
+                    <input type="text" name="packing_{{$index}}" class="form-control" ng-model="stock.packing.value" ng-change="vm.onStockChange(stock, stock.packing)">
+                    <div ng-if="stock.packing.bDirty"></div>
+                  </div>
+                </td>
+                <td>
+                  <div ng-class="stockForm['specification_' + $index].$valid ? '':'invalidData'">
+                    <input type="number" name="specification_{{$index}}" class="form-control" ng-model="stock.specification.value" ng-change="vm.onStockChange(stock, stock.specification)">
+                    <div ng-if="stock.specification.bDirty"></div>
+                  </div>
+                </td>
+                <td>
+                  <div ng-class="stockForm['buyer_' + $index].$valid ? '':'invalidData'">
+                    <input type="number" name="buyer_{{$index}}" class="form-control" ng-model="stock.buyer.value" ng-change="vm.onStockChange(stock, stock.buyer)">
+                    <div ng-if="stock.buyer.bDirty"></div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </ng-form>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-left">
+          <form class="form-inline">
+            <div class="form-group">
+              <span>{{'显示'+ vm.dataBegin + '到' + vm.dataEnd + '条数据, 共' + vm.dataTotal + '条数据'}}</span>
+            </div>
+          </form>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
+          <ul class="pagination">
+            <li ng-class="vm.currentPage > 1 ?'':'disabled'"><span ng-click="vm.prevPage()" ng-disabled="vm.currentPage <= 1">&laquo;</span></li>
+            <li ng-repeat="page in vm.pages" ng-class="vm.currentPage == page?'active':''">
+              <span ng-click="vm.gotoPage(page)">{{page}}</span>
+            </li>
+            <li ng-class="vm.currentPage < vm.totalPage ?'':'disabled'"><span ng-click="vm.nextPage()">&raquo;</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
