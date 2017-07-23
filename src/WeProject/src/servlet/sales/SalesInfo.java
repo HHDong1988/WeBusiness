@@ -107,7 +107,7 @@ public class SalesInfo extends HttpServlet{
 //				return;
 //			}
 			if(hasId){
-				ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOCOUNTBYID);
+				ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOCOUNTBYPRODUCTID);
 			}else{
 				ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOCOUNT);
 				ps.setInt(1, id);
@@ -129,7 +129,7 @@ public class SalesInfo extends HttpServlet{
 			int startPoint =iPagesize * (iPageNum-1);
 			//iPagesize * (iPageNum-1) +" ," + iPagesize
             if(hasId){
-            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYPAGEBYID);
+            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYPAGEBYPRODUCTID);
     			ps.setInt(1, id);
     			ps.setInt(2, startPoint);
     			ps.setInt(3, iPagesize);

@@ -33,30 +33,36 @@ public final class Constant {
 	public static final String SQL_UPDATE_USERLOGINTIME = "UPDATE sys_conf_userinfo "
 			+ "SET LastLoginTime = ? "
 			+ "WHERE UserName = ?";
-	public static final String SQL_GET_STORAGEITEMCOUNT="SELECT COUNT(ID) as total, UserName"
+	public static final String SQL_GET_STORAGEITEMCOUNT="SELECT COUNT(ID) as total, ID"
 			+ " FROM data_storage_products ";	
 	public static final String SQL_GET_STORAGEBYPAGE="SELECT ID, Name, CurrentAmount, SoldAmount"
 			+ " FROM data_storage_products "
 			+ " ORDER BY ID LIMIT ?,?";
-	public static final String SQL_GET_PURCHASEITEMCOUNT="SELECT COUNT(ID) as total, UserName"
+	public static final String SQL_GET_PURCHASEITEMCOUNT="SELECT COUNT(ID) as total, ID"
 			+ " FROM data_purchaseinfo ";	
 	
 	public static final String SQL_GET_PURCHASEINFOBYPAGE="SELECT * "
 			+ " FROM data_purchaseinfo "
 			+ " ORDER BY ID LIMIT ?,?";
-	public static final String SQL_GET_SALESINFOCOUNTBYID="SELECT COUNT(ID) as total, UserName"
+	public static final String SQL_GET_SALESINFOCOUNTBYPRODUCTID="SELECT COUNT(ID) as total, ID"
 			+ " FROM data_purchaseinfo "
-			+ " WHERE ID = ?";
-	public static final String SQL_GET_SALESINFOCOUNT="SELECT COUNT(ID) as total, UserName"
+			+ " WHERE ProductID = ?";
+	public static final String SQL_GET_SALESINFOCOUNT="SELECT COUNT(ID) as total, ID"
 			+ " FROM data_purchaseinfo "
 			+ " WHERE ID = ?";
 	public static final String SQL_GET_SALESINFOBYPAGE="SELECT * "
 			+ " FROM data_saleproducts "
 			+ " ORDER BY ID LIMIT ?,?";
-	public static final String SQL_GET_SALESINFOBYPAGEBYID="SELECT * "
+	public static final String SQL_GET_SALESINFOBYPAGEBYPRODUCTID="SELECT * "
 			+ " FROM data_saleproducts "
-			+ " WHERE ID = ?"
+			+ " WHERE ProductID = ?"
 			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_GET_PUCHASEAMOUNTVALUEBYID="SELECT Amount"
+			+ " FROM data_purchaseinfo "
+			+ " WHERE ID = ?";
+	public static final String SQL_GET_PRODUCTCURRNETAMOUNTVALUEBYID="SELECT Amount"
+			+ " FROM data_storage_products "
+			+ " WHERE ID = ?";
 	
 	public static final String LastLogInTimeColumn="LastLoginTime";
 	public static final String SQL_CHECK_PRODUCTEXIST = "SELECT ID, UserName"
