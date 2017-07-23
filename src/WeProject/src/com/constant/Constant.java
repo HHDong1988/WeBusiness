@@ -65,7 +65,7 @@ public final class Constant {
 			+ " WHERE ID = ?";
 	
 	public static final String LastLogInTimeColumn="LastLoginTime";
-	public static final String SQL_CHECK_PRODUCTEXIST = "*"
+	public static final String SQL_CHECK_PRODUCTEXIST = "SELECT ID"
 			+ " FROM data_storage_products "
 			+ " WHERE Name = ? ";
 	
