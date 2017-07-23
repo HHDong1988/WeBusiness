@@ -20,15 +20,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+
 import com.constant.Constant;
 import com.database.DBController;
 import com.util.GetRequestJsonUtils;
 import com.util.HttpUtil;
 import com.util.MD5Util;
-public class Storage extends HttpServlet{
-private static final long serialVersionUID = 1L;
-	
 
+public class PurchaseInfo extends HttpServlet{
+	private static final long serialVersionUID = 1L;
 	private Boolean HasAuthority(HttpServletRequest req,Connection conn, String targetUserName){
 		Cookie[] cookies = req.getCookies();
 		String username = null;
@@ -59,39 +59,39 @@ private static final long serialVersionUID = 1L;
 		return false;
 	}
 	
-	private JSONArray InsertProduct(Connection conn,JSONArray array) 
+	private JSONArray InsertPurchaseInfo(Connection conn,JSONArray array) 
 			throws JSONException{
 		JSONArray occpupylist=new JSONArray();
-		for(int i=0;i<array.length();i++)
-		{
-			JSONObject object = (JSONObject)array.get(i);
-			if(object==null)return null;
-			String userName = ((String) object.get("Name")).trim();
-			PreparedStatement ps;
-			try {
-				ps = conn.prepareStatement(Constant.SQL_CHECK_PRODUCTEXIST);
-				ps.setString(1, userName);
-				JSONArray result = DBController.getJsonArray(ps, conn);
-				if(result.length()>0){
-					array.remove(i);
-					i--;
-					occpupylist.put(userName);
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-
-		}
+//		for(int i=0;i<array.length();i++)
+//		{
+//			JSONObject object = (JSONObject)array.get(i);
+//			if(object==null)return null;
+//			String userName = ((String) object.get("Name")).trim();
+//			PreparedStatement ps;
+//			try {
+//				ps = conn.prepareStatement(Constant.SQL_CHECK_PRODUCTEXIST);
+//				ps.setString(1, userName);
+//				JSONArray result = DBController.getJsonArray(ps, conn);
+//				if(result.length()>0){
+//					array.remove(i);
+//					i--;
+//					occpupylist.put(userName);
+//				}
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//				return null;
+//			}
+//
+//		}
 		Date date = new Date();
 		java.sql.Timestamp sqlDate=new java.sql.Timestamp(date.getTime());
-		Boolean result = DBController.ExecuteMultipleInsert(conn, "data_storage_products", array, sqlDate);
+		Boolean result = DBController.ExecuteMultipleInsert(conn, "data_purchaseinfo", array, sqlDate);
 		if(result)return occpupylist;
 		else return null;
 	}
 	
-	private Boolean UpdateProducts(Connection conn,JSONArray array) {
+	private Boolean UpdatePurchaseInfo(Connection conn,JSONArray array) {
 		for(int i=0;i<array.length();i++)
 		{
 			try {
@@ -102,7 +102,7 @@ private static final long serialVersionUID = 1L;
 				return false;
 			}
 		}
-		Boolean result = DBController.ExecuteMultipleUpdate(conn, "data_storage_products", array, "ID");
+		Boolean result = DBController.ExecuteMultipleUpdate(conn, "data_purchaseinfo", array, "ID");
 		return result;
 	}
 	
@@ -143,7 +143,7 @@ private static final long serialVersionUID = 1L;
 //				return;
 //			}
 			
-			ps = conn.prepareStatement(Constant.SQL_GET_STORAGEITEMCOUNT);
+			ps = conn.prepareStatement(Constant.SQL_GET_PURCHASEITEMCOUNT);
 			JSONArray jArrTotalArray = null;
 			try {
 				jArrTotalArray = DBController.getJsonArray(ps, conn);
@@ -160,7 +160,7 @@ private static final long serialVersionUID = 1L;
             int startPoint =iPagesize * (iPageNum-1);
 			//iPagesize * (iPageNum-1) +" ," + iPagesize
 			
-			ps = conn.prepareStatement(Constant.SQL_GET_STORAGEBYPAGE);
+			ps = conn.prepareStatement(Constant.SQL_GET_PURCHASEINFOBYPAGE);
 			
 			ps.setInt(1, startPoint);
 			ps.setInt(2, iPagesize);
@@ -245,14 +245,14 @@ private static final long serialVersionUID = 1L;
 			if(object.has("Add")){
 				tempArray = object.getJSONArray("Add");
 				if(tempArray!=null){
-					nameOccupyList = InsertProduct(conn,tempArray); 
+					nameOccupyList = InsertPurchaseInfo(conn,tempArray); 
 				}
 				
 			}
 			if(object.has("Edit")){
 				tempArray = object.getJSONArray("Edit");
 				if(tempArray!=null){
-					editResult = UpdateProducts(conn, tempArray); 
+					editResult = UpdatePurchaseInfo(conn, tempArray); 
 				}
 			}
 			

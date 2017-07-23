@@ -63,5 +63,31 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
     <url-pattern>/api/password</url-pattern>
   </servlet-mapping>
   
+   <servlet>
+    <servlet-name>Purchase</servlet-name>
+    <servlet-class>servlet.storage.PurchaseInfo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Purchase</servlet-name>
+    <url-pattern>/api/purchase</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>SalesInfo</servlet-name>
+    <servlet-class>servlet.sales.SalesInfo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SalesInfo</servlet-name>
+    <url-pattern>/api/sales</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>Storage</servlet-name>
+    <servlet-class>servlet.storage.Storage</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Storage</servlet-name>
+    <url-pattern>/api/stocks</url-pattern>
+  </servlet-mapping>
  
 </web-app>

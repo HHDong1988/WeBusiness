@@ -38,8 +38,20 @@ public final class Constant {
 	public static final String SQL_GET_STORAGEBYPAGE="SELECT ID, Name, CurrentAmount, SoldAmount"
 			+ " FROM data_storage_products "
 			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_GET_PURCHASEITEMCOUNT="SELECT COUNT(ID) as total, UserName"
+			+ " FROM data_purchaseinfo ";	
+	public static final String SQL_GET_PURCHASEINFOBYPAGE="SELECT * "
+			+ " FROM data_purchaseinfo "
+			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_GET_SALESINFOBYID="SELECT * "
+			+ " FROM data_saleproducts "
+			+ " WHERE ID = ?";
 	
 	public static final String LastLogInTimeColumn="LastLoginTime";
+	public static final String SQL_CHECK_PRODUCTEXIST = "SELECT ID, UserName"
+			+ " FROM data_storage_products "
+			+ " WHERE Name = ? ";
+	
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
 	public static final String USERNAME_ERROR = "User name is occupied.";
