@@ -28,7 +28,7 @@ public final class Constant {
 			+ "SET Password = ?"
 			+ "WHERE UserName = ?";
 			
-	public static final String SQL_GET_USERTOTALCOUNT="SELECT COUNT(ID) as total, UserName"
+	public static final String SQL_GET_USERTOTALCOUNT="SELECT COUNT(ID) as total, ID"
 			+ " FROM sys_conf_userinfo ";
 	public static final String SQL_UPDATE_USERLOGINTIME = "UPDATE sys_conf_userinfo "
 			+ "SET LastLoginTime = ? "
@@ -65,7 +65,7 @@ public final class Constant {
 			+ " WHERE ID = ?";
 	
 	public static final String LastLogInTimeColumn="LastLoginTime";
-	public static final String SQL_CHECK_PRODUCTEXIST = "SELECT ID, UserName"
+	public static final String SQL_CHECK_PRODUCTEXIST = "*"
 			+ " FROM data_storage_products "
 			+ " WHERE Name = ? ";
 	

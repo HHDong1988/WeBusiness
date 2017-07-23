@@ -66,16 +66,16 @@ private static final long serialVersionUID = 1L;
 		{
 			JSONObject object = (JSONObject)array.get(i);
 			if(object==null)return null;
-			String userName = ((String) object.get("Name")).trim();
+			String name = ((String) object.get("Name")).trim();
 			PreparedStatement ps;
 			try {
 				ps = conn.prepareStatement(Constant.SQL_CHECK_PRODUCTEXIST);
-				ps.setString(1, userName);
+				ps.setString(1, name);
 				JSONArray result = DBController.getJsonArray(ps, conn);
 				if(result.length()>0){
 					array.remove(i);
 					i--;
-					occpupylist.put(userName);
+					occpupylist.put(name);
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
