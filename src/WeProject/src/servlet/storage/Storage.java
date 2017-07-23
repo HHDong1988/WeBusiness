@@ -157,11 +157,14 @@ private static final long serialVersionUID = 1L;
 
             int startPoint =iPagesize * (iPageNum-1);
 			//iPagesize * (iPageNum-1) +" ," + iPagesize
+			if(iPagesize==-1){
+				ps = conn.prepareStatement(Constant.SQL_GET_STORAGE);
+			}else{
+				ps = conn.prepareStatement(Constant.SQL_GET_STORAGEBYPAGE);
+				ps.setInt(1, startPoint);
+				ps.setInt(2, iPagesize);
+			}
 			
-			ps = conn.prepareStatement(Constant.SQL_GET_STORAGEBYPAGE);
-			
-			ps.setInt(1, startPoint);
-			ps.setInt(2, iPagesize);
 			JSONArray array = DBController.getJsonArray(ps, conn);
 
 			endDate = new Date();

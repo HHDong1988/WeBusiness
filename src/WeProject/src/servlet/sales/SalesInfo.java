@@ -128,17 +128,28 @@ public class SalesInfo extends HttpServlet{
 
 			int startPoint =iPagesize * (iPageNum-1);
 			//iPagesize * (iPageNum-1) +" ," + iPagesize
-            if(hasId){
-            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYPAGEBYPRODUCTID);
-    			ps.setInt(1, id);
-    			ps.setInt(2, startPoint);
-    			ps.setInt(3, iPagesize);
-            }else
-            {
-            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYPAGE);
-            	ps.setInt(1, startPoint);
-    			ps.setInt(2, iPagesize);
-            }
+			if(iPagesize==-1){
+				if(hasId){
+	            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYPRODUCTID);
+	    			ps.setInt(1, id);
+	            }else
+	            {
+	            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFO);
+	            }
+			}else{
+				if(hasId){
+	            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYPAGEBYPRODUCTID);
+	    			ps.setInt(1, id);
+	    			ps.setInt(2, startPoint);
+	    			ps.setInt(3, iPagesize);
+	            }else
+	            {
+	            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYPAGE);
+	            	ps.setInt(1, startPoint);
+	    			ps.setInt(2, iPagesize);
+	            }
+			}
+           
 			
 			JSONArray array = DBController.getJsonArray(ps, conn);
 

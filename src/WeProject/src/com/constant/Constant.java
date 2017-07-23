@@ -38,12 +38,16 @@ public final class Constant {
 	public static final String SQL_GET_STORAGEBYPAGE="SELECT ID, Name, CurrentAmount, SoldAmount"
 			+ " FROM data_storage_products "
 			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_GET_STORAGE="SELECT ID, Name, CurrentAmount, SoldAmount"
+			+ " FROM data_storage_products ";
 	public static final String SQL_GET_PURCHASEITEMCOUNT="SELECT COUNT(ID) as total, ID"
 			+ " FROM data_purchaseinfo ";	
 	
 	public static final String SQL_GET_PURCHASEINFOBYPAGE="SELECT * "
 			+ " FROM data_purchaseinfo "
 			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_GET_PURCHASEINFO="SELECT * "
+			+ " FROM data_purchaseinfo ";
 	public static final String SQL_GET_SALESINFOCOUNTBYPRODUCTID="SELECT COUNT(ID) as total, ID"
 			+ " FROM data_purchaseinfo "
 			+ " WHERE ProductID = ?";
@@ -53,10 +57,15 @@ public final class Constant {
 	public static final String SQL_GET_SALESINFOBYPAGE="SELECT * "
 			+ " FROM data_saleproducts "
 			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_GET_SALESINFO="SELECT * "
+			+ " FROM data_saleproducts ";
 	public static final String SQL_GET_SALESINFOBYPAGEBYPRODUCTID="SELECT * "
 			+ " FROM data_saleproducts "
 			+ " WHERE ProductID = ?"
 			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_GET_SALESINFOBYPRODUCTID="SELECT * "
+			+ " FROM data_saleproducts "
+			+ " WHERE ProductID = ?";
 //	public static final String SQL_GET_PUCHASEAMOUNTVALUEBYID="SELECT Amount"
 //			+ " FROM data_purchaseinfo "
 //			+ " WHERE ID = ?";

@@ -62,7 +62,6 @@ public class PurchaseInfo extends HttpServlet{
 	private Boolean InsertPurchaseInfo(Connection conn,JSONArray array) 
 			throws JSONException, SQLException{
 		
-		JSONArray productUpdateArray=new JSONArray();
 		for(int i=0;i<array.length();i++){
 			JSONObject object = array.getJSONObject(i);
 			if(!object.has("ProductID")||!object.has("Amount")||!object.has("ID"))continue;
@@ -74,20 +73,20 @@ public class PurchaseInfo extends HttpServlet{
 			PreparedStatement ps = conn.prepareStatement(Constant.SQL_UPDATE_PRODUCTCURRENTAMOUNTBYID);
 			ps.setInt(1, purchaseAmount);
 			ps.setInt(2, productID);
-			
-			JSONObject updateObject = new JSONObject();
-			updateObject.put("ID", productID);
-			updateObject.put("CurrentAmount", purchaseAmount);
-			productUpdateArray.put(updateObject);
+			ps.executeUpdate();
+//			
+//			JSONObject updateObject = new JSONObject();
+//			updateObject.put("ID", productID);
+//			updateObject.put("CurrentAmount", purchaseAmount);
+//			productUpdateArray.put(updateObject);
 		}
 		Boolean result = DBController.ExecuteMultipleInsert(conn, "data_purchaseinfo", array);
-		Boolean updateresult = DBController.ExecuteMultipleUpdate(conn, "data_storage_products", productUpdateArray,"ID");
-		if(result&&updateresult)return true;
+		if(result)return true;
 		else return false;
 	}
 	
 	private Boolean UpdatePurchaseInfo(Connection conn,JSONArray array) throws JSONException, SQLException {
-		JSONArray productUpdateArray=new JSONArray();
+//		JSONArray productUpdateArray=new JSONArray();
 //		for(int i=0;i<array.length();i++){
 //			JSONObject object = array.getJSONObject(i);
 //			if(!object.has("ProductID")||!object.has("Amount")||!object.has("ID"))continue;
@@ -166,11 +165,14 @@ public class PurchaseInfo extends HttpServlet{
 
             int startPoint =iPagesize * (iPageNum-1);
 			//iPagesize * (iPageNum-1) +" ," + iPagesize
-			
-			ps = conn.prepareStatement(Constant.SQL_GET_PURCHASEINFOBYPAGE);
-			
-			ps.setInt(1, startPoint);
-			ps.setInt(2, iPagesize);
+			if(iPagesize==-1){
+				ps = conn.prepareStatement(Constant.SQL_GET_PURCHASEINFO);
+			}else{
+				ps = conn.prepareStatement(Constant.SQL_GET_PURCHASEINFOBYPAGE);
+				ps.setInt(1, startPoint);
+				ps.setInt(2, iPagesize);
+			}
+		
 			JSONArray array = DBController.getJsonArray(ps, conn);
 
 			endDate = new Date();
