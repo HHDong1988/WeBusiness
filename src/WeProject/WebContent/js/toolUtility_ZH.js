@@ -61,6 +61,7 @@ function LanguageUtility() {
   this.WARNING_TITTLE = '警告';
   this.WARNING_MESSAGE_SAVE_USERS = '继续添加之前，请保存当前修改';
   this.SUCCESS_TITTLE = '操作成功';
+  this.FAILED_TITTLE = '操作失败';
   this.SUCCESS_MESAAGE_SYNC_USERS = '保存用户成功';
   this.SUCCESS_MESSAGE_SET_PERSON_INFO=  '设置用户信息成功';
   this.ERROR_TITTLE_USERINFO = '用户信息格式错误';
@@ -92,4 +93,15 @@ function LanguageUtility() {
   this.SALES_SHIPMENT_VENDOR = '物流商';
   this.SALES_TRACKING_NUMBER = '运单号';
   this.SALES_BATCH_NUMBER = '商品批号';
+  this.SALES_MENU_INSTOCK = '商品入库';
+  this.SALES_MENU_PURCHASE_INFO = '采购信息';
+  this.SALES_MENU_SALES_INFO = '销售信息';
+  this.SALES_MENU_SALES_STATICS = '销售统计';
+  this.SALES_STATICS_START_TIME = '开始时间';
+  this.SALES_STATICS_END_TIME = '技术时间';
+  this.SALES_STATICS_QUERY = '查询';
+  this.SUCCESS_MESAAGE_SYNC_STOCKS = '同步库存数据成功';
+  this.ERROR_MESSAGE_SYNC_STOCKS = '同步库存数据失败'
+  this.SUCCESS_MESAAGE_SYNC_PURCHASE = '同步采购数据成功';
+  this.ERROR_MESSAGE_SYNC_PURCHASE  = '同步采购数据失败'
 }

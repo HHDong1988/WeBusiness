@@ -124,7 +124,14 @@
             userService.allPrimaryAgencies.push({ ID: user.ID.toString(), UserName: user.UserName });
           }
         }, function (error) {
-
+            return error;
+        })
+      }
+      userService.getAllStoreKeeper = function () {
+        return userService.getAllUsers(1, -1, "UserTypeID=4").then(function (res) {
+          return res;
+        }, function (error) {
+            return error;
         })
       }
       userService.setPersonInfo = function (userData) {
@@ -152,6 +159,68 @@
       }
 
     })
+    .service('stockService', function ($http) {
+      var stockService = this;
+      stockService.getAllStocks = function (page, pageSize) {
+      var url = '/api/stocks?page=' + page + '&pageSize=' + pageSize;
+
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      };
+
+      stockService.syncStockData = function (stockData) {
+        return $http.post('/api/stocks', stockData).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      }
+    })
+    .service('purchaseService', function ($http) {
+      var purchaseService = this;
+      purchaseService.getAllPurchases = function (page, pageSize,stockID) {
+        var url = '/api/purchase?page=' + page + '&pageSize=' + pageSize;
+
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      };
+
+      purchaseService.syncPurchaseData = function (purchaseData) {
+        return $http.post('/api/purchase', purchaseData).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      }
+    })
+    .service('salesService', function ($http) {
+      var salesService = this;
+      salesService.getAllSales = function (page, pageSize,stockID) {
+        
+        var url = '/api/sales?page=' + page + '&pageSize=' + pageSize;
+
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      };
+
+      salesService.syncSalesData = function (salesData) {
+        return $http.post('/api/sales', purchaseData).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      }
+    })
+
     .factory('authService', function ($q, $http, sessionService, AUTH_MESSAGE_ZH) {
       var authService = {};
       authService.logIn = function (credentials) {
@@ -263,6 +332,63 @@
             });
           };
         }]
+      };
+    })
+    .directive('barChart', function ($window) {
+      return {
+        restrict: 'A',
+        link: function ($scope, element, attrs) {
+          var myChart = echarts.init(element[0]);
+          $scope.$watch(attrs.eData, function (newValue, oldValue, scope) {
+            var xData = [],
+              sData = [],
+              data = newValue;
+            angular.forEach(data, function (val) {
+              xData.push(val.name);
+              sData.push(val.value);
+            });
+            var option = {
+              title: {
+                text: '销售统计',
+                subtext: '销量占比',
+                x: 'center'
+              },
+              color: ['#3398DB'],
+              tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                  type: 'shadow'
+                }
+              },
+              grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+              },
+              xAxis: [{
+                type: 'category',
+                data: xData,
+                axisTick: {
+                  alignWithLabel: true
+                }
+              }],
+              yAxis: [{
+                type: 'value'
+              }],
+              series: [{
+                name: 'Alarm Priority',
+                type: 'bar',
+                barWidth: '60%',
+                data: sData
+              }]
+            };
+            myChart.setOption(option);
+          }, true);
+          $window.onresize = function () {
+            myChart.resize();
+          };
+        }
       };
     })
     .config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {

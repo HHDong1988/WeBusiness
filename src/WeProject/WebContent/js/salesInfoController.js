@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('salesInfoController', ['$scope', 'PAGE_SIZE_OPTIONS', salesInfoController])
+  angular.module('app-web').controller('salesInfoController', ['$scope', 'salesService', 'PAGE_SIZE_OPTIONS', salesInfoController])
 
-  function salesInfoController($scope, PAGE_SIZE_OPTIONS) {
+  function salesInfoController($scope, salesService, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onAdd = function () {
@@ -75,14 +75,36 @@
       if (page < 1) {
         return;
       }
+
+      vm.currentPage = page;
+      vm.stocks = [];
+      salesService.getAllSales(vm.currentPage, vm.pageSize).then(function (res) {
+        for (var i = 0; i < res.data.data.length; i++) {
+          var stock = res.data.data[i];
+          var newStock = {
+            ID: stock.ID,
+            Name: { value: stock.Name, bDirty: false },
+            purchaseCount: { value: stock.TotalAmount, bDirty: false },
+            currentCount: { value: stock.CurrentAmount, bDirty: false },
+            imgUrl: '',
+            bDirty: false,
+          };
+
+          vm.stocks.push(newStock);
+
+          vm.dataTotal = res.data.total;
+          vm.dataDirty = false;
+          vm.bSelectCurrentPage = false;
+          vm.refreshPaginator();
+        }
+      }, function (error) {
+
+      });
+
     }
 
     vm.refreshPage = function () {
       vm.gotoPage(vm.currentPage);
-    }
-
-    vm.onItemChange = function (stock, info) {
-      
     }
 
     vm.init = function () {

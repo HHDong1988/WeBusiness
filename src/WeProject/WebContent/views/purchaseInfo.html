@@ -1,8 +1,8 @@
 <div class="row">
   <div class="col-md-3">
     <ul class="nav nav-pills nav-stacked">
-      <li role="presentation" class="active"><a href="#">商品入库</a></li>
-      <li role="presentation"><a href="#">采购信息</a></li>
+      <li role="presentation"><a href="#">商品入库</a></li>
+      <li role="presentation" class="active"><a href="#">采购信息</a></li>
       <li role="presentation"><a href="#">销售信息</a></li>
       <li role="presentation"><a href="#">销售统计</a></li>
     </ul>
@@ -40,70 +40,58 @@
               <tr ng-repeat="stock in vm.stocks  | limitTo: vm.pageSize + 1">
                 <td>{{$index + vm.pageSize*(vm.currentPage - 1) + 1}}</td>
                 <td>
-                  <div ng-class="stockForm['stockName_' + $index].$valid ? '':'invalidData'">
-                    <input type="text" name="stockName_{{$index}}" class="form-control" ng-model="stock.Name.value" ng-change="vm.onStockChange(stock, stock.Name)"
-                      ng-blur="vm.onNameChange(stockForm['stockName_' + $index].$valid)" required>
-                    <div ng-if="stock.Name.bDirty"></div>
+                  <div>
+                    <select class="form-control" ng-model="stock.ProductID" ng-disabled="stock.ID != ''" ng-options="product.ID as product.Name for product in vm.productList"></select>
                   </div>
                 </td>
                 <td>
-                  <div ng-class="stockForm['purchaseCount_' + $index].$valid ? '':'invalidData'">
-                    <input type="number" name="purchaseCount_{{$index}}" class="form-control" ng-model="stock.purchaseCount.value" ng-change="vm.onStockChange(stock, stock.purchaseCount)">
-                    <div ng-if="stock.purchaseCount.bDirty"></div>
+                  <div ng-class="stockForm['Amount_' + $index].$valid ? '':'invalidData'">
+                    <input type="number" name="Amount_{{$index}}" class="form-control" ng-model="stock.Amount" ng-disabled="stock.ID != ''">
                   </div>
                 </td>
                 <td>
-                  <div ng-class="stockForm['restCount_' + $index].$valid ? '':'invalidData'">
-                    <input type="number" name="restCount_{{$index}}" class="form-control" ng-model="stock.restCount.value" ng-change="vm.onStockChange(stock, stock.restCount)">
-                    <div ng-if="stock.restCount.bDirty"></div>
+                  <div ng-class="stockForm['Remaining_' + $index].$valid ? '':'invalidData'">
+                    <input type="number" name="Remaining_{{$index}}" class="form-control" ng-model="stock.Remaining" ng-disabled="stock.ID != ''">
                   </div>
                 </td>
                 <td>
-                  <div ng-class="stockForm['price_' + $index].$valid ? '':'invalidData'">
-                    <input type="number" name="price_{{$index}}" class="form-control" ng-model="stock.price.value" ng-change="vm.onStockChange(stock, stock.price)">
-                    <div ng-if="stock.price.bDirty"></div>
+                  <div ng-class="stockForm['PurchasePrice_' + $index].$valid ? '':'invalidData'">
+                    <input type="text" name="PurchasePrice_{{$index}}" class="form-control" ng-model="stock.PurchasePrice" ng-disabled="stock.ID != ''" required>
                   </div>
                 </td>
                 <td>
-                  <div ng-class="stockForm['vendor_' + $index].$valid ? '':'invalidData'">
-                    <input type="text" name="vendor_{{$index}}" class="form-control" ng-model="stock.vendor.value" ng-change="vm.onStockChange(stock, stock.vendor)">
-                    <div ng-if="stock.vendor.bDirty"></div>
+                  <div ng-class="stockForm['VendorName_' + $index].$valid ? '':'invalidData'">
+                    <input type="text" name="VendorName_{{$index}}" class="form-control" ng-model="stock.VendorName" ng-disabled="stock.ID != ''" required>
                   </div>
                 </td>
                 <td>
-                  <div ng-class="stockForm['productionDate_' + $index].$valid ? '':'invalidData'">
-                    <input type="date" name="productionDate_{{$index}}" class="form-control" ng-model="stock.productionDate.value" ng-change="vm.onStockChange(stock, stock.productionDate)">
-                    <div ng-if="stock.productionDate.bDirty"></div>
+                  <div ng-class="stockForm['ProducedTime_' + $index].$valid ? '':'invalidData'">
+                    <input type="date" name="ProducedTime_{{$index}}" class="form-control" ng-model="stock.ProducedTime" ng-disabled="stock.ID != ''">
                   </div>
                 </td>
                 <td>
-                  <div ng-class="stockForm['shelfLife_' + $index].$valid ? '':'invalidData'">
-                    <input type="date" name="shelfLife_{{$index}}" class="form-control" ng-model="stock.shlefLife.value" ng-change="vm.onStockChange(stock, stock.shlefLife)">
-                    <div ng-if="stock.shlefLife.bDirty"></div>
+                  <div ng-class="stockForm['ExpirationDate_' + $index].$valid ? '':'invalidData'">
+                    <input type="number" name="ExpirationDate_{{$index}}" class="form-control" ng-model="stock.ExpirationDate" ng-disabled="stock.ID != ''">
                   </div>
                 </td>
                 <td>
-                  <div ng-class="stockForm['batchNumber_' + $index].$valid ? '':'invalidData'">
-                    <input type="text" name="batchNumber_{{$index}}" class="form-control" ng-model="stock.batchNumber.value" ng-change="vm.onStockChange(stock, stock.batchNumber)">
-                    <div ng-if="stock.batchNumber.bDirty"></div>
+                  <div ng-class="stockForm['BatchNum_' + $index].$valid ? '':'invalidData'">
+                    <input type="text" name="BatchNum_{{$index}}" class="form-control" ng-model="stock.BatchNum" ng-disabled="stock.ID != ''">
                   </div>
                 </td>
                 <td>
-                  <div ng-class="stockForm['packing_' + $index].$valid ? '':'invalidData'">
-                    <input type="text" name="packing_{{$index}}" class="form-control" ng-model="stock.packing.value" ng-change="vm.onStockChange(stock, stock.packing)">
-                    <div ng-if="stock.packing.bDirty"></div>
+                  <div ng-class="stockForm['PackageType_' + $index].$valid ? '':'invalidData'">
+                    <input type="text" name="PackageType_{{$index}}" class="form-control" ng-model="stock.PackageType" ng-disabled="stock.ID != ''">
                   </div>
                 </td>
                 <td>
-                  <div ng-class="stockForm['specification_' + $index].$valid ? '':'invalidData'">
-                    <input type="number" name="specification_{{$index}}" class="form-control" ng-model="stock.specification.value" ng-change="vm.onStockChange(stock, stock.specification)">
-                    <div ng-if="stock.specification.bDirty"></div>
+                  <div ng-class="stockForm['Standard_' + $index].$valid ? '':'invalidData'">
+                    <input type="text" name="Standard_{{$index}}" class="form-control" ng-model="stock.Standard" ng-disabled="stock.ID != ''">
                   </div>
                 </td>
                 <td>
-                  <div ng-class="stockForm['buyer_' + $index].$valid ? '':'invalidData'">
-                    <input type="number" name="buyer_{{$index}}" class="form-control" ng-model="stock.buyer.value" ng-change="vm.onStockChange(stock, stock.buyer)">
-                    <div ng-if="stock.buyer.bDirty"></div>
+                  <div>
+                    <select class="form-control" ng-model="stock.PurchaserID" ng-disabled="stock.ID != ''" ng-options="storeKeeper.ID as storeKeeper.UserName for storeKeeper in vm.storeKeeperList"></select>
                   </div>
                 </td>
               </tr>

@@ -29,6 +29,20 @@
   
 }
 
+.storageTable tbody tr td div div
+{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 8px;
+  width: 8px;
+  border-left: 4px solid red;
+  border-top: 4px solid red;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  
+}
+
 .usersTable tbody tr th{
   height: 10px;
 }

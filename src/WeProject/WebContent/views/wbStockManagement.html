@@ -31,7 +31,7 @@
             <td>{{$index + vm.pageSize*(vm.currentPage - 1) + 1}}</td>
             <td>
               <div ng-class="stockForm['stockName_' + $index].$valid ? '':'invalidData'">
-                <input type="text" name="stockName_{{$index}}" class="form-control" ng-model="stock.Name.value" ng-change="vm.onStockChange(stock, stock.Name)"
+                <input type="text" name="stockName_{{$index}}" class="form-control" ng-model="stock.Name.value" ng-change="vm.onStockChange(stock, stock.Name)" ng-disabled="stock.TotalAmount != 0"
                   ng-blur="vm.onNameChange(stockForm['stockName_' + $index].$valid)" required>
                 <div ng-if="stock.Name.bDirty"></div>
               </div>
@@ -42,16 +42,18 @@
               </div>
             </td>
             <td>
-              <div ng-class="stockForm['purchaseCount_' + $index].$valid ? '':'invalidData'">
+              <!-- <div ng-class="stockForm['purchaseCount_' + $index].$valid ? '':'invalidData'">
                 <input type="number" name="purchaseCount_{{$index}}" class="form-control" ng-model="stock.purchaseCount.value" ng-change="vm.onStockChange(stock, stock.purchaseCount)">
                 <div ng-if="stock.purchaseCount.bDirty"></div>
-              </div>
+              </div> -->
+              {{stock.TotalAmount}}
             </td>
             <td>
-              <div ng-class="stockForm['currentCount_' + $index].$valid ? '':'invalidData'">
+              <!-- <div ng-class="stockForm['currentCount_' + $index].$valid ? '':'invalidData'">
                 <input type="number" name="currentCount_{{$index}}" class="form-control" ng-model="stock.currentCount.value" ng-change="vm.onStockChange(stock, stock.currentCount)">
                 <div ng-if="stock.currentCount.bDirty"></div>
-              </div>
+              </div> -->
+              {{stock.CurrentAmount}}
             </td>
             <td>
               <div class="text-center">

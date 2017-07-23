@@ -1,18 +1,18 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('stockManageController', ['$scope', 'PAGE_SIZE_OPTIONS', stockManageController])
+  angular.module('app-web').controller('stockManageController', ['$scope', 'stockService','toastService', 'PAGE_SIZE_OPTIONS', stockManageController])
 
-  function stockManageController($scope, PAGE_SIZE_OPTIONS) {
+  function stockManageController($scope, stockService,toastService, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onAdd = function () {
       var newStock = {
-        ID:'',
+        ID: '',
         Name: { value: '', bDirty: false },
-        purchaseCount: { value: 0,bDirty: false },
-        currentCount: { value: 0, bDirty: false },
-        imgUrl:'',
+        TotalAmount: 0,
+        CurrentAmount: 0,
+        imgUrl: '',
         bDirty: false,
       };
 
@@ -27,7 +27,34 @@
     }
 
     vm.onSync = function () {
+      var addItems = [];
+      var editItems = [];
 
+      for (var i = 0; i < vm.stocks.length; i++) {
+        var stock = vm.stocks[i];
+        if (stock.ID == '') {
+          var newStock = {
+            Name: stock.Name.value
+          };
+
+          addItems.push(newStock);
+        }
+        else if (stock.bDirty) {
+          var changedStock = new Object();
+
+          changedStock.ID = stock.ID;
+          changedStock.Name = stock.Name.value;
+          editItems.push(changedStock);
+        }
+      }
+
+      var stockData = { Add: addItems, Edit: editItems};
+      stockService.syncStockData(stockData).then(function (res) {
+        vm.onRefresh();
+        toastService.toast('success', vm.language.SUCCESS_MESAAGE_SYNC_STOCKS, vm.language.SUCCESS_TITTLE);
+      }, function (error) {
+        toastService.toast('error', vm.language.ERROR_MESSAGE_SYNC_STOCKS, vm.language.FAILED_TITTLE);
+      });
     }
 
 
@@ -70,22 +97,53 @@
       if (page < 1) {
         return;
       }
+
+      vm.currentPage = page;
+      vm.stocks = [];
+      stockService.getAllStocks(vm.currentPage, vm.pageSize).then(function (res) {
+        for (var i = 0; i < res.data.data.length; i++) {
+          var stock = res.data.data[i];
+          var newStock = {
+            ID: stock.ID,
+            Name: { value: stock.Name, bDirty: false },
+            TotalAmount: stock.TotalAmount,
+            CurrentAmount: stock.CurrentAmount,
+            imgUrl: '',
+            bDirty: false,
+          };
+
+          vm.stocks.push(newStock);
+
+          vm.dataTotal = res.data.total;
+          vm.dataDirty = false;
+          vm.bSelectCurrentPage = false;
+          vm.refreshPaginator();
+        }
+      }, function (error) {
+
+      });
     }
 
     vm.refreshPage = function () {
       vm.gotoPage(vm.currentPage);
     }
 
+    vm.onStockChange = function (stock, stockInfo) {
+      stockInfo.bDirty = true;
+      stock.bDirty = true;
+      vm.dataDirty = true; 
+    }
+
     vm.onViewPurchaseInfo = function (stock) {
-      
+
     }
 
     vm.onViewSalesInfo = function (stock) {
-      
+
     }
 
     vm.onViewSalesStatics = function () {
-      
+
     }
 
     vm.init = function () {
@@ -117,35 +175,35 @@
       vm.language.STOCK_SALES_STATICS];
 
       vm.stocks = [{
-        ID:1,
+        ID: 1,
         Name: { value: "西班牙等离子鸭蛋", bDirty: false },
         purchaseCount: { value: 3000, bDirty: false },
         currentCount: { value: 2000, bDirty: false },
-        imgUrl:'',
+        imgUrl: '',
         bDirty: false
       },
       {
-        ID:2,
+        ID: 2,
         Name: { value: "日本北海道鞋垫", bDirty: false },
         purchaseCount: { value: 2000, bDirty: false },
         currentCount: { value: 1500, bDirty: false },
-        imgUrl:'',
+        imgUrl: '',
         bDirty: false
       },
       {
-        ID:3,
+        ID: 3,
         Name: { value: "南美肌肉拖鞋", bDirty: false },
         purchaseCount: { value: 3000, bDirty: false },
         currentCount: { value: 2000, bDirty: false },
-        imgUrl:'',
+        imgUrl: '',
         bDirty: false
       },
       {
-        ID:4,
+        ID: 4,
         Name: { value: "菲律宾跳楼槟榔", bDirty: false },
         purchaseCount: { value: 3000, bDirty: false },
         currentCount: { value: 2000, bDirty: false },
-        imgUrl:'',
+        imgUrl: '',
         bDirty: false
       }];
 

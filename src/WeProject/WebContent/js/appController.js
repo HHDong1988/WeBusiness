@@ -78,16 +78,16 @@
       vm.passwordReset = { oldPassword: '', newPassword: '', confirmPassword: '' };
       vm.errorMessage = '';
       vm.isUserAuth = authService.isAuthenticated;
-      vm.isUserAuth = function () {
-        return true;
-      }
+      // vm.isUserAuth = function () {
+      //   return true;
+      // }
       vm.isNewUser = function () {
        return vm.currentUser.bNewUser;
       }
 
-      vm.isNewUser = function () {
-       return false;
-      }
+      // vm.isNewUser = function () {
+      //  return false;
+      // }
 
       vm.showLogin = function () {
         return !vm.isUserAuth();

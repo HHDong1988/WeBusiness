@@ -1,25 +1,25 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('purchaseInfoController', ['$scope', 'PAGE_SIZE_OPTIONS', purchaseInfoController])
+  angular.module('app-web').controller('purchaseInfoController', ['$scope', 'userService', 'stockService', 'purchaseService', 'toastService', 'PAGE_SIZE_OPTIONS', purchaseInfoController])
 
-  function purchaseInfoController($scope, PAGE_SIZE_OPTIONS) {
+  function purchaseInfoController($scope, userService, stockService, purchaseService, toastService, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onAdd = function () {
       var newStock = {
         ID: '',
-        Name: { value: '', bDirty: false },
-        purchaseCount: { value: 0, bDirty: false },
-        restCount: { value: 0, bDirty: false },
-        price: { value: 0, bDirty: false },
-        vendor: { value: '', bDirty: false },
-        productionDate: { value: '', bDirty: false },
-        shelfLife: { value: '', bDirty: false },
-        batchNumber: { value: '', bDirty: false },
-        packing: { value: '', bDirty: false },
-        specification: { value: '', bDirty: false },
-        buyer: { value: '', bDirty: false },
+        ProductID: '',
+        Amount: 0,
+        Remaining: 0,
+        PurchasePrice: 0,
+        VendorName: '',
+        ProducedTime: new Date(),
+        ExpirationTime: 0,
+        BatchNum: 0,
+        PackageType: '',
+        Standard: '',
+        PurchaserID: '',
         bDirty: false,
       };
 
@@ -34,7 +34,36 @@
     }
 
     vm.onSync = function () {
+      var addItems = [];
+      for (var i = 0; i < vm.stocks.length; i++) {
+        var stock = vm.stocks[i];
+        if (stock.ID == '') {
+          var newStock = {
+            ID: parseInt(stock.ID),
+            ProductID: parseInt(stock.ProductID),
+            Amount: stock.Amount,
+            Remaining: stock.Remaining,
+            PurchasePrice: stock.PurchasePrice,
+            VendorName: stock.VendorName,
+            ProducedTime: stock.ProducedTime.toString(),
+            ExpirationDate: stock.ExpirationDate,
+            BatchNum: stock.BatchNum,
+            PackageType: stock.PackageType,
+            Standard: stock.Standard,
+            PurchaserID: parseInt(stock.PurchaserID),
+          };
 
+          addItems.push(newStock);
+        }
+      }
+
+      var purchaseData = { Add: addItems };
+      purchaseService.syncPurchaseData(purchaseData).then(function (res) {
+        vm.onRefresh();
+        toastService.toast('success', vm.language.SUCCESS_MESAAGE_SYNC_PURCHASE, vm.language.SUCCESS_TITTLE);
+      }, function (error) {
+        toastService.toast('error', vm.language.ERROR_MESSAGE_SYNC_PURCHASE, vm.language.FAILED_TITTLE);
+      });
     }
 
 
@@ -77,22 +106,72 @@
       if (page < 1) {
         return;
       }
+
+      vm.currentPage = page;
+      vm.stocks = [];
+      purchaseService.getAllPurchases(vm.currentPage, vm.pageSize).then(function (res) {
+        for (var i = 0; i < res.data.data.length; i++) {
+          var stock = res.data.data[i];
+          var newStock = {
+            ID: stock.ID,
+            ProductID: stock.ProductID.toString(),
+            Amount: stock.Amount,
+            Remaining: stock.Remaining,
+            PurchasePrice: stock.PurchasePrice,
+            VendorName: stock.VendorName,
+            ProducedTime: new Date(Date.parse(stock.ProducedTime.replace(/-/g, "/"))),
+            ExpirationDate: stock.ExpirationDate,
+            BatchNum: stock.BatchNum,
+            PackageType: stock.PackageType,
+            Standard: stock.Standard,
+            PurchaserID: stock.PurchaserID.toString(),
+            bDirty: false,
+          };
+
+          vm.stocks.push(newStock);
+
+          vm.dataTotal = res.data.total;
+          vm.dataDirty = false;
+          vm.bSelectCurrentPage = false;
+          vm.refreshPaginator();
+        }
+      }, function (error) {
+
+      });
     }
 
     vm.refreshPage = function () {
       vm.gotoPage(vm.currentPage);
     }
 
-    vm.onViewPurchaseInfo = function (stock) {
+    vm.getAllInitialData = function () {
+      vm.productList = [];
+      stockService.getAllStocks(1, -1).then(function (res) {
+        for (var i = 0; i < res.data.data.length; i++) {
+          var stock = res.data.data[i];
+          var newStock = {
+            ID: stock.ID.toString(),
+            Name: stock.Name
+          };
+          vm.productList.push(newStock);
+        }
+        vm.getAllStoreKeeper();
+      }, function (error) {
 
+      })
     }
 
-    vm.onViewSalesInfo = function (stock) {
+    vm.getAllStoreKeeper = function () {
+      vm.storeKeeperList = [];
+      userService.getAllStoreKeeper().then(function (res) {
+        for (var i = 0; i < res.data.data.length; i++) {
+          var user = res.data.data[i];
+          vm.storeKeeperList.push({ ID: user.ID.toString(), UserName: user.UserName });
+        }
+        vm.gotoPage(vm.currentPage);
+      }, function (error) {
 
-    }
-
-    vm.onViewSalesStatics = function () {
-
+      })
     }
 
     vm.init = function () {
@@ -129,9 +208,10 @@
       vm.language.PURCHASE_BUYER];
 
       vm.stocks = [];
+      vm.productList = [];
+      vm.storeKeeperList = [];
 
-
-      vm.gotoPage(vm.currentPage);
+      vm.getAllInitialData();
     };
 
     vm.init();
