@@ -71,14 +71,13 @@ public class PurchaseInfo extends HttpServlet{
 			int purchaseAmount = object.getInt("Amount");
 			//update remaining
 			object.put("Remaining", purchaseAmount);
-			int updateValue = purchaseAmount - 0;
-			PreparedStatement ps = conn.prepareStatement(Constant.SQL_GET_PRODUCTCURRNETAMOUNTBYID);
-			ps.setInt(1, productID);
-			int productOriginalAmount = DBController.getNumber(ps, conn);
-			int productNewAmout = productOriginalAmount+updateValue;
+			PreparedStatement ps = conn.prepareStatement(Constant.SQL_UPDATE_PRODUCTCURRENTAMOUNTBYID);
+			ps.setInt(1, purchaseAmount);
+			ps.setInt(2, productID);
+			
 			JSONObject updateObject = new JSONObject();
 			updateObject.put("ID", productID);
-			updateObject.put("CurrentAmount", productNewAmout);
+			updateObject.put("CurrentAmount", purchaseAmount);
 			productUpdateArray.put(updateObject);
 		}
 		Boolean result = DBController.ExecuteMultipleInsert(conn, "data_purchaseinfo", array);

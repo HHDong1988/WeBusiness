@@ -57,14 +57,14 @@ public final class Constant {
 			+ " FROM data_saleproducts "
 			+ " WHERE ProductID = ?"
 			+ " ORDER BY ID LIMIT ?,?";
-	public static final String SQL_GET_PUCHASEAMOUNTVALUEBYID="SELECT Amount"
-			+ " FROM data_purchaseinfo "
-			+ " WHERE ID = ?";
-	public static final String SQL_GET_PRODUCTCURRNETAMOUNTBYID="SELECT CurrentAmount"
-			+ " FROM data_storage_products "
-			+ " WHERE ID = ?";
+//	public static final String SQL_GET_PUCHASEAMOUNTVALUEBYID="SELECT Amount"
+//			+ " FROM data_purchaseinfo "
+//			+ " WHERE ID = ?";
+//	public static final String SQL_GET_PRODUCTCURRNETAMOUNTBYID="SELECT CurrentAmount"
+//			+ " FROM data_storage_products "
+//			+ " WHERE ID = ?";
 	public static final String SQL_UPDATE_PRODUCTCURRENTAMOUNTBYID="UPDATE data_storage_products "
-			+ "SET CurrentAmount = ? "
+			+ "SET CurrentAmount=CurrentAmount+? "
 			+ "WHERE ID = ?";
 	
 	public static final String LastLogInTimeColumn="LastLoginTime";
