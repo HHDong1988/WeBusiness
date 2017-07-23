@@ -40,12 +40,23 @@ public final class Constant {
 			+ " ORDER BY ID LIMIT ?,?";
 	public static final String SQL_GET_PURCHASEITEMCOUNT="SELECT COUNT(ID) as total, UserName"
 			+ " FROM data_purchaseinfo ";	
+	
 	public static final String SQL_GET_PURCHASEINFOBYPAGE="SELECT * "
 			+ " FROM data_purchaseinfo "
 			+ " ORDER BY ID LIMIT ?,?";
-	public static final String SQL_GET_SALESINFOBYID="SELECT * "
-			+ " FROM data_saleproducts "
+	public static final String SQL_GET_SALESINFOCOUNTBYID="SELECT COUNT(ID) as total, UserName"
+			+ " FROM data_purchaseinfo "
 			+ " WHERE ID = ?";
+	public static final String SQL_GET_SALESINFOCOUNT="SELECT COUNT(ID) as total, UserName"
+			+ " FROM data_purchaseinfo "
+			+ " WHERE ID = ?";
+	public static final String SQL_GET_SALESINFOBYPAGE="SELECT * "
+			+ " FROM data_saleproducts "
+			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_GET_SALESINFOBYPAGEBYID="SELECT * "
+			+ " FROM data_saleproducts "
+			+ " WHERE ID = ?"
+			+ " ORDER BY ID LIMIT ?,?";
 	
 	public static final String LastLogInTimeColumn="LastLoginTime";
 	public static final String SQL_CHECK_PRODUCTEXIST = "SELECT ID, UserName"

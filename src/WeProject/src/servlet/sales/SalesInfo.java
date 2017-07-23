@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 
 
+
 import com.constant.Constant;
 import com.database.DBController;
 import com.util.GetRequestJsonUtils;
@@ -83,8 +84,17 @@ public class SalesInfo extends HttpServlet{
 //			writer.close();
 //			return;
 //		}
-		int id = Integer.parseInt(req.getParameter("Id").trim());
+		int iPageNum = Integer.parseInt(req.getParameter("page").trim());
+		int iPagesize = Integer.parseInt(req.getParameter("pageSize").trim());
 		int total=0;
+		Boolean hasId=false;
+		String idString = req.getParameter("Id");
+		if(idString!=null)hasId=true;
+		int id =0;
+		if(hasId){
+			id = Integer.parseInt(idString);
+		}
+		
 		try {
 			conn = DBController.getConnection();
 //			if(!HasAuthority(req,conn,null)){
@@ -96,8 +106,13 @@ public class SalesInfo extends HttpServlet{
 //				conn.close();
 //				return;
 //			}
+			if(hasId){
+				ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOCOUNTBYID);
+			}else{
+				ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOCOUNT);
+				ps.setInt(1, id);
+			}
 			
-			ps = conn.prepareStatement(Constant.SQL_GET_PURCHASEITEMCOUNT);
 			JSONArray jArrTotalArray = null;
 			try {
 				jArrTotalArray = DBController.getJsonArray(ps, conn);
@@ -111,11 +126,20 @@ public class SalesInfo extends HttpServlet{
 				e.printStackTrace();
 			}
 
-            
+			int startPoint =iPagesize * (iPageNum-1);
+			//iPagesize * (iPageNum-1) +" ," + iPagesize
+            if(hasId){
+            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYPAGEBYID);
+    			ps.setInt(1, id);
+    			ps.setInt(2, startPoint);
+    			ps.setInt(3, iPagesize);
+            }else
+            {
+            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYPAGE);
+            	ps.setInt(1, startPoint);
+    			ps.setInt(2, iPagesize);
+            }
 			
-			ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYID);
-			
-			ps.setInt(1, id);
 			JSONArray array = DBController.getJsonArray(ps, conn);
 
 			endDate = new Date();
@@ -125,7 +149,7 @@ public class SalesInfo extends HttpServlet{
 				writer.append(jObject.toString());
 			}else
 			{
-				jObject = HttpUtil.getResponseJson(true, array, endDate.getTime() - beginDate.getTime(), null,0,-1,-1);
+				jObject = HttpUtil.getResponseJson(true, array, endDate.getTime() - beginDate.getTime(), null,total,iPageNum,iPagesize);
 				writer.append(jObject.toString());
 			}
 

@@ -173,6 +173,18 @@ private static final long serialVersionUID = 1L;
 				writer.append(jObject.toString());
 			}else
 			{
+				for(int i=0;i<array.length();i++){
+					try {
+						JSONObject item = array.getJSONObject(i);
+						int currentAmount = item.getInt("CurrentAmount");
+						int soldAmount = item.getInt("SoldAmount");
+						int totalAmount = currentAmount+soldAmount;
+						item.put("TotalAmount", totalAmount);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				jObject = HttpUtil.getResponseJson(true, array, endDate.getTime() - beginDate.getTime(), null,total,iPageNum,iPagesize);
 				writer.append(jObject.toString());
 			}
