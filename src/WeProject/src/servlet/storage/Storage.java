@@ -84,9 +84,7 @@ private static final long serialVersionUID = 1L;
 			}
 
 		}
-		Date date = new Date();
-		java.sql.Timestamp sqlDate=new java.sql.Timestamp(date.getTime());
-		Boolean result = DBController.ExecuteMultipleInsert(conn, "data_storage_products", array, sqlDate);
+		Boolean result = DBController.ExecuteMultipleInsert(conn, "data_storage_products", array);
 		if(result)return occpupylist;
 		else return null;
 	}

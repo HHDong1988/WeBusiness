@@ -88,7 +88,11 @@ public class PurchaseInfo extends HttpServlet{
 		java.sql.Timestamp sqlDate=new java.sql.Timestamp(date.getTime());
 		JSONArray productUpdateArray=new JSONArray();
 		for(int i=0;i<array.length();i++){
-			
+			JSONObject object = array.getJSONObject(i);
+			if(object.has(""))
+			if(object.has("Amount")){
+				
+			}
 		}
 		Boolean result = DBController.ExecuteMultipleInsert(conn, "data_purchaseinfo", array, sqlDate);
 		if(result)return occpupylist;
