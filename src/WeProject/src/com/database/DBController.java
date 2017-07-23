@@ -101,7 +101,7 @@ public class DBController {
 		try {
 			for(int i=0;i<array.length();i++)
 			{
-				JSONObject object = (JSONObject) array.get(i);
+				JSONObject object = array.getJSONObject(i);
 				if(object==null)continue;
 				int objectKeyCount=0;
 				//String whereStatement="WHERE " +keyId +"= ?";

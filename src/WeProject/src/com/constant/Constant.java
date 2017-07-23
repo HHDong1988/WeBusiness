@@ -60,9 +60,12 @@ public final class Constant {
 	public static final String SQL_GET_PUCHASEAMOUNTVALUEBYID="SELECT Amount"
 			+ " FROM data_purchaseinfo "
 			+ " WHERE ID = ?";
-	public static final String SQL_GET_PRODUCTCURRNETAMOUNTVALUEBYID="SELECT Amount"
+	public static final String SQL_GET_PRODUCTCURRNETAMOUNTBYID="SELECT CurrentAmount"
 			+ " FROM data_storage_products "
 			+ " WHERE ID = ?";
+	public static final String SQL_UPDATE_PRODUCTCURRENTAMOUNTBYID="UPDATE data_storage_products "
+			+ "SET CurrentAmount = ? "
+			+ "WHERE ID = ?";
 	
 	public static final String LastLogInTimeColumn="LastLoginTime";
 	public static final String SQL_CHECK_PRODUCTEXIST = "SELECT ID"

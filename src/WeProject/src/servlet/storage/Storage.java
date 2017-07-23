@@ -118,28 +118,28 @@ private static final long serialVersionUID = 1L;
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-//		if(!HttpUtil.doBeforeProcessing(req)){
-//			endDate = new Date();
-//			jObject = HttpUtil.getResponseJson(false, null,
-//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//			writer.append(jObject.toString());
-//			writer.close();
-//			return;
-//		}
+		if(!HttpUtil.doBeforeProcessing(req)){
+			endDate = new Date();
+			jObject = HttpUtil.getResponseJson(false, null,
+					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+			writer.append(jObject.toString());
+			writer.close();
+			return;
+		}
 		int iPageNum = Integer.parseInt(req.getParameter("page").trim());
 		int iPagesize = Integer.parseInt(req.getParameter("pageSize").trim());
 		int total=0;
 		try {
 			conn = DBController.getConnection();
-//			if(!HasAuthority(req,conn,null)){
-//				endDate = new Date();
-//				jObject = HttpUtil.getResponseJson(false, null,
-//						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//				writer.append(jObject.toString());
-//				writer.close();
-//				conn.close();
-//				return;
-//			}
+			if(!HasAuthority(req,conn,null)){
+				endDate = new Date();
+				jObject = HttpUtil.getResponseJson(false, null,
+						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+				writer.append(jObject.toString());
+				writer.close();
+				conn.close();
+				return;
+			}
 			
 			ps = conn.prepareStatement(Constant.SQL_GET_STORAGEITEMCOUNT);
 			JSONArray jArrTotalArray = null;
@@ -269,7 +269,7 @@ private static final long serialVersionUID = 1L;
 			endDate=new Date();
 			if(deleteResult&&editResult&&nameOccupyList!=null){
 				jObject = HttpUtil.getResponseJson(true, nameOccupyList,
-						endDate.getTime() - beginDate.getTime(), Constant.USERNAME_ERROR,0,1,-1);
+						endDate.getTime() - beginDate.getTime(), Constant.DATEBASE_ERROR,0,1,-1);
 				writer.append(jObject.toString());
 			}else
 			{

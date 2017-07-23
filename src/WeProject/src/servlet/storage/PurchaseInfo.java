@@ -59,59 +59,57 @@ public class PurchaseInfo extends HttpServlet{
 		return false;
 	}
 	
-	private JSONArray InsertPurchaseInfo(Connection conn,JSONArray array) 
-			throws JSONException{
-		JSONArray occpupylist=new JSONArray();
-//		for(int i=0;i<array.length();i++)
-//		{
-//			JSONObject object = (JSONObject)array.get(i);
-//			if(object==null)return null;
-//			String userName = ((String) object.get("Name")).trim();
-//			PreparedStatement ps;
-//			try {
-//				ps = conn.prepareStatement(Constant.SQL_CHECK_PRODUCTEXIST);
-//				ps.setString(1, userName);
-//				JSONArray result = DBController.getJsonArray(ps, conn);
-//				if(result.length()>0){
-//					array.remove(i);
-//					i--;
-//					occpupylist.put(userName);
-//				}
-//			} catch (SQLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//				return null;
-//			}
-//
-//		}
-		Date date = new Date();
-		java.sql.Timestamp sqlDate=new java.sql.Timestamp(date.getTime());
+	private Boolean InsertPurchaseInfo(Connection conn,JSONArray array) 
+			throws JSONException, SQLException{
+		
 		JSONArray productUpdateArray=new JSONArray();
 		for(int i=0;i<array.length();i++){
 			JSONObject object = array.getJSONObject(i);
-			if(object.has(""))
-			if(object.has("Amount")){
-				
-			}
+			if(!object.has("ProductID")||!object.has("Amount")||!object.has("ID"))continue;
+			int productID = object.getInt("ProductID");
+			int id = object.getInt("ID");
+			int purchaseAmount = object.getInt("Amount");
+			int updateValue = purchaseAmount - 0;
+			PreparedStatement ps = conn.prepareStatement(Constant.SQL_GET_PRODUCTCURRNETAMOUNTBYID);
+			ps.setInt(1, productID);
+			int productOriginalAmount = DBController.getNumber(ps, conn);
+			int productNewAmout = productOriginalAmount+updateValue;
+			JSONObject updateObject = new JSONObject();
+			updateObject.put("ID", productID);
+			updateObject.put("CurrentAmount", productNewAmout);
+			productUpdateArray.put(updateObject);
 		}
-		Boolean result = DBController.ExecuteMultipleInsert(conn, "data_purchaseinfo", array, sqlDate);
-		if(result)return occpupylist;
-		else return null;
+		Boolean result = DBController.ExecuteMultipleInsert(conn, "data_purchaseinfo", array);
+		Boolean updateresult = DBController.ExecuteMultipleUpdate(conn, "data_storage_products", productUpdateArray,"ID");
+		if(result&&updateresult)return true;
+		else return false;
 	}
 	
-	private Boolean UpdatePurchaseInfo(Connection conn,JSONArray array) {
-		for(int i=0;i<array.length();i++)
-		{
-			try {
-				JSONObject object = array.getJSONObject(i);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
-			}
+	private Boolean UpdatePurchaseInfo(Connection conn,JSONArray array) throws JSONException, SQLException {
+		JSONArray productUpdateArray=new JSONArray();
+		for(int i=0;i<array.length();i++){
+			JSONObject object = array.getJSONObject(i);
+			if(!object.has("ProductID")||!object.has("Amount")||!object.has("ID"))continue;
+			int productID = object.getInt("ProductID");
+			int id = object.getInt("ID");
+			int purchaseAmount = object.getInt("Amount");
+			PreparedStatement ps = conn.prepareStatement(Constant.SQL_GET_PUCHASEAMOUNTVALUEBYID);
+			ps.setInt(1, id);
+			int purchaseOriginalAmount = DBController.getNumber(ps, conn);
+			int updateValue = purchaseAmount - purchaseOriginalAmount;
+			ps = conn.prepareStatement(Constant.SQL_GET_PRODUCTCURRNETAMOUNTBYID);
+			ps.setInt(1, productID);
+			int productOriginalAmount = DBController.getNumber(ps, conn);
+			int productNewAmout = productOriginalAmount+updateValue;
+			JSONObject updateObject = new JSONObject();
+			updateObject.put("ID", productID);
+			updateObject.put("CurrentAmount", productNewAmout);
+			productUpdateArray.put(updateObject);
 		}
 		Boolean result = DBController.ExecuteMultipleUpdate(conn, "data_purchaseinfo", array, "ID");
-		return result;
+		Boolean updateresult = DBController.ExecuteMultipleUpdate(conn, "data_storage_products", productUpdateArray,"ID");
+		if(result&&updateresult)return true;
+		return false;
 	}
 	
 	//get
@@ -128,28 +126,28 @@ public class PurchaseInfo extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-//		if(!HttpUtil.doBeforeProcessing(req)){
-//			endDate = new Date();
-//			jObject = HttpUtil.getResponseJson(false, null,
-//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//			writer.append(jObject.toString());
-//			writer.close();
-//			return;
-//		}
+		if(!HttpUtil.doBeforeProcessing(req)){
+			endDate = new Date();
+			jObject = HttpUtil.getResponseJson(false, null,
+					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+			writer.append(jObject.toString());
+			writer.close();
+			return;
+		}
 		int iPageNum = Integer.parseInt(req.getParameter("page").trim());
 		int iPagesize = Integer.parseInt(req.getParameter("pageSize").trim());
 		int total=0;
 		try {
 			conn = DBController.getConnection();
-//			if(!HasAuthority(req,conn,null)){
-//				endDate = new Date();
-//				jObject = HttpUtil.getResponseJson(false, null,
-//						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//				writer.append(jObject.toString());
-//				writer.close();
-//				conn.close();
-//				return;
-//			}
+			if(!HasAuthority(req,conn,null)){
+				endDate = new Date();
+				jObject = HttpUtil.getResponseJson(false, null,
+						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+				writer.append(jObject.toString());
+				writer.close();
+				conn.close();
+				return;
+			}
 			
 			ps = conn.prepareStatement(Constant.SQL_GET_PURCHASEITEMCOUNT);
 			JSONArray jArrTotalArray = null;
@@ -247,13 +245,13 @@ public class PurchaseInfo extends HttpServlet{
 				return;
 			}
 			JSONArray tempArray;
-			JSONArray nameOccupyList=new JSONArray();
+			Boolean addResult=true;
 			Boolean editResult=true;
 			Boolean deleteResult=true;
 			if(object.has("Add")){
 				tempArray = object.getJSONArray("Add");
 				if(tempArray!=null){
-					nameOccupyList = InsertPurchaseInfo(conn,tempArray); 
+					addResult = InsertPurchaseInfo(conn,tempArray); 
 				}
 				
 			}
@@ -265,9 +263,9 @@ public class PurchaseInfo extends HttpServlet{
 			}
 			
 			endDate=new Date();
-			if(deleteResult&&editResult&&nameOccupyList!=null){
-				jObject = HttpUtil.getResponseJson(true, nameOccupyList,
-						endDate.getTime() - beginDate.getTime(), Constant.USERNAME_ERROR,0,1,-1);
+			if(deleteResult&&editResult&&addResult){
+				jObject = HttpUtil.getResponseJson(true, null,
+						endDate.getTime() - beginDate.getTime(), Constant.DATEBASE_ERROR,0,1,-1);
 				writer.append(jObject.toString());
 			}else
 			{
