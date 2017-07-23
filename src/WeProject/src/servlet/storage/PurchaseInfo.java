@@ -69,6 +69,8 @@ public class PurchaseInfo extends HttpServlet{
 			int productID = object.getInt("ProductID");
 			int id = object.getInt("ID");
 			int purchaseAmount = object.getInt("Amount");
+			//update remaining
+			object.put("Remaining", purchaseAmount);
 			int updateValue = purchaseAmount - 0;
 			PreparedStatement ps = conn.prepareStatement(Constant.SQL_GET_PRODUCTCURRNETAMOUNTBYID);
 			ps.setInt(1, productID);
@@ -87,28 +89,28 @@ public class PurchaseInfo extends HttpServlet{
 	
 	private Boolean UpdatePurchaseInfo(Connection conn,JSONArray array) throws JSONException, SQLException {
 		JSONArray productUpdateArray=new JSONArray();
-		for(int i=0;i<array.length();i++){
-			JSONObject object = array.getJSONObject(i);
-			if(!object.has("ProductID")||!object.has("Amount")||!object.has("ID"))continue;
-			int productID = object.getInt("ProductID");
-			int id = object.getInt("ID");
-			int purchaseAmount = object.getInt("Amount");
-			PreparedStatement ps = conn.prepareStatement(Constant.SQL_GET_PUCHASEAMOUNTVALUEBYID);
-			ps.setInt(1, id);
-			int purchaseOriginalAmount = DBController.getNumber(ps, conn);
-			int updateValue = purchaseAmount - purchaseOriginalAmount;
-			ps = conn.prepareStatement(Constant.SQL_GET_PRODUCTCURRNETAMOUNTBYID);
-			ps.setInt(1, productID);
-			int productOriginalAmount = DBController.getNumber(ps, conn);
-			int productNewAmout = productOriginalAmount+updateValue;
-			JSONObject updateObject = new JSONObject();
-			updateObject.put("ID", productID);
-			updateObject.put("CurrentAmount", productNewAmout);
-			productUpdateArray.put(updateObject);
-		}
+//		for(int i=0;i<array.length();i++){
+//			JSONObject object = array.getJSONObject(i);
+//			if(!object.has("ProductID")||!object.has("Amount")||!object.has("ID"))continue;
+//			int productID = object.getInt("ProductID");
+//			int id = object.getInt("ID");
+//			int purchaseAmount = object.getInt("Amount");
+//			PreparedStatement ps = conn.prepareStatement(Constant.SQL_GET_PUCHASEAMOUNTVALUEBYID);
+//			ps.setInt(1, id);
+//			int purchaseOriginalAmount = DBController.getNumber(ps, conn);
+//			int updateValue = purchaseAmount - purchaseOriginalAmount;
+//			ps = conn.prepareStatement(Constant.SQL_GET_PRODUCTCURRNETAMOUNTBYID);
+//			ps.setInt(1, productID);
+//			int productOriginalAmount = DBController.getNumber(ps, conn);
+//			int productNewAmout = productOriginalAmount+updateValue;
+//			JSONObject updateObject = new JSONObject();
+//			updateObject.put("ID", productID);
+//			updateObject.put("CurrentAmount", productNewAmout);
+//			productUpdateArray.put(updateObject);
+//		}
 		Boolean result = DBController.ExecuteMultipleUpdate(conn, "data_purchaseinfo", array, "ID");
-		Boolean updateresult = DBController.ExecuteMultipleUpdate(conn, "data_storage_products", productUpdateArray,"ID");
-		if(result&&updateresult)return true;
+		//Boolean updateresult = DBController.ExecuteMultipleUpdate(conn, "data_storage_products", productUpdateArray,"ID");
+		if(result)return true;
 		return false;
 	}
 	
