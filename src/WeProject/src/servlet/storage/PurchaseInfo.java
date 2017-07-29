@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 
 
@@ -134,28 +136,28 @@ public class PurchaseInfo extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-		if(!HttpUtil.doBeforeProcessing(req)){
-			endDate = new Date();
-			jObject = HttpUtil.getResponseJson(false, null,
-					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-			writer.append(jObject.toString());
-			writer.close();
-			return;
-		}
+//		if(!HttpUtil.doBeforeProcessing(req)){
+//			endDate = new Date();
+//			jObject = HttpUtil.getResponseJson(false, null,
+//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+//			writer.append(jObject.toString());
+//			writer.close();
+//			return;
+//		}
 		int iPageNum = Integer.parseInt(req.getParameter("page").trim());
 		int iPagesize = Integer.parseInt(req.getParameter("pageSize").trim());
 		int total=0;
 		try {
 			conn = DBController.getConnection();
-			if(!HasAuthority(req,conn,null)){
-				endDate = new Date();
-				jObject = HttpUtil.getResponseJson(false, null,
-						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-				writer.append(jObject.toString());
-				writer.close();
-				conn.close();
-				return;
-			}
+//			if(!HasAuthority(req,conn,null)){
+//				endDate = new Date();
+//				jObject = HttpUtil.getResponseJson(false, null,
+//						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+//				writer.append(jObject.toString());
+//				writer.close();
+//				conn.close();
+//				return;
+//			}
 			
 			ps = conn.prepareStatement(Constant.SQL_GET_PURCHASEITEMCOUNT);
 			JSONArray jArrTotalArray = null;
@@ -185,10 +187,16 @@ public class PurchaseInfo extends HttpServlet{
 			for(int i=0;i<array.length();i++){
 				JSONObject object = array.getJSONObject(i);
 				if(object.has("ProducedTime")){
-					String productedTime = object.getString("ProducedTime");
-					long proDate = Date.parse(productedTime);
+					java.sql.Timestamp productedTime = (Timestamp) object.get("ProducedTime");
+					long proDate = productedTime.getTime();
 					object.remove("ProducedTime");
 					object.put("ProducedTime", proDate);
+				}
+				if(object.has("PurchaseTime")){
+					java.sql.Timestamp productedTime = (Timestamp) object.get("PurchaseTime");
+					long proDate = productedTime.getTime();
+					object.remove("PurchaseTime");
+					object.put("PurchaseTime", proDate);
 				}
 			}
 
