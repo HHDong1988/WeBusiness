@@ -36,6 +36,26 @@ public class HttpUtil {
 		}
 		return resultJObject;
 	}
+	
+	public static JSONObject getResponseJsonDataIsObject(boolean success, JSONObject jArray,
+			Long time, String description,int total,int page, int pageSize) {
+		JSONObject resultJObject = new JSONObject();
+		jArray = jArray == null ? new JSONObject() : jArray;
+		description = description == null ? "" : description;
+		try {
+			resultJObject.put("success", success);
+			resultJObject.put("data", jArray);
+			resultJObject.put("time", time);
+			resultJObject.put("description", description);
+			resultJObject.put("total", total);
+			resultJObject.put("page", page);
+			resultJObject.put("pageSize", pageSize);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultJObject;
+	}
 
 	public static boolean doBeforeProcessing(HttpServletRequest request) {
 		// 首先检查session，若已经登陆则直接忽略一下代码

@@ -66,6 +66,10 @@ public final class Constant {
 	public static final String SQL_GET_SALESINFOBYPRODUCTID="SELECT * "
 			+ " FROM data_saleproducts "
 			+ " WHERE ProductID = ?";
+	public static final String SQL_GET_ORDERINFOSTATISTICS="SELECT * "
+			+ " FROM data_orders "
+			+ " WHERE LogTime > ? and LogTime < ?";
+	public static final String SQL_GET_ORDERINFOSTATISTICSIDCondition=" and ProductID=?";
 //	public static final String SQL_GET_PUCHASEAMOUNTVALUEBYID="SELECT Amount"
 //			+ " FROM data_purchaseinfo "
 //			+ " WHERE ID = ?";
