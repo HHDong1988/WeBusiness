@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 
 
+
 import com.constant.Constant;
 import com.database.DBController;
 import com.util.GetRequestJsonUtils;
@@ -73,11 +74,17 @@ public class PurchaseInfo extends HttpServlet{
 			ps.setInt(1, purchaseAmount);
 			ps.setInt(2, productID);
 			ps.executeUpdate();
-//			
-//			JSONObject updateObject = new JSONObject();
-//			updateObject.put("ID", productID);
-//			updateObject.put("CurrentAmount", purchaseAmount);
-//			productUpdateArray.put(updateObject);
+			
+			Date currentDate = new Date();
+			java.sql.Timestamp purchaseDate=new java.sql.Timestamp(currentDate.getTime());
+			object.put("PurchaseTime", purchaseDate);
+			if(object.has("ProducedTime")){
+				long timeValue = object.getLong("ProducedTime");
+				object.remove("ProducedTime");
+				Date produceTimeDate= new Date(timeValue);
+				java.sql.Timestamp produceSqlTime=new java.sql.Timestamp(produceTimeDate.getTime());
+				object.put("ProducedTime", produceSqlTime);
+			}
 		}
 		Boolean result = DBController.ExecuteMultipleInsert(conn, "data_purchaseinfo", array);
 		if(result)return true;
