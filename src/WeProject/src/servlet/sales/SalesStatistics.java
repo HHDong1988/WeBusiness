@@ -77,14 +77,14 @@ public class SalesStatistics extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-//		if(!HttpUtil.doBeforeProcessing(req)){
-//			endDate = new Date();
-//			jObject = HttpUtil.getResponseJson(false, null,
-//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//			writer.append(jObject.toString());
-//			writer.close();
-//			return;
-//		}
+		if(!HttpUtil.doBeforeProcessing(req)){
+			endDate = new Date();
+			jObject = HttpUtil.getResponseJson(false, null,
+					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+			writer.append(jObject.toString());
+			writer.close();
+			return;
+		}
 		long serverstartTimeLong = Long.parseLong(req.getParameter("startTime").trim());
 		Date serverstartDate= new Date(serverstartTimeLong);
 		java.sql.Timestamp sqlstartDate=new java.sql.Timestamp(serverstartDate.getTime());
@@ -99,15 +99,15 @@ public class SalesStatistics extends HttpServlet{
 		
 		try {
 			conn = DBController.getConnection();
-//			if(!HasAuthority(req,conn,null)){
-//				endDate = new Date();
-//				jObject = HttpUtil.getResponseJson(false, null,
-//						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//				writer.append(jObject.toString());
-//				writer.close();
-//				conn.close();
-//				return;
-//			}
+			if(!HasAuthority(req,conn,null)){
+				endDate = new Date();
+				jObject = HttpUtil.getResponseJson(false, null,
+						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+				writer.append(jObject.toString());
+				writer.close();
+				conn.close();
+				return;
+			}
 			if(productId!=-1){
 				ps = conn.prepareStatement(Constant.SQL_GET_ORDERINFOSTATISTICS+Constant.SQL_GET_ORDERINFOSTATISTICSIDCondition);
 				ps.setObject(1, sqlstartDate);

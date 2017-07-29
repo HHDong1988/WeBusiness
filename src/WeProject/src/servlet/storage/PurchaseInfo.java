@@ -66,7 +66,6 @@ public class PurchaseInfo extends HttpServlet{
 			JSONObject object = array.getJSONObject(i);
 			if(!object.has("ProductID")||!object.has("Amount")||!object.has("ID"))continue;
 			int productID = object.getInt("ProductID");
-			int id = object.getInt("ID");
 			int purchaseAmount = object.getInt("Amount");
 			//update remaining
 			object.put("Remaining", purchaseAmount);
