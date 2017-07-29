@@ -40,6 +40,7 @@ public final class Constant {
 			+ " ORDER BY ID LIMIT ?,?";
 	public static final String SQL_GET_STORAGE="SELECT ID, Name, CurrentAmount, SoldAmount"
 			+ " FROM data_storage_products ";
+	public static final String SQL_GET_STORAGEWHEREPRODUCTID="WHERE ID = ?";
 	public static final String SQL_GET_PURCHASEITEMCOUNT="SELECT COUNT(ID) as total, ID"
 			+ " FROM data_purchaseinfo ";	
 	

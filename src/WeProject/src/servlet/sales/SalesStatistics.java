@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 
 
+
 import com.constant.Constant;
 import com.database.DBController;
 import com.util.GetRequestJsonUtils;
@@ -134,6 +135,7 @@ public class SalesStatistics extends HttpServlet{
 					returnObject.put(itemId+"", itemAmount);
 				}
 			}
+			
 			endDate = new Date();
 			if(array==null||(array!=null&&array.length()==0)){
 				jObject = HttpUtil.getResponseJson(false, null,
