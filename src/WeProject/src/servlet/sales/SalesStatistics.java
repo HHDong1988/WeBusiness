@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 
 
@@ -120,6 +122,7 @@ public class SalesStatistics extends HttpServlet{
 				ps.setObject(2, sqlendDate);
 			}
 			JSONArray array = DBController.getJsonArray(ps, conn);
+			JSONArray returnArray = new JSONArray();
 			JSONObject returnObject = new JSONObject();
 			for(int i=0;i<array.length();i++){
 				JSONObject object = array.getJSONObject(i);
@@ -135,8 +138,17 @@ public class SalesStatistics extends HttpServlet{
 					returnObject.put(itemId+"", itemAmount);
 				}
 			}
-			JSONArray returnArray = new JSONArray();
-			returnArray.put(returnObject);
+			Iterator iterator = returnObject.keys();
+			while(iterator.hasNext()){
+				String key = (String) iterator.next();
+				int value = returnObject.getInt(key);
+				int idValue=Integer.parseInt(key);
+				JSONObject jobject = new JSONObject();
+				jobject.put("ProductID", idValue);
+				jobject.put("SoldAmount", value);
+				returnArray.put(jobject);
+			}
+			
 			endDate = new Date();
 			if(array==null||(array!=null&&array.length()==0)){
 				jObject = HttpUtil.getResponseJson(false, null,
