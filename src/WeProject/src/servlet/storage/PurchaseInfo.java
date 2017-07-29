@@ -88,6 +88,7 @@ public class PurchaseInfo extends HttpServlet{
 				java.sql.Timestamp produceSqlTime=new java.sql.Timestamp(produceTimeDate.getTime());
 				object.put("ProducedTime", produceSqlTime);
 			}
+			if(object.has("ID"))object.remove("ID");
 		}
 		Boolean result = DBController.ExecuteMultipleInsert(conn, "data_purchaseinfo", array);
 		if(result)return true;
@@ -136,28 +137,28 @@ public class PurchaseInfo extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-//		if(!HttpUtil.doBeforeProcessing(req)){
-//			endDate = new Date();
-//			jObject = HttpUtil.getResponseJson(false, null,
-//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//			writer.append(jObject.toString());
-//			writer.close();
-//			return;
-//		}
+		if(!HttpUtil.doBeforeProcessing(req)){
+			endDate = new Date();
+			jObject = HttpUtil.getResponseJson(false, null,
+					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+			writer.append(jObject.toString());
+			writer.close();
+			return;
+		}
 		int iPageNum = Integer.parseInt(req.getParameter("page").trim());
 		int iPagesize = Integer.parseInt(req.getParameter("pageSize").trim());
 		int total=0;
 		try {
 			conn = DBController.getConnection();
-//			if(!HasAuthority(req,conn,null)){
-//				endDate = new Date();
-//				jObject = HttpUtil.getResponseJson(false, null,
-//						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//				writer.append(jObject.toString());
-//				writer.close();
-//				conn.close();
-//				return;
-//			}
+			if(!HasAuthority(req,conn,null)){
+				endDate = new Date();
+				jObject = HttpUtil.getResponseJson(false, null,
+						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+				writer.append(jObject.toString());
+				writer.close();
+				conn.close();
+				return;
+			}
 			
 			ps = conn.prepareStatement(Constant.SQL_GET_PURCHASEITEMCOUNT);
 			JSONArray jArrTotalArray = null;
