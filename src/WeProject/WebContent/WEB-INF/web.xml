@@ -89,5 +89,14 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
     <servlet-name>Storage</servlet-name>
     <url-pattern>/api/stocks</url-pattern>
   </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>SalesStatistics</servlet-name>
+    <servlet-class>servlet.sales.SalesStatistics</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SalesStatistics</servlet-name>
+    <url-pattern>/api/statistics</url-pattern>
+  </servlet-mapping>
  
 </web-app>
