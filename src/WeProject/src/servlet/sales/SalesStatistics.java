@@ -135,7 +135,8 @@ public class SalesStatistics extends HttpServlet{
 					returnObject.put(itemId+"", itemAmount);
 				}
 			}
-			
+			JSONArray returnArray = new JSONArray();
+			returnArray.put(returnObject);
 			endDate = new Date();
 			if(array==null||(array!=null&&array.length()==0)){
 				jObject = HttpUtil.getResponseJson(false, null,
@@ -143,7 +144,7 @@ public class SalesStatistics extends HttpServlet{
 				writer.append(jObject.toString());
 			}else
 			{
-				jObject = HttpUtil.getResponseJsonDataIsObject(true, returnObject, endDate.getTime() - beginDate.getTime(), null,-1,-1,-1);
+				jObject = HttpUtil.getResponseJson(true, returnArray, endDate.getTime() - beginDate.getTime(), null,-1,-1,-1);
 				writer.append(jObject.toString());
 			}
 
