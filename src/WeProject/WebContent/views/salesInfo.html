@@ -1,13 +1,13 @@
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-2">
     <ul class="nav nav-pills nav-stacked">
-      <li role="presentation"><a href="#">商品入库</a></li>
-      <li role="presentation"><a href="#">采购信息</a></li>
-      <li role="presentation" class="active"><a href="#">销售信息</a></li>
-       <li role="presentation"><a href="#">销售统计</a></li>
+      <li role="presentation"><a href="#!/outOfStore">{{vm.language.SALES_MENU_OUTSTOCK}}</a></li>
+      <li role="presentation"><a href="#!/purchaseInfo">{{vm.language.SALES_MENU_PURCHASE_INFO}}</a></li>
+      <li role="presentation" class="active"><a href="#!/salesInfo">{{vm.language.SALES_MENU_SALES_INFO}}</a></li>
+      <li role="presentation"><a href="#!/salesStatics">{{vm.language.SALES_MENU_SALES_STATICS}}</a></li>
     </ul>
   </div>
-  <div class="col-md-9">
+  <div class="col-md-10">
     <div class="tableContainer">
 
       <div class="row">
@@ -24,9 +24,7 @@
 
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
           <div class="btn-group">
-            <button type="button" class="btn btn-default" ng-click="vm.onAdd()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
             <button type="button" class="btn btn-default" ng-click="vm.onRefresh()"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
-            <button type="button" class="btn btn-default" ng-click="vm.onSync()" ng-disabled="!vm.dataDirty"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></button>
           </div>
         </div>
       </div>

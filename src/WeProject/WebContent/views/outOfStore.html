@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-md-2">
+    <ul class="nav nav-pills nav-stacked">
+      <li role="presentation" class="active"><a href="#">{{vm.language.SALES_MENU_OUTSTOCK}}</a></li>
+      <li role="presentation"><a href="#!/purchaseInfo">{{vm.language.SALES_MENU_PURCHASE_INFO}}</a></li>
+      <li role="presentation"><a href="#!/salesInfo">{{vm.language.SALES_MENU_SALES_INFO}}</a></li>
+      <li role="presentation"><a href="#!/salesStatics">{{vm.language.SALES_MENU_SALES_STATICS}}</a></li>
+    </ul>
+  </div>
+  <div class="col-md-10">
+    <div class="row">
+      <div class="col-md-12">
+        <form class="form-inline">
+          <div class="form-group">
+            <label for="buyer">{{vm.language.SALES_BUYER}}</label>
+            <input type="text" class="form-control" id="buyer" ng-model="vm.buyer" placeholder="{{vm.language.SALES_BUYER}}">
+          </div>
+          <div class="form-group">
+            <label for="receiver">{{vm.language.RECEIVER}}</label>
+            <input type="text" class="form-control" id="receiver" ng-model="vm.receiver" placeholder="{{vm.language.RECEIVER}}">
+          </div>
+          <button type="button" class="btn btn-default" ng-click="vm.onQuery()">{{vm.language.QUERY}}</button>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-left">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default" ng-click="vm.onRefresh()"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+          <button type="button" class="btn btn-default" ng-click="vm.onSync()" ng-disabled="!vm.dataDirty"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+</div>

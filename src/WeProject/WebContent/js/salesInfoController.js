@@ -6,33 +6,8 @@
   function salesInfoController($scope, salesService, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
-    vm.onAdd = function () {
-      var newStock = {
-        ID: '',
-        Name: { value: '', bDirty: false },
-        salesCount: { value: 0, bDirty: false },
-        salesPrice: { value: 0, bDirty: false },
-        salesDate: { value: '', bDirty: false },
-        buyer: { value: '', bDirty: false },
-        mailAddress: { value: '', bDirty: false },
-        shipmentVendor: { value: '', bDirty: false },
-        trackingNumber: { value: '', bDirty: false },
-        batchNumber: { value: '', bDirty: false },
-        bDirty: false,
-      };
-
-      vm.stocks.push(newStock);
-      vm.dataDirty = true;
-      vm.refreshPaginator();
-    }
-
-
     vm.onRefresh = function () {
       vm.gotoPage(vm.currentPage);
-    }
-
-    vm.onSync = function () {
-
     }
 
 

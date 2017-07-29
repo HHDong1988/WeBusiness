@@ -45,7 +45,7 @@
             Remaining: stock.Remaining,
             PurchasePrice: stock.PurchasePrice,
             VendorName: stock.VendorName,
-            ProducedTime: stock.ProducedTime.toString(),
+            ProducedTime: stock.ProducedTime.getTime(),
             ExpirationDate: stock.ExpirationDate,
             BatchNum: stock.BatchNum,
             PackageType: stock.PackageType,
@@ -112,6 +112,8 @@
       purchaseService.getAllPurchases(vm.currentPage, vm.pageSize).then(function (res) {
         for (var i = 0; i < res.data.data.length; i++) {
           var stock = res.data.data[i];
+          var producedTime = new Date();
+          producedTime.setTime(stock.ProducedTime);
           var newStock = {
             ID: stock.ID,
             ProductID: stock.ProductID.toString(),
@@ -119,7 +121,7 @@
             Remaining: stock.Remaining,
             PurchasePrice: stock.PurchasePrice,
             VendorName: stock.VendorName,
-            ProducedTime: new Date(Date.parse(stock.ProducedTime.replace(/-/g, "/"))),
+            ProducedTime: producedTime,
             ExpirationDate: stock.ExpirationDate,
             BatchNum: stock.BatchNum,
             PackageType: stock.PackageType,

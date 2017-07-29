@@ -124,14 +124,14 @@
             userService.allPrimaryAgencies.push({ ID: user.ID.toString(), UserName: user.UserName });
           }
         }, function (error) {
-            return error;
+          return error;
         })
       }
       userService.getAllStoreKeeper = function () {
         return userService.getAllUsers(1, -1, "UserTypeID=4").then(function (res) {
           return res;
         }, function (error) {
-            return error;
+          return error;
         })
       }
       userService.setPersonInfo = function (userData) {
@@ -162,7 +162,7 @@
     .service('stockService', function ($http) {
       var stockService = this;
       stockService.getAllStocks = function (page, pageSize) {
-      var url = '/api/stocks?page=' + page + '&pageSize=' + pageSize;
+        var url = '/api/stocks?page=' + page + '&pageSize=' + pageSize;
 
         return $http.get(url).then(function (res) {
           return res;
@@ -181,7 +181,7 @@
     })
     .service('purchaseService', function ($http) {
       var purchaseService = this;
-      purchaseService.getAllPurchases = function (page, pageSize,stockID) {
+      purchaseService.getAllPurchases = function (page, pageSize, stockID) {
         var url = '/api/purchase?page=' + page + '&pageSize=' + pageSize;
 
         return $http.get(url).then(function (res) {
@@ -201,8 +201,8 @@
     })
     .service('salesService', function ($http) {
       var salesService = this;
-      salesService.getAllSales = function (page, pageSize,stockID) {
-        
+      salesService.getAllSales = function (page, pageSize, stockID) {
+
         var url = '/api/sales?page=' + page + '&pageSize=' + pageSize;
 
         return $http.get(url).then(function (res) {
@@ -211,14 +211,20 @@
           return error;
         });
       };
-
-      salesService.syncSalesData = function (salesData) {
-        return $http.post('/api/sales', purchaseData).then(function (res) {
+    })
+    .service('salesStatisticsService', function ($http) {
+      var salesStatisticsService = this;
+      salesStatisticsService.getStatistics = function (startTime, endTime, productID) {
+        var url = '/api/salesStatistics?startTime=' + startTime + '&endTime=' + endTime;
+        if (productID) {
+          url = url + "&productID=" + productID;
+        }
+        return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
           return error;
         });
-      }
+      };
     })
 
     .factory('authService', function ($q, $http, sessionService, AUTH_MESSAGE_ZH) {
@@ -333,32 +339,85 @@
           };
         }]
       };
-    })
-    .directive('barChart', function ($window) {
+    }).directive('pieChart', function ($window) {
       return {
         restrict: 'A',
         link: function ($scope, element, attrs) {
           var myChart = echarts.init(element[0]);
           $scope.$watch(attrs.eData, function (newValue, oldValue, scope) {
-            var xData = [],
-              sData = [],
-              data = newValue;
-            angular.forEach(data, function (val) {
-              xData.push(val.name);
-              sData.push(val.value);
+            var legend = [];
+            angular.forEach(newValue, function (val) {
+              legend.push(val.name);
             });
             var option = {
               title: {
                 text: '销售统计',
-                subtext: '销量占比',
+                subtext: attrs.eTitle,
                 x: 'center'
               },
-              color: ['#3398DB'],
               tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                  type: 'shadow'
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+              },
+              series: [{
+                name: 'Alarm',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '60%'],
+                data: newValue,
+                itemStyle: {
+                  emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                  }
                 }
+              }]
+            };
+            myChart.setOption(option);
+          }, true);
+          window.addEventListener("resize", function () {
+            myChart.resize();
+          });
+        }
+      };
+    }).directive('lineChart', function ($window) {
+      return {
+        restrict: 'A',
+        link: function ($scope, element, attrs) {
+          var myChart = echarts.init(element[0]);
+          $scope.$watch(attrs.eData, function (newValue, oldValue, scope) {
+            var legend = [];
+            var data1 = [];
+            var data2 = [];
+            angular.forEach(newValue.yData, function (val) {
+              legend.push(val.name);
+            });
+            angular.copy(newValue.yData[0].data, data1);
+            angular.copy(newValue.yData[1].data, data2);
+            var option = {
+              title: {
+                text: '销售统计',
+                subtext: attrs.eTitle,
+                x: 'center'
+              },
+              tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+              },
+              legend: {
+                left: 'left',
+                data: legend
+              },
+              xAxis: {
+                type: 'category',
+                name: 'x',
+                splitLine: { show: false },
+                data: newValue.xData
+              },
+              yAxis: {
+                type: 'log',
+                name: 'y'
               },
               grid: {
                 left: '3%',
@@ -366,28 +425,23 @@
                 bottom: '3%',
                 containLabel: true
               },
-              xAxis: [{
-                type: 'category',
-                data: xData,
-                axisTick: {
-                  alignWithLabel: true
-                }
-              }],
-              yAxis: [{
-                type: 'value'
-              }],
-              series: [{
-                name: 'Alarm Priority',
-                type: 'bar',
-                barWidth: '60%',
-                data: sData
-              }]
+              series: [
+                {
+                  name: legend[0],
+                  type: 'line',
+                  data: data1,
+                },
+                {
+                  name: legend[1],
+                  type: 'line',
+                  data: data2,
+                }]
             };
             myChart.setOption(option);
           }, true);
-          $window.onresize = function () {
+          window.addEventListener("resize", function () {
             myChart.resize();
-          };
+          });
         }
       };
     })
@@ -431,6 +485,12 @@
         templateUrl: 'views/salesStatics.html'
       });
 
+      $routeProvider.when('/outOfStore', {
+        controller: 'outOfStoreController',
+        controllerAs: 'vm',
+        templateUrl: 'views/outOfStore.html'
+      });
+
       $routeProvider.when('/resetpassword', {
         controller: 'personalInfoController',
         controllerAs: 'appVm',
@@ -468,7 +528,4 @@
 
       $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, { userID: currentUser, userRole: currentUserRole });
     });
-
-
-
 })();
