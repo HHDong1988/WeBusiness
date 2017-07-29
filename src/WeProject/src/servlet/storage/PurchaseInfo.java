@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 
 
+
 import com.constant.Constant;
 import com.database.DBController;
 import com.util.GetRequestJsonUtils;
@@ -119,6 +120,7 @@ public class PurchaseInfo extends HttpServlet{
 	}
 	
 	//get
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -180,6 +182,15 @@ public class PurchaseInfo extends HttpServlet{
 			}
 		
 			JSONArray array = DBController.getJsonArray(ps, conn);
+			for(int i=0;i<array.length();i++){
+				JSONObject object = array.getJSONObject(i);
+				if(object.has("ProducedTime")){
+					String productedTime = object.getString("ProducedTime");
+					long proDate = Date.parse(productedTime);
+					object.remove("ProducedTime");
+					object.put("ProducedTime", proDate);
+				}
+			}
 
 			endDate = new Date();
 			if(array==null||(array!=null&&array.length()==0)){
@@ -195,6 +206,9 @@ public class PurchaseInfo extends HttpServlet{
 			writer.close();
 			conn.close();
 		} catch (SQLException  e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

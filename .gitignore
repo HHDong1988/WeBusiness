@@ -8,5 +8,5 @@
 # Eclipse
 src/.metadata/
 src/.settings/
-src/RemoteSystemTempFiles/
+src/RemoteSystemsTempFiles/
 src/Tools/
