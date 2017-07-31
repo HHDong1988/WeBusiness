@@ -116,7 +116,7 @@ public class SalesStatistics extends HttpServlet{
 			Integer val = (Integer)entry.getValue();
 			Calendar gc =  Calendar.getInstance();
 			gc.setTimeInMillis(key);
-			returnObject.put("Year", gc.get(Calendar.YEAR)+1900);
+			returnObject.put("Year", gc.get(Calendar.YEAR));
 			returnObject.put("Month", gc.get(Calendar.MONTH)+1);
 			returnObject.put("Day", gc.get(Calendar.DAY_OF_MONTH));
 			returnObject.put("SoldAmount", val);
