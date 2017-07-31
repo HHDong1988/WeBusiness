@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('salesStaticsController', ['$scope','stockService','salesStatisticsService', 'PAGE_SIZE_OPTIONS', salesStaticsController])
+  angular.module('app-web').controller('salesStaticsController', ['$scope', 'stockService', 'salesStatisticsService', 'PAGE_SIZE_OPTIONS', salesStaticsController])
 
-  function salesStaticsController($scope,stockService,salesStatisticsService, PAGE_SIZE_OPTIONS) {
+  function salesStaticsController($scope, stockService, salesStatisticsService, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onQuery = function () {
@@ -12,6 +12,8 @@
       } else {
         vm.showAllStatics = false;
       }
+
+      vm.getSalesStatistics();
     }
 
     vm.getAllInitialData = function () {
@@ -24,6 +26,7 @@
             Name: stock.Name
           };
           vm.productList.push(newStock);
+          vm.productIDDict[newStock.ID] = newStock.Name;
         }
       }, function (error) {
 
@@ -31,12 +34,20 @@
     }
 
     vm.getSalesStatistics = function () {
-      salesStatisticsService.getSalesStatistics(vm.startTime.getTime(), vm.endTime.getTime(), vm.ProductID ).then(function (res) {
-        if (vm.ProductID) {
-          
+      salesStatisticsService.getStatistics(vm.startTime.getTime(), vm.endTime.getTime(), vm.ProductID).then(function (res) {
+        vm.salesVolumeData = [];
+        for (var i = 0; i < res.data.data.length; i++) {
+          var sale = res.data.data[i];
+          var saleStatistics = {
+            value: sale.SoldAmount,
+            name: vm.productIDDict[sale.ProductID.toString()]
+          };
+
+          vm.salesVolumeData.push(saleStatistics);
+
         }
-      },function (error) {
-        
+      }, function (error) {
+
       })
     }
 
@@ -46,6 +57,7 @@
       vm.startTime = '';
       vm.endTime = '';
       vm.productList = [];
+      vm.productIDDict = new Array();
       vm.ProductID = '';
 
       vm.showAllStatics = false;
