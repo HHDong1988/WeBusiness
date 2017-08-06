@@ -14,24 +14,50 @@
 </head>
 
 <body data-ng-app="app-web" data-ng-controller="appController as appVm">
-
   <div>
     <header>
+      <nav class="navbar navbar-default navbar-fixed-top my-nav">
+        <div class="container-fluid my-nav-container">
+          <div class="row">
+            <div class="col-xs-2 pull-left">
+              <a href="#"><span class="glyphicon glyphicon-home"></span></a>
+            </div>
+            <div class="col-xs-10 text-center">
+              <div class="input-group">
+                <input type="text" class="form-control">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
     </header>
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-12" ng-view></div>
       </div>
-      <div class="row">
-        <div class="navbar navbar-fixed-bottom">
-          <footer class="col-md-12">
-            <div class="pull-right">
-            </div>
-            <strong>Copyright &copy; 2017 <a href="#">微商</a>.</strong> All rights reserved.
-          </footer>
-        </div>
-      </div>
     </div>
+    <footer>
+      <nav class="navbar navbar-default navbar-fixed-bottom my-nav">
+        <div class="container-fluid my-nav-container">
+          <div class="row">
+            <div class="col-xs-3 text-center">
+              <a href="#"><span class="glyphicon glyphicon-home"></span></a>
+            </div>
+            <div class="col-xs-3 text-center">
+              <a href="#"><span class="glyphicon glyphicon-list"></span></a>
+            </div>
+            <div class="col-xs-3 text-center">
+              <a href="#"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+            </div>
+            <div class="col-xs-3 text-center">
+              <a href="#"><span class="glyphicon glyphicon-user"></span></a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </footer>
+
   </div>
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/angular/angular.js"></script>
@@ -45,6 +71,7 @@
   <script src="js/app-web.js"></script>
   <script src="js/appController.js"></script>
   <script src="js/productListController.js"></script>
+  <script src="js/productDetailController.js"></script>
   <script src="js/site.js"></script>
 </body>
 

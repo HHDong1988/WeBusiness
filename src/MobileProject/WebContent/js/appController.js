@@ -1,18 +1,11 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('appController', ['$rootScope', '$scope', 'authService', 'userService', 'menuService', 'USER_ROLES', 'AUTH_EVENTS', 'MENU_EVENT', appController]);
+  angular.module('app-web').controller('appController', ['$rootScope', '$scope', 'authService', 'userService', 'AUTH_EVENTS', appController]);
 
-  function appController($rootScope, $scope, authService,userService, menuService, USER_ROLES, AUTH_EVENTS, MENU_EVENT) {
+  function appController($rootScope, $scope, authService,userService, AUTH_EVENTS) {
     var vm = this;
 
-    // $scope.$on(MENU_EVENT.menuList, function (event, msg) {
-    //   vm.menus = [];
-    //   for (var i = 0; i < msg.menuList.length; i++) {
-    //     var element = msg.menuList[i];
-    //     vm.menus.push(vm.menuList[element]);       
-    //   }
-    // });
 
     $scope.$on(AUTH_EVENTS.gotCookie, function (event, msg) {
       vm.currentUser = msg;
@@ -74,7 +67,6 @@
       vm.credential = { username: '', password: '' };
       vm.currentUser = { userID: '', userRole: '', bNewUser: false };
       vm.userInfo = {Tel:'',RealName:'',Address:''};
-      vm.userRoles = USER_ROLES;
       vm.passwordReset = { oldPassword: '', newPassword: '', confirmPassword: '' };
       vm.errorMessage = '';
       vm.isUserAuth = authService.isAuthenticated;
@@ -101,12 +93,6 @@
         return vm.isUserAuth() && !vm.isNewUser();
       }
 
-      vm.menus = [];
-      vm.menuList = [{ value: vm.language.USER_MANAGEMENT, href: '#!/userManagement' },
-      { value: vm.language.FINANCE_MANAGEMENT, href: '#!/financeManagement' },
-      { value: vm.language.STOCK_MANAGEMENT, href: '#!/stockManagement' },
-      { value: vm.language.SALES_MENU_SALES_INFO, href: '#!/salesInfo' }];
-      vm.menus = vm.menuList;
     };
 
     vm.init();

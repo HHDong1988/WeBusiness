@@ -16,15 +16,6 @@
       loginSuccess: '登陆成功',
       loginError: '登陆失败，用户名或密码错误'
     })
-    .constant('USER_ROLES', {
-      admin: 1,
-      assistant: 2,
-      accountant: 3,
-      storeKeeper: 4,
-      primaryAgency: 5,
-      secondaryAgency: 6,
-      superAdmin: 7
-    })
     .factory('authInterceptor', function ($rootScope, $q,
       AUTH_EVENTS) {
       return {
@@ -86,6 +77,27 @@
         });
       }
 
+    })
+    .service('productService', function ($http) {
+      var productService = this;
+      productService.selectProductID = 0;
+      
+      productService.getAllProducts = function () {
+        return $http.get('/api/products').then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        })
+      }
+
+      productService.getProductDetail = function (productID) {
+        var url = '/api/products/detail?productID='+productID;
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        })
+      }
     })
 
     .factory('authService', function ($q, $http, sessionService, AUTH_MESSAGE_ZH) {
@@ -154,10 +166,16 @@
         templateUrl: 'views/productList.html'
       });
 
-      $routeProvider.when('/userManagement', {
-        controller: 'userManageController',
+      $routeProvider.when('/productList', {
+        controller: 'productListController',
         controllerAs: 'vm',
-        templateUrl: 'views/wbUserManagement.html'
+        templateUrl: 'views/productList.html'
+      });
+
+      $routeProvider.when('/productDetail', {
+        controller: 'productDetailController',
+        controllerAs: 'vm',
+        templateUrl: 'views/productDetail.html'
       });
 
       $routeProvider.otherwise({ redirectTo: "/" });
@@ -170,7 +188,7 @@
         }
       ]);
     }])
-    .run(function (sessionService, userService, menuService, AUTH_EVENTS, MENU_EVENT, $rootScope, $cookieStore, $cookies) {
+    .run(function () {
 
     });
 })();
