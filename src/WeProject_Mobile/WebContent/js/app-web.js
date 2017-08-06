@@ -81,7 +81,7 @@
     .service('productService', function ($http) {
       var productService = this;
       productService.selectProductID = 0;
-      
+
       productService.getAllProducts = function () {
         return $http.get('/api/products').then(function (res) {
           return res;
@@ -91,7 +91,7 @@
       }
 
       productService.getProductDetail = function (productID) {
-        var url = '/api/products/detail?productID='+productID;
+        var url = '/api/products/detail?productID=' + productID;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -176,6 +176,12 @@
         controller: 'productDetailController',
         controllerAs: 'vm',
         templateUrl: 'views/productDetail.html'
+      });
+
+      $routeProvider.when('/shoppingCart', {
+        controller: 'shoppingCartController',
+        controllerAs: 'vm',
+        templateUrl: 'views/shoppingCart.html'
       });
 
       $routeProvider.otherwise({ redirectTo: "/" });
