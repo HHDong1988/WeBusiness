@@ -1,14 +1,33 @@
 <div>
-  <div ng-repeat="product in vm.productList">
-    <div>
-      <a ng-click="vm.gotoDetail(product)"><img class="img-responsive" src="{{product.Picture1}}"></a>
+  <header>
+    <nav class="navbar navbar-default navbar-fixed-top my-nav">
+      <div class="container-fluid my-nav-container">
+        <div class="row">
+          <div class="col-xs-2 pull-left">
+            <a href="#"><span class="glyphicon glyphicon-home"></span></a>
+          </div>
+          <div class="col-xs-10 text-center">
+            <div class="input-group">
+              <input type="text" class="form-control">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div>
+    <div ng-repeat="product in vm.productList">
+      <div>
+        <a ng-click="vm.gotoDetail(product)"><img class="img-responsive" src="{{product.Picture1}}"></a>
+      </div>
+      <div>
+        <p>{{product.Title}}</p>
+      </div>
+      <div>
+        <p>{{product.Description}}</p>
+      </div>
+      <hr />
     </div>
-    <div>
-      <p>{{product.Title}}</p>
-    </div>
-    <div>
-      <p>{{product.Description}}</p>
-    </div>
-    <hr />
   </div>
 </div>

@@ -1,33 +1,46 @@
-<div class="productDetailContainer">
-  <div class="row">
-    <div class="col-xs-6 imgContainer">
-      <img class="img-responsive" src="{{vm.product.Picture1}}">
+<div>
+  <header>
+    <nav class="navbar navbar-default navbar-fixed-top my-nav">
+      <div class="container-fluid my-nav-container">
+        <div class="row">
+          <div class="col-xs-2 pull-left">
+            <a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="productDetailContainer">
+    <div class="row">
+      <div class="col-xs-6 imgContainer">
+        <img class="img-responsive" src="{{vm.product.Picture1}}">
+      </div>
+      <div class="col-xs-6 imgContainer">
+        <img class="img-responsive" src="{{vm.product.Picture2}}">
+      </div>
     </div>
-    <div class="col-xs-6 imgContainer">
-      <img class="img-responsive" src="{{vm.product.Picture2}}">
+    <div class="row">
+      <div class="col-xs-6 imgContainer">
+        <img class="img-responsive" src="{{vm.product.Picture3}}">
+      </div>
+      <div class="col-xs-6 imgContainer">
+        <img class="img-responsive" src="{{vm.product.Picture4}}">
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-6 imgContainer">
-      <img class="img-responsive" src="{{vm.product.Picture3}}">
+    <div class="row">
+      <div>
+        <p>{{vm.product.Description}}</p>
+      </div>
     </div>
-    <div class="col-xs-6 imgContainer">
-      <img class="img-responsive" src="{{vm.product.Picture4}}">
+    <div class="row">
+      <div>
+        <p>{{vm.product.Price | currency:'￥' }}</p>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div>
-      <p>{{vm.product.Description}}</p>
-    </div>
-  </div>
-  <div class="row">
-    <div>
-      <p>{{vm.product.Price}}</p>
-    </div>
-  </div>
-  <div class="row">
-    <div>
-      <button class="btn btn-default">加入购物车</button>
+    <div class="row">
+      <div>
+        <button class="btn btn-default">加入购物车</button>
+      </div>
     </div>
   </div>
 </div>
