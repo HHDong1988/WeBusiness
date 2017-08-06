@@ -82,8 +82,9 @@
       var productService = this;
       productService.selectProductID = 0;
 
-      productService.getAllProducts = function () {
-        return $http.get('/api/products').then(function (res) {
+      productService.getAllProducts = function (page, pageSize) {
+        var url = '/api/products?page=' + page + '&pageSize=' + pageSize;
+        return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
           return error;
