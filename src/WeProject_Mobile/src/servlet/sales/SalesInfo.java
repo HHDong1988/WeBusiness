@@ -32,36 +32,6 @@ import com.util.MD5Util;
 public class SalesInfo extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
-	private Boolean HasAuthority(HttpServletRequest req,Connection conn, String targetUserName){
-		Cookie[] cookies = req.getCookies();
-		String username = null;
-		if (cookies != null) {
-			for (Cookie c : cookies) {
-				if (c.getName().equals("username")) {
-					username = c.getValue();
-				}
-			}
-			PreparedStatement ps = null;
-			try {
-				ps = conn.prepareStatement(Constant.SQL_SELECT_USERTypeId);
-				ps.setString(1, username);
-				JSONArray array = DBController.getJsonArray(ps, conn);
-				array.length();
-				JSONObject userobject = array.getJSONObject(0);
-				int usertypeid = userobject.getInt("UserTypeID");
-				
-				if(usertypeid==Constant.Super_Admin_Id||usertypeid==Constant.Storekeeper_Id)return true;
-			} catch (SQLException | JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
-			}
-			
-				
-		}
-		return false;
-	}
-	
 	//get
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -76,43 +46,23 @@ public class SalesInfo extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-		if(!HttpUtil.doBeforeProcessing(req)){
-			endDate = new Date();
-			jObject = HttpUtil.getResponseJson(false, null,
-					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-			writer.append(jObject.toString());
-			writer.close();
-			return;
-		}
+//		if(!HttpUtil.doBeforeProcessing(req)){
+//			endDate = new Date();
+//			jObject = HttpUtil.getResponseJson(false, null,
+//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+//			writer.append(jObject.toString());
+//			writer.close();
+//			return;
+//		}
 		int iPageNum = Integer.parseInt(req.getParameter("page").trim());
 		int iPagesize = Integer.parseInt(req.getParameter("pageSize").trim());
 		int total=0;
-		Boolean hasId=false;
-		String idString = req.getParameter("Id");
-		if(idString!=null)hasId=true;
-		int id =0;
-		if(hasId){
-			id = Integer.parseInt(idString);
-		}
+		
 		
 		try {
 			conn = DBController.getConnection();
-			if(!HasAuthority(req,conn,null)){
-				endDate = new Date();
-				jObject = HttpUtil.getResponseJson(false, null,
-						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-				writer.append(jObject.toString());
-				writer.close();
-				conn.close();
-				return;
-			}
-			if(hasId){
-				ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOCOUNTBYPRODUCTID);
-				ps.setInt(1, id);
-			}else{
-				ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOCOUNT);
-				
-			}
+			
+			ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOCOUNT);
 			
 			JSONArray jArrTotalArray = null;
 			try {
@@ -129,27 +79,9 @@ public class SalesInfo extends HttpServlet{
 
 			int startPoint =iPagesize * (iPageNum-1);
 			//iPagesize * (iPageNum-1) +" ," + iPagesize
-			if(iPagesize==-1){
-				if(hasId){
-	            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYPRODUCTID);
-	    			ps.setInt(1, id);
-	            }else
-	            {
-	            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFO);
-	            }
-			}else{
-				if(hasId){
-	            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYPAGEBYPRODUCTID);
-	    			ps.setInt(1, id);
-	    			ps.setInt(2, startPoint);
-	    			ps.setInt(3, iPagesize);
-	            }else
-	            {
-	            	ps = conn.prepareStatement(Constant.SQL_GET_SALESINFOBYPAGE);
-	            	ps.setInt(1, startPoint);
-	    			ps.setInt(2, iPagesize);
-	            }
-			}
+			ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOBYPAGE);
+        	ps.setInt(1, startPoint);
+			ps.setInt(2, iPagesize);
            
 			
 			JSONArray array = DBController.getJsonArray(ps, conn);

@@ -33,52 +33,13 @@ public final class Constant {
 	public static final String SQL_UPDATE_USERLOGINTIME = "UPDATE sys_conf_userinfo "
 			+ "SET LastLoginTime = ? "
 			+ "WHERE UserName = ?";
-	public static final String SQL_GET_STORAGEITEMCOUNT="SELECT COUNT(ID) as total, ID"
-			+ " FROM data_storage_products ";	
-	public static final String SQL_GET_STORAGEBYPAGE="SELECT ID, Name, CurrentAmount, SoldAmount"
-			+ " FROM data_storage_products "
-			+ " ORDER BY ID LIMIT ?,?";
-	public static final String SQL_GET_STORAGE="SELECT ID, Name, CurrentAmount, SoldAmount"
-			+ " FROM data_storage_products ";
-	public static final String SQL_GET_STORAGEWHEREPRODUCTID="WHERE ID = ?";
-	public static final String SQL_GET_PURCHASEITEMCOUNT="SELECT COUNT(ID) as total, ID"
-			+ " FROM data_purchaseinfo ";	
-	
-	public static final String SQL_GET_PURCHASEINFOBYPAGE="SELECT * "
-			+ " FROM data_purchaseinfo "
-			+ " ORDER BY ID LIMIT ?,?";
-	public static final String SQL_GET_PURCHASEINFO="SELECT * "
-			+ " FROM data_purchaseinfo ";
-	public static final String SQL_GET_SALESINFOCOUNTBYPRODUCTID="SELECT COUNT(ID) as total, ID"
+	public static final String SQL_GET_OnlineSALESINFOCOUNT="SELECT COUNT(ID) as total, ID"
 			+ " FROM data_saleproducts "
-			+ " WHERE ProductID = ?";
-	public static final String SQL_GET_SALESINFOCOUNT="SELECT COUNT(ID) as total, ID"
-			+ " FROM data_saleproducts ";
-	public static final String SQL_GET_SALESINFOBYPAGE="SELECT * "
+			+ " WHERE Online = 1";
+	public static final String SQL_GET_OnlineSALESINFOBYPAGE="SELECT * "
 			+ " FROM data_saleproducts "
+			+ " WHERE Online = 1"
 			+ " ORDER BY ID LIMIT ?,?";
-	public static final String SQL_GET_SALESINFO="SELECT * "
-			+ " FROM data_saleproducts ";
-	public static final String SQL_GET_SALESINFOBYPAGEBYPRODUCTID="SELECT * "
-			+ " FROM data_saleproducts "
-			+ " WHERE ProductID = ?"
-			+ " ORDER BY ID LIMIT ?,?";
-	public static final String SQL_GET_SALESINFOBYPRODUCTID="SELECT * "
-			+ " FROM data_saleproducts "
-			+ " WHERE ProductID = ?";
-	public static final String SQL_GET_ORDERINFOSTATISTICS="SELECT * "
-			+ " FROM data_orders "
-			+ " WHERE LogTime > ? and LogTime < ?";
-	public static final String SQL_GET_ORDERINFOSTATISTICSIDCondition=" and ProductID=?";
-//	public static final String SQL_GET_PUCHASEAMOUNTVALUEBYID="SELECT Amount"
-//			+ " FROM data_purchaseinfo "
-//			+ " WHERE ID = ?";
-//	public static final String SQL_GET_PRODUCTCURRNETAMOUNTBYID="SELECT CurrentAmount"
-//			+ " FROM data_storage_products "
-//			+ " WHERE ID = ?";
-	public static final String SQL_UPDATE_PRODUCTCURRENTAMOUNTBYID="UPDATE data_storage_products "
-			+ "SET CurrentAmount=CurrentAmount+? "
-			+ "WHERE ID = ?";
 	
 	public static final String LastLogInTimeColumn="LastLoginTime";
 	public static final String SQL_CHECK_PRODUCTEXIST = "SELECT ID"
