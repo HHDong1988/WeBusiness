@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" 
+xmlns="http://java.sun.com/xml/ns/j2ee" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  <servlet>
+    <servlet-name>Hello1</servlet-name>
+    <servlet-class>Hello1</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>Hello1</servlet-name>
+    <url-pattern>/api/hello</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>LogInSystem</servlet-name>
+    <servlet-class>LogInSystem</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>LogInSystem</servlet-name>
+    <url-pattern>/api/login</url-pattern>
+  </servlet-mapping>  
+  
+  
+   <servlet>
+    <servlet-name>LogoffSystem</servlet-name>
+    <servlet-class>LogoffSystem</servlet-class>
+  </servlet>
+
+  
+   <servlet-mapping>
+    <servlet-name>LogoffSystem</servlet-name>
+    <url-pattern>/api/logoff</url-pattern>
+  </servlet-mapping>
+  
+  
+  <servlet>
+    <servlet-name>Menu</servlet-name>
+    <servlet-class>servlet.accounts.Menu</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Menu</servlet-name>
+    <url-pattern>/api/menu</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>Account</servlet-name>
+    <servlet-class>servlet.accounts.Account</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Account</servlet-name>
+    <url-pattern>/api/users</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>ResetPassword</servlet-name>
+    <servlet-class>servlet.accounts.ResetPassword</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResetPassword</servlet-name>
+    <url-pattern>/api/password</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>UserSales</servlet-name>
+    <servlet-class>servlet.sales.SalesInfo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserSales</servlet-name>
+    <url-pattern>/api/usersales</url-pattern>
+  </servlet-mapping>
+  
+ 
+ 
+</web-app>
