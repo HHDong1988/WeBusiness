@@ -80,7 +80,7 @@
     })
     .service('productService', function ($http) {
       var productService = this;
-      productService.selectProductID = 0;
+      productService.selectProduct = null;
 
       productService.getAllProducts = function (page, pageSize) {
         var url = '/api/products?page=' + page + '&pageSize=' + pageSize;

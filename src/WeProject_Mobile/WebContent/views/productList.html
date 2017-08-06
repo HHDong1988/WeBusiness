@@ -1,13 +1,13 @@
 <div>
   <div ng-repeat="product in vm.productList">
     <div>
-      <a ng-click="vm.gotoDetail(product.ProductID)"><img class="img-responsive" src="{{product.imgSrc}}"></a>
+      <a ng-click="vm.gotoDetail(product)"><img class="img-responsive" src="{{product.Picture1}}"></a>
     </div>
     <div>
-      <p>{{product.introduction}}</p>
+      <p>{{product.Title}}</p>
     </div>
     <div>
-      <p>{{product.detail}}</p>
+      <p>{{product.Description}}</p>
     </div>
     <hr />
   </div>
