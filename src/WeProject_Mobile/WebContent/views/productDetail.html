@@ -13,34 +13,55 @@
   <div class="productDetailContainer">
     <div class="row">
       <div class="col-xs-6 imgContainer">
-        <img class="img-responsive" src="{{vm.product.Picture1}}">
+        <img class="img-responsive" src="{{vm.productDetail.Picture1}}">
       </div>
       <div class="col-xs-6 imgContainer">
-        <img class="img-responsive" src="{{vm.product.Picture2}}">
+        <img class="img-responsive" src="{{vm.productDetail.Picture2}}">
       </div>
     </div>
     <div class="row">
       <div class="col-xs-6 imgContainer">
-        <img class="img-responsive" src="{{vm.product.Picture3}}">
+        <img class="img-responsive" src="{{vm.productDetail.Picture3}}">
       </div>
       <div class="col-xs-6 imgContainer">
-        <img class="img-responsive" src="{{vm.product.Picture4}}">
+        <img class="img-responsive" src="{{vm.productDetail.Picture4}}">
       </div>
     </div>
     <div class="row">
       <div>
-        <p>{{vm.product.Description}}</p>
+        <p>{{vm.productDetail.Description}}</p>
       </div>
     </div>
     <div class="row">
       <div>
-        <p>{{vm.product.Price | currency:'￥' }}</p>
-      </div>
-    </div>
-    <div class="row">
-      <div>
-        <button class="btn btn-default">加入购物车</button>
+        <p>{{vm.productDetail.Price | currency:'￥' }}</p>
       </div>
     </div>
   </div>
+  <footer>
+    <nav class="navbar navbar-default navbar-fixed-bottom my-nav">
+      <div class="container-fluid my-nav-container">
+        <div class="row">
+          <div class="col-xs-2 text-center">
+            <a href="#"><span class="glyphicon glyphicon-home"></span></a>
+          </div>
+          <div class="col-xs-2 text-center">
+            <a href="#!/shoppingCart"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+          </div>
+          <div class="col-xs-4 text-center nonPadding">
+            <div class="input-group">
+              <span class="input-group-btn"><button class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+              </span>
+              <input type="number" class="form-control">
+              <span class="input-group-btn"><button class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+              </span>
+            </div>
+          </div>
+          <div class="col-xs-4 text-center nonPadding text-container ">
+            <button class="btn btn-success">加入购物车</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </footer>
 </div>

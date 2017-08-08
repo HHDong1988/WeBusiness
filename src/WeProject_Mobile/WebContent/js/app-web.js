@@ -80,7 +80,7 @@
     })
     .service('productService', function ($http) {
       var productService = this;
-      productService.selectProduct = null;
+      productService.productID = 0;
 
       productService.getAllProducts = function (page, pageSize) {
         var url = '/api/products?page=' + page + '&pageSize=' + pageSize;
@@ -91,8 +91,8 @@
         })
       }
 
-      productService.getProductDetail = function (productID) {
-        var url = '/api/products/detail?productID=' + productID;
+      productService.getProductDetail = function () {
+        var url = '/api/products/detail?productID=' + productService.productID ;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -194,8 +194,12 @@
           return $injector.get('authInterceptor');
         }
       ]);
-    }])
-    .run(function () {
-
+    }]).run( function ($rootScope, $location) {
+      $rootScope.$on('$locationChangeStart', function (event, next, current) {
+        var path = /#!\/productDetail\/(\d)+/i.exec(next);
+        if (path && path[1]) {
+          $location.path('/productDetail');
+        }
+      });
     });
 })();
