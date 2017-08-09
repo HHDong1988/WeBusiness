@@ -14,10 +14,22 @@
         
       });
     }
+
+    vm.decreaseCount = function () {
+      if (vm.count <= 1) {
+        return;
+      }
+      vm.count--;
+    }
+
+    vm.increaseCount = function () {
+      vm.count++;
+    }
     vm.init = function () {
       vm.language = new LanguageUtility();
       vm.tittle = vm.language.LOGIN;
       
+      vm.count = 1;
       vm.productID = productService.productID;
       vm.productDetail = {
         ProductID: 1, 

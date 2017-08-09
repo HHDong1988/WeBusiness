@@ -12,18 +12,22 @@
   </header>
   <div class="productDetailContainer">
     <div class="row">
-      <div class="col-xs-6 imgContainer">
+      <div class="col-xs-12 imgContainer">
         <img class="img-responsive" src="{{vm.productDetail.Picture1}}">
       </div>
-      <div class="col-xs-6 imgContainer">
+    </div>
+    <div class="row">
+      <div class="col-xs-12 imgContainer">
         <img class="img-responsive" src="{{vm.productDetail.Picture2}}">
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-6 imgContainer">
+      <div class="col-xs-12 imgContainer">
         <img class="img-responsive" src="{{vm.productDetail.Picture3}}">
       </div>
-      <div class="col-xs-6 imgContainer">
+    </div>
+    <div class="row">
+      <div class="col-xs-12 imgContainer">
         <img class="img-responsive" src="{{vm.productDetail.Picture4}}">
       </div>
     </div>
@@ -50,15 +54,15 @@
           </div>
           <div class="col-xs-4 text-center nonPadding">
             <div class="input-group">
-              <span class="input-group-btn"><button class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+              <span class="input-group-btn"><button class="btn btn-default" ng-click="vm.decreaseCount()"><span class="glyphicon glyphicon-minus"></span></button>
               </span>
-              <input type="number" class="form-control">
-              <span class="input-group-btn"><button class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+              <input type="number" class="form-control" ng-model="vm.count">
+              <span class="input-group-btn"><button class="btn btn-default" ng-click="vm.increaseCount()"><span class="glyphicon glyphicon-plus"></span></button>
               </span>
             </div>
           </div>
           <div class="col-xs-4 text-center nonPadding text-container ">
-            <button class="btn btn-success">加入购物车</button>
+            <button class="btn btn-success">{{vm.language.ADD_TO_CART}}</button>
           </div>
         </div>
       </div>
