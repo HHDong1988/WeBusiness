@@ -10,7 +10,7 @@
       vm.language = new LanguageUtility();
       vm.tittle = vm.language.LOGIN;
 
-      vm.products = cartService.products;
+      vm.products = cartService.getAllItems();
     };
 
     vm.init();

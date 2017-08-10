@@ -1,3 +1,64 @@
 <div>
-  This is shopping cart
+  <header>
+    <nav class="navbar navbar-default navbar-fixed-top my-nav">
+      <div class="container-fluid my-nav-container">
+        <div class="row">
+          <div class="col-xs-2 pull-left">
+            <a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div ng-repeat="product in vm.products">
+    <div class="row">
+      <div class="col-xs-4 center-block">
+        <img class="img-responsive" src="{{product.productImg}}">
+      </div>
+      <div class="col-xs-8">
+        <strong>{{product.productTitle}}</strong>
+        <p>{{product.productDescription}}</p>
+        <p>{{product.productPrice * product.productCount | currency:'￥'}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <form>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputFile">File input</label>
+        <input type="file" id="exampleInputFile">
+        <p class="help-block">Example block-level help text here.</p>
+      </div>
+      <div class="checkbox">
+        <label>
+      <input type="checkbox"> Check me out
+    </label>
+      </div>
+    </form>
+  </div>
+  <footer>
+    <nav class="navbar navbar-default navbar-fixed-bottom my-nav">
+      <div class="container-fluid my-nav-container">
+        <div class="row">
+          <div class="col-xs-2 text-center">
+            <a href="#"><span class="glyphicon glyphicon-home"></span></a>
+          </div>
+          <div class="col-xs-4 text-center">
+            <a href="#"><span class="glyphicon glyphicon-user"></span></a>
+          </div>
+          <div class="col-xs-4 text-center">
+            <a href="#"><span>结算</span></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </footer>
 </div>

@@ -49,8 +49,8 @@
           <div class="col-xs-2 text-center">
             <a href="#"><span class="glyphicon glyphicon-home"></span></a>
           </div>
-          <div class="col-xs-2 text-center">
-            <a href="#!/shoppingCart"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+          <div class="col-xs-2 text-center badgeContainer">
+            <a href="#!/shoppingCart"><span class="glyphicon glyphicon-shopping-cart"><span class="badge">{{vm.cartItemCount}}</span></span></a>
           </div>
           <div class="col-xs-4 text-center nonPadding">
             <div class="input-group">
@@ -62,7 +62,7 @@
             </div>
           </div>
           <div class="col-xs-4 text-center nonPadding text-container ">
-            <button class="btn btn-success">{{vm.language.ADD_TO_CART}}</button>
+            <button class="btn btn-primary" ng-click="vm.addToCart()">{{vm.language.ADD_TO_CART}}</button>
           </div>
         </div>
       </div>

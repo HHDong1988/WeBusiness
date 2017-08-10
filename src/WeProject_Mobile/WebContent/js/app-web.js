@@ -108,6 +108,12 @@
         var product = {productID:ID,productImg:img,productDescription:des,productTitle:title,productPrice:price, productCount:count};
         products.push(product);
       }
+      cartService.getItemCount = function () {
+        return products.length;
+      }
+      cartService.getAllItems = function () {
+        return products;
+      }
     })
 
     .factory('authService', function ($q, $http, sessionService, AUTH_MESSAGE_ZH) {

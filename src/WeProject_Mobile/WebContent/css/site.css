@@ -1,5 +1,5 @@
 body{
-  padding-top:  50px;
+  padding-top: 60px;
   padding-bottom: 50px;
 }
 
@@ -29,4 +29,14 @@ body{
 .text-container{
   padding: 0px;
   margin-top: -5px;
+}
+
+.badgeContainer{
+  position: relative;
+}
+
+.badgeContainer a span span{
+  position: absolute;
+  left: 15px;
+  top: 0px;
 }

@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('productDetailController', ['$rootScope', '$scope','productService', productDetailController]);
+  angular.module('app-web').controller('productDetailController', ['$rootScope', '$scope','productService','cartService', productDetailController]);
 
-  function productDetailController($rootScope, $scope,productService) {
+  function productDetailController($rootScope, $scope,productService,cartService) {
     var vm = this;
     
 
@@ -25,10 +25,17 @@
     vm.increaseCount = function () {
       vm.count++;
     }
+
+    vm.addToCart = function () {
+      cartService.addToCart(vm.productID, vm.productDetail.Picture1,vm.productDetail.Description, vm.productDetail.Title, vm.productDetail.Price, vm.count);
+      vm.cartItemCount = cartService.getItemCount();
+
+    }
     vm.init = function () {
       vm.language = new LanguageUtility();
       vm.tittle = vm.language.LOGIN;
       
+      vm.cartItemCount = cartService.getItemCount();
       vm.count = 1;
       vm.productID = productService.productID;
       vm.productDetail = {
