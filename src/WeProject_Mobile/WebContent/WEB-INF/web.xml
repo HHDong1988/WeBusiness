@@ -78,7 +78,16 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
   </servlet>
   <servlet-mapping>
     <servlet-name>Order</servlet-name>
-    <url-pattern>/api/userorder</url-pattern>
+    <url-pattern>/api/orders</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>OrderReceiver</servlet-name>
+    <servlet-class>servlet.sales.OrderReceiver</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OrderReceiver</servlet-name>
+    <url-pattern>/api/orderreceiver</url-pattern>
   </servlet-mapping>
  
 </web-app>

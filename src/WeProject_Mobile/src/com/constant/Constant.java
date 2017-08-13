@@ -64,6 +64,9 @@ public final class Constant {
 	public static final String SQL_UPDATE_REDUCESTORAGEAMOUNT ="UPDATE data_storage_products "
 			+ "SET CurrentAmount=CurrentAmount-?, SoldAmount= SoldAmount+? "
 			+ "WHERE ID = ?";
+	public static final String SQL_GET_RECEIVERBYSALERID="SELECT ID, Name, Tel, Address "
+			+ " FROM data_orderreciver "
+			+ " WHERE SalerID=?";
 	// End Orders from Users
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
