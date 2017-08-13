@@ -6,7 +6,7 @@ public final class Constant {
 	public static final String SQL_SELECT_USER = "SELECT ID, UserName, UserTypeID, CreateTime, LastLoginTime"
 			+ " FROM sys_conf_userinfo "
 			+ " WHERE UserName = ? AND Password = ? ";
-	public static final String SQL_CHECK_USERNAME = "SELECT ID, UserName"
+	public static final String SQL_SELECT_USERIDBYNAME = "SELECT ID"
 			+ " FROM sys_conf_userinfo "
 			+ " WHERE UserName = ? ";
 	public static final String SQL_SELECT_USERTypeId = "SELECT UserTypeID"
@@ -40,12 +40,31 @@ public final class Constant {
 			+ " FROM data_saleproducts "
 			+ " WHERE Online = 1"
 			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_GET_OnlineSALESINFOBYID="SELECT * "
+			+ " FROM data_saleproducts "
+			+ " WHERE Online = 1 and ID=?";
 	
 	public static final String LastLogInTimeColumn="LastLoginTime";
 	public static final String SQL_CHECK_PRODUCTEXIST = "SELECT ID"
 			+ " FROM data_storage_products "
 			+ " WHERE Name = ? ";
 	
+	// Orders from Users
+	public static final String SQL_INSERT_CART="INSERT INTO data_cart (SystemUserID,ReceiverName,"
+			+ "ReceiverTel, ReceiverAddr, TotalCount,TotalPrice, PostNum, PassAudit) VALUES (?,?,?,?,?,?,?,1)";
+	public static final String SQL_UPDATETOTALPRICE_CART= "UPDATE data_cart "
+			+ "SET TotalCount = ?, TotalPrice = ? "
+			+ "WHERE CartID = ?";
+	public static final String SQL_Get_AUTOID="select @@identity";
+	public static final String SQL_GET_SALESPRODUCTPRICEANDPRODUCTID="SELECT Price, ProductID"
+			+ " FROM data_saleproducts "
+			+ " WHERE ID = ?";
+	public static final String SQL_INSERT_ORDER="INSERT INTO data_orders (CartID,SaleProductID,Price,"
+			+ "Amount,LogTime) VALUES (?,?,?,?,?)";
+	public static final String SQL_UPDATE_REDUCESTORAGEAMOUNT ="UPDATE data_storage_products "
+			+ "SET CurrentAmount=CurrentAmount-?, SoldAmount= SoldAmount+? "
+			+ "WHERE ID = ?";
+	// End Orders from Users
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
 	public static final String USERNAME_ERROR = "User name is occupied.";
@@ -59,37 +78,7 @@ public final class Constant {
 	// public 
 	public static final String SQL_SELECT_USER_LIST = "SELECT ID, UserName FROM data_user";
 	
-	// Account function
-	public static final String SQL_SELECT_CONDUMETYPE = "SELECT ID,Name_EN,Name_ZH,IsOut FROM enum_consumetype ORDER BY ID";
-	public static final String SQL_SELECT_LOGDATA = "SELECT * from data_detailconsume WHERE Date = ? ";	
-	public static final String SQL_SELECT_MONTHDETAIL = "SELECT * from data_detailconsume WHERE Date = ?";
-	public static final String SQL_SELECT_ALLYEARS = "SELECT DISTINCT year FROM sta_yearbytype ";
 	
-	
-	// Clothes function
-	public static final String SQL_SELECT_SEASON = "SELECT * FROM enum_season";
-	public static final String SQL_SELECT_COLOR = "SELECT * FROM enum_color";
-	public static final String SQL_SELECT_MAINTYPE = "SELECT * FROM enum_clothestype";
-	public static final String SQL_SELECT_SUBTYPE = "SELECT * FROM enum_clothessubtype";
-	public static final String SQL_SELECT_SINGLEITEM = "SELECT ID,BuyTime,TypeID,Description,SubTypeID,ColorID,UserID,Link1,Link2,Link3,Value,SeasonID,`Where` FROM data_clothesdetail where ID = ?";
-	
-	// Medicine function
-	public static final String SQL_SELECT_MEDICINETYPE = "SELECT * FROM enum_medicinetype";
-	public static final String SQL_SELECT_MEDSINGLEITEM = "SELECT ID,`Name`,Production_Date,Expiration_Date,TypeID,Amount,`Left`,Unit,`Value`,`Usage`,Note,Link,Location_Buy as Location FROM data_medicnedetail where ID = ?";
-	public static final String SQL_SELECT_MEDUPDATE = "Update data_medicnedetail set `left`=? where ID = ?";
-	
-	// Blogs function
-	public static final String SQL_SELECT_BLOGLIST = "SELECT ID,UserID,Title,Date FROM data_blogs";
-	public static final String SQL_SELECT_BLOGITEM = "SELECT * FROM data_blogs where ID= ?";
-	
-	// Gift function
-	public static final String SQL_SELECT_GIFTLIST = "SELECT ID,Name,Value,IsIn,Date,Description FROM date_giftdetail";
-	
-	// AC function
-	public static final String SQL_SELECT_ACLIST = "SELECT ID,Host,Account,Password,Combine,Answer FROM data_AClist";
-	
-	// schedule function
-	public static final String SQL_SELECT_SCHEDULELIST = "SELECT Date,StartTime,EndTime,Title,`Where`,UserID,Description FROM data_schedule";
 	
 	// Role and Id
 	public static final int Primary_Agency_Id = 5;
