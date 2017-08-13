@@ -40,6 +40,9 @@ public final class Constant {
 			+ " FROM data_saleproducts "
 			+ " WHERE Online = 1"
 			+ " ORDER BY ID LIMIT ?,?";
+	public static final String SQL_GET_OnlineSALESINFOBYID="SELECT * "
+			+ " FROM data_saleproducts "
+			+ " WHERE Online = 1 and ID=?";
 	
 	public static final String LastLogInTimeColumn="LastLoginTime";
 	public static final String SQL_CHECK_PRODUCTEXIST = "SELECT ID"

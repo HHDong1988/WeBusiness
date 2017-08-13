@@ -32,12 +32,14 @@ import com.util.MD5Util;
 public class SalesInfo extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
+	
 	//get
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// super.doGet(req, resp);
+		JSONArray resultarray =null;
 		Date beginDate = new Date();
 		Date endDate = null;
 		resp.setContentType("application/json; charset=utf-8");
@@ -46,54 +48,67 @@ public class SalesInfo extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-		if(!HttpUtil.doBeforeProcessing(req)){
-			endDate = new Date();
-			jObject = HttpUtil.getResponseJson(false, null,
-					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-			writer.append(jObject.toString());
-			writer.close();
-			return;
+//		if(!HttpUtil.doBeforeProcessing(req)){
+//			endDate = new Date();
+//			jObject = HttpUtil.getResponseJson(false, null,
+//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+//			writer.append(jObject.toString());
+//			writer.close();
+//			return;
+//		}
+		int iPageNum =0; 
+		if(req.getParameter("page")!=null){
+			iPageNum= Integer.parseInt(req.getParameter("page").trim());
 		}
-		int iPageNum = Integer.parseInt(req.getParameter("page").trim());
-		int iPagesize = Integer.parseInt(req.getParameter("pageSize").trim());
+			
+		int iPagesize =0; 
+		if(req.getParameter("pageSize")!=null){
+			iPagesize = Integer.parseInt(req.getParameter("pageSize").trim());
+		}
+		int salesID=-1;
+		if( req.getParameter("ID")!=null){
+			salesID = Integer.parseInt(req.getParameter("ID").trim());
+		}
 		int total=0;
 		
 		
 		try {
 			conn = DBController.getConnection();
-			
-			ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOCOUNT);
-			
-			JSONArray jArrTotalArray = null;
-			try {
-				jArrTotalArray = DBController.getJsonArray(ps, conn);
-				if(jArrTotalArray != null && jArrTotalArray.length() > 0){
-					total = jArrTotalArray.getJSONObject(0).getInt("total");
-				} else {
-					total = 0;
+			if(salesID==-1){
+				ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOCOUNT);
+				
+				JSONArray jArrTotalArray = null;
+				try {
+					jArrTotalArray = DBController.getJsonArray(ps, conn);
+					if(jArrTotalArray != null && jArrTotalArray.length() > 0){
+						total = jArrTotalArray.getJSONObject(0).getInt("total");
+					} else {
+						total = 0;
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 
-			int startPoint =iPagesize * (iPageNum-1);
-			//iPagesize * (iPageNum-1) +" ," + iPagesize
-			ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOBYPAGE);
-        	ps.setInt(1, startPoint);
-			ps.setInt(2, iPagesize);
-           
-			
-			JSONArray array = DBController.getJsonArray(ps, conn);
+				int startPoint =iPagesize * (iPageNum-1);
+				//iPagesize * (iPageNum-1) +" ," + iPagesize
+				ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOBYPAGE);
+	        	ps.setInt(1, startPoint);
+				ps.setInt(2, iPagesize);
+			}else{//sales id has value
+				ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOBYID);
+	        	ps.setInt(1, salesID);
+			}
+			resultarray = DBController.getJsonArray(ps, conn);
 
 			endDate = new Date();
-			if(array==null||(array!=null&&array.length()==0)){
+			if(resultarray==null||(resultarray!=null&&resultarray.length()==0)){
 				jObject = HttpUtil.getResponseJson(false, null,
 						endDate.getTime() - beginDate.getTime(), Constant.DATEBASEEMPTY_ERROR,0,1,-1);
 				writer.append(jObject.toString());
 			}else
 			{
-				jObject = HttpUtil.getResponseJson(true, array, endDate.getTime() - beginDate.getTime(), null,total,iPageNum,iPagesize);
+				jObject = HttpUtil.getResponseJson(true, resultarray, endDate.getTime() - beginDate.getTime(), null,total,iPageNum,iPagesize);
 				writer.append(jObject.toString());
 			}
 
