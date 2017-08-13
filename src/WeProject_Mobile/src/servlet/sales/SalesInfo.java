@@ -46,14 +46,14 @@ public class SalesInfo extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-//		if(!HttpUtil.doBeforeProcessing(req)){
-//			endDate = new Date();
-//			jObject = HttpUtil.getResponseJson(false, null,
-//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//			writer.append(jObject.toString());
-//			writer.close();
-//			return;
-//		}
+		if(!HttpUtil.doBeforeProcessing(req)){
+			endDate = new Date();
+			jObject = HttpUtil.getResponseJson(false, null,
+					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+			writer.append(jObject.toString());
+			writer.close();
+			return;
+		}
 		int iPageNum = Integer.parseInt(req.getParameter("page").trim());
 		int iPagesize = Integer.parseInt(req.getParameter("pageSize").trim());
 		int total=0;

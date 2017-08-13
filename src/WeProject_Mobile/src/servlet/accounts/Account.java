@@ -96,7 +96,7 @@ public class Account extends HttpServlet{
 			String userName = ((String) object.get("UserName")).trim();
 			PreparedStatement ps;
 			try {
-				ps = conn.prepareStatement(Constant.SQL_CHECK_USERNAME);
+				ps = conn.prepareStatement(Constant.SQL_SELECT_USERIDBYNAME);
 				ps.setString(1, userName);
 				JSONArray result = DBController.getJsonArray(ps, conn);
 				if(result.length()>0){
