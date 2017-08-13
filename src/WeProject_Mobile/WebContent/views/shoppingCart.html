@@ -10,7 +10,7 @@
       </div>
     </nav>
   </header>
-  <div ng-repeat="product in vm.products">
+  <div ng-repeat="product in vm.products" ng-if="vm.products.length != 0">
     <div class="row">
       <div class="col-xs-4 center-block">
         <img class="img-responsive" src="{{product.productImg}}">

@@ -78,7 +78,7 @@
       }
 
       userService.getAllReceivers = function () {
-        var url = '/api/Receivers';
+        var url = '/api/orderreceiver';
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -101,7 +101,7 @@
       }
 
       productService.getProductDetail = function () {
-        var url = '/api/products/detail?productID=' + productService.productID;
+        var url = '/api/products?ID=' + productService.productID;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -124,12 +124,15 @@
         return products;
       }
       cartService.orderNow = function (order) {
-        var url = '/api/ orders';
-        return $http.put(url,order).then(function (res) {
+        var url = '/api/orders';
+        return $http.post(url, order).then(function (res) {
           return res;
         }, function (error) {
           return error;
         })
+      }
+      cartService.clearCart = function () {
+        products = [];
       }
     })
 
@@ -158,7 +161,7 @@
       }
 
       authService.isAuthenticated = function () {
-        return !!sessionService.userId;
+        return sessionService.userId != 0; 
       };
 
       authService.isAuthorized = function (authorizedRoles) {
@@ -198,6 +201,12 @@
         controllerAs: 'vm',
         templateUrl: 'views/productList.html'
       });
+      
+      $routeProvider.when('/login', {
+        controller: 'loginController',
+        controllerAs: 'vm',
+        templateUrl: 'views/login.html'
+      });
 
       $routeProvider.when('/productList', {
         controller: 'productListController',
@@ -232,10 +241,11 @@
           return $injector.get('authInterceptor');
         }
       ]);
-    }]).run(function ($rootScope, $location) {
+    }]).run(function ($rootScope, $location,productService) {
       $rootScope.$on('$locationChangeStart', function (event, next, current) {
         var path = /#!\/productDetail\/(\d)+/i.exec(next);
         if (path && path[1]) {
+          productService.productID = path[1];
           $location.path('/productDetail');
         }
       });

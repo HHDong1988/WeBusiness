@@ -10,4 +10,7 @@ function LanguageUtility() {
   this.SETTLE = '去结算';
   this.TOTAL = '合计: ';
   this.ORDER = '立即下单';
+  this.LOGIN_TITTLE = '登陆到微店系统';
+  this.USER_NAME = '用户名';
+  this.USER_PASSWORD = '密码';
 }

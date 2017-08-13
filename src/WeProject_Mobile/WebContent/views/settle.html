@@ -34,7 +34,7 @@
             </div>
           </div>
           <div class="list-group" ng-show="vm.bShowReceierList">
-            <button type="button" class="list-group-item"  ng-repeat="receiver in vm.receivers" ng-click="vm.onSetReceiver(receiver)">{{receiver.name}}</button>
+            <button type="button" class="list-group-item"  ng-repeat="receiver in vm.receivers" ng-click="vm.onSetReceiver(receiver)">{{receiver.Name}}</button>
           </div>
         </div>
       </div>
@@ -57,13 +57,13 @@
       <div class="container-fluid my-nav-container">
         <div class="row">
           <div class="col-xs-2 text-center">
-            <a href="#"><span class="glyphicon glyphicon-home"></span></a>
+            <a href="#!/"><span class="glyphicon glyphicon-home"></span></a>
           </div>
           <div class="col-xs-4 text-center">
-            <a href="#"><span class="glyphicon glyphicon-user"></span></a>
+            <a href="#!/"><span class="glyphicon glyphicon-user"></span></a>
           </div>
           <div class="col-xs-6 text-center colorButton">
-            <a href="#" ng-click="vm.onOrderNow()"><span>{{vm.language.ORDER}}</span></a>
+            <a ng-click="vm.onOrderNow()"><span>{{vm.language.ORDER}}</span></a>
           </div>
         </div>
       </div>

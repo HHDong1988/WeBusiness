@@ -11,23 +11,41 @@
     }
 
     vm.onSetReceiver = function (receiver) {
-      vm.receiverName = receiver.name;
-      vm.receiverTel = receiver.tel;
-      vm.receiverAddr = receiver.addr;
-      vm.postNum = receiver.postNum;
+      vm.receiverName = receiver.Name;
+      vm.receiverTel = receiver.Tel;
+      vm.receiverAddr = receiver.Address;
+      vm.postNum = receiver.PostNum;
       vm.onShowReceiverList();
     }
 
     vm.getReceiverList = function () {
       userService.getAllReceivers().then(function (res) {
-        
+        vm.receivers = [];
+        angular.copy(res.data.data, vm.receivers);
       },function (error) {
         
       })
     }
 
     vm.onOrderNow = function () {
-      
+      var order = new Object();
+      order.ReceiverName = vm.receiverName;
+      order.ReceiverAddr = vm.receiverAddr;
+      order.ReceiverTel = vm.receiverTel;
+      order.PostNum = vm.postNum;
+      order.Orders = [];
+      for (var i = 0; i < vm.products .length; i++) {
+        var product = vm.products [i];
+        var singleOrder = {SaleProductID: parseInt(product.productID), Amount:product.productCount};
+        order.Orders.push(singleOrder);
+      }
+
+      cartService.orderNow(order).then(function (res) {
+        cartService.clearCart();
+        $location.path('/')
+      },function (error) {
+        
+      })
     }
 
     vm.init = function () {
@@ -44,12 +62,12 @@
       vm.bShowReceierList = false;
 
       vm.receivers = [
-        { name: '张三', tel: '1234567', addr: '大连', postNum: '0000000' },
-        { name: '李四', tel: '1234567', addr: '大连', postNum: '0000000' },
-        { name: '王五', tel: '1234567', addr: '大连', postNum: '0000000' },
-        { name: '赵六', tel: '1234567', addr: '大连', postNum: '0000000' },
-        { name: '周七', tel: '1234567', addr: '大连', postNum: '0000000' },
-        { name: '吴八', tel: '1234567', addr: '大连', postNum: '0000000' }
+        { Name: '张三', Tel: '1234567', Address: '大连', PostNum: '0000000' },
+        { Name: '李四', Tel: '1234567', Address: '大连', PostNum: '0000000' },
+        { Name: '王五', Tel: '1234567', Address: '大连', PostNum: '0000000' },
+        { Name: '赵六', Tel: '1234567', Address: '大连', PostNum: '0000000' },
+        { Name: '周七', Tel: '1234567', Address: '大连', PostNum: '0000000' },
+        { Name: '吴八', Tel: '1234567', Address: '大连', PostNum: '0000000' }
       ];
 
       vm.getReceiverList();

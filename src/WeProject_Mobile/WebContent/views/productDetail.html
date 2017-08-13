@@ -10,7 +10,7 @@
       </div>
     </nav>
   </header>
-  <div class="productDetailContainer">
+  <div class="productDetailContainer" ng-show="vm.productDetail != null">
     <div class="row">
       <div class="col-xs-12 imgContainer">
         <img class="img-responsive" src="{{vm.productDetail.Picture1}}">
@@ -50,7 +50,7 @@
             <a href="#"><span class="glyphicon glyphicon-home"></span></a>
           </div>
           <div class="col-xs-2 text-center badgeContainer">
-            <a href="#!/shoppingCart"><span class="glyphicon glyphicon-shopping-cart"><span class="badge">{{vm.cartItemCount}}</span></span></a>
+            <a ng-click="vm.onShoppingCartClick()"><span class="glyphicon glyphicon-shopping-cart"><span class="badge">{{vm.cartItemCount}}</span></span></a>
           </div>
           <div class="col-xs-4 text-center nonPadding">
             <div class="input-group">

@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6 col-md-4 col-md-offset-4">
+      <h1 class="text-center login-title">{{vm.language.LOGIN_TITTLE}}</h1>
+      <div class="account-wall">
+        <ng-form class="form-signin" name="loginForm">
+          <input type="text" name="username" class="form-control" ng-model="vm.credential.username" placeholder="{{vm.language.USER_NAME}}" required
+            autofocus>
+          <span style="color:red" ng-show="loginForm.username.$dirty && loginForm.username.$invalid">
+            <span ng-show="loginForm.username.$error.required">{{vm.language.USERNAME_RULE}}</span>
+          </span>
+          <input type="password" name="password" class="form-control" ng-model="vm.credential.password" placeholder="{{vm.language.USER_PASSWORD}}"
+            required>
+          <span style="color:red" ng-show="loginForm.password.$dirty && loginForm.password.$invalid">
+            <span ng-show="loginForm.password.$error.required">{{vm.language.PASSWORD_REQUIRED}}</span>
+          </span>
+          <span style="color:red" ng-show="vm.errorMessage != ''">
+            <span>{{vm.errorMessage}}</span>
+          </span>
+          <button class="btn btn-primary btn-block" type="submit"  ng-disabled="loginForm.$invalid" ng-click="vm.login()">
+            {{vm.language.LOGIN}}
+          </button>
+        </ng-form>
+      </div>
+    </div>
+  </div>
+</div>
