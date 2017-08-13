@@ -1,0 +1,72 @@
+<div>
+  <header>
+    <nav class="navbar navbar-default navbar-fixed-top my-nav">
+      <div class="container-fluid my-nav-container">
+        <div class="row">
+          <div class="col-xs-2 pull-left">
+            <a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div ng-repeat="product in vm.products">
+    <div class="row">
+      <div class="col-xs-4 center-block">
+        <img class="img-responsive" src="{{product.productImg}}">
+      </div>
+      <div class="col-xs-8">
+        <strong>{{product.productTitle}}</strong>
+        <p>{{product.productDescription}}</p>
+        <p>{{product.productPrice * product.productCount | currency:'￥'}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="row receiverInfoContainer">
+    <form>
+      <div class="form-group">
+        <label for="receiverName">{{vm.language.RECEIVER_NAME}}</label>
+        <div>
+          <div class="input-group dropdown">
+            <input type="text" class="form-control" id="receiverName" ng-model="vm.receiverName">
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="vm.onShowReceiverList()"><span class="caret"></span></button>
+            </div>
+          </div>
+          <div class="list-group" ng-show="vm.bShowReceierList">
+            <button type="button" class="list-group-item"  ng-repeat="receiver in vm.receivers" ng-click="vm.onSetReceiver(receiver)">{{receiver.name}}</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="receiverTel">{{vm.language.RECEIVER_TEL}}</label>
+        <input type="text" class="form-control" id="receiverTel" ng-model="vm.receiverTel">
+      </div>
+      <div class="form-group">
+        <label for="receiverAddr">{{vm.language.RECEIVER_ADDR}}</label>
+        <input type="text" class="form-control" id="receiverAddr" ng-model="vm.receiverAddr">
+      </div>
+      <div class="form-group">
+        <label for="postNum">{{vm.language.POST_NUM}}</label>
+        <input type="text" class="form-control" id="postNum" ng-model="vm.postNum">
+      </div>
+    </form>
+  </div>
+  <footer>
+    <nav class="navbar navbar-default navbar-fixed-bottom my-nav">
+      <div class="container-fluid my-nav-container">
+        <div class="row">
+          <div class="col-xs-2 text-center">
+            <a href="#"><span class="glyphicon glyphicon-home"></span></a>
+          </div>
+          <div class="col-xs-4 text-center">
+            <a href="#"><span class="glyphicon glyphicon-user"></span></a>
+          </div>
+          <div class="col-xs-6 text-center colorButton">
+            <a href="#" ng-click="vm.onOrderNow()"><span>{{vm.language.ORDER}}</span></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </footer>
+</div>

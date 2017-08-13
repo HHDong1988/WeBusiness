@@ -40,3 +40,27 @@ body{
   left: 15px;
   top: 0px;
 }
+
+.receiverInfoContainer
+{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.myGroup{
+   height: 10px !important;
+   font-size: 5px;
+}
+
+.myIcon{
+  height: 20px;
+  line-height: 10px;
+}
+
+.myIcon span{
+  font-size: 5px;
+}
+
+.myInput{
+  height: 20px;
+}

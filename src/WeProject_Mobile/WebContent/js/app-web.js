@@ -77,6 +77,15 @@
         });
       }
 
+      userService.getAllReceivers = function () {
+        var url = '/api/Receivers';
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      }
+
     })
     .service('productService', function ($http) {
       var productService = this;
@@ -104,8 +113,8 @@
       var cartService = this;
       var products = [];
 
-      cartService.addToCart = function (ID,img,des,title, price, count) {
-        var product = {productID:ID,productImg:img,productDescription:des,productTitle:title,productPrice:price, productCount:count};
+      cartService.addToCart = function (ID, img, des, title, price, count) {
+        var product = { productID: ID, productImg: img, productDescription: des, productTitle: title, productPrice: price, productCount: count };
         products.push(product);
       }
       cartService.getItemCount = function () {
@@ -113,6 +122,14 @@
       }
       cartService.getAllItems = function () {
         return products;
+      }
+      cartService.orderNow = function (order) {
+        var url = '/api/ orders';
+        return $http.put(url,order).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        })
       }
     })
 
@@ -198,6 +215,12 @@
         controller: 'shoppingCartController',
         controllerAs: 'vm',
         templateUrl: 'views/shoppingCart.html'
+      });
+
+      $routeProvider.when('/settle', {
+        controller: 'settleController',
+        controllerAs: 'vm',
+        templateUrl: 'views/settle.html'
       });
 
       $routeProvider.otherwise({ redirectTo: "/" });
