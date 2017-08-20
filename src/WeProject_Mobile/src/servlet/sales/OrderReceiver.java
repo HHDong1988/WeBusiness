@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import com.constant.Constant;
 import com.database.DBController;
+import com.mysql.jdbc.Statement;
 import com.util.GetRequestJsonUtils;
 import com.util.HttpUtil;
 
@@ -65,14 +66,14 @@ public class OrderReceiver extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-//		if(!HttpUtil.doBeforeProcessing(req)){
-//			endDate = new Date();
-//			jObject = HttpUtil.getResponseJson(false, null,
-//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//			writer.append(jObject.toString());
-//			writer.close();
-//			return;
-//		}
+		if(!HttpUtil.doBeforeProcessing(req)){
+			endDate = new Date();
+			jObject = HttpUtil.getResponseJson(false, null,
+					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+			writer.append(jObject.toString());
+			writer.close();
+			return;
+		}
 		
 		try {
 			conn = DBController.getConnection();
@@ -95,6 +96,150 @@ public class OrderReceiver extends HttpServlet{
 			writer.close();
 			conn.close();
 		} catch (SQLException  e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private Boolean InsertOrderReceicer(JSONArray receiverList, 
+			int salerID, Connection conn) throws SQLException, JSONException{
+		if(receiverList==null)return true;
+		//SQL_INSERT_RECEIVER="INSERT INTO data_orderreciver (Name,Tel,Address,"
+		//+ "SalerID) VALUES (?,?,?,?)";
+		java.sql.Statement ps=conn.createStatement();
+		for(int i=0;i<receiverList.length();i++){
+			StringBuilder sb=new StringBuilder();
+			sb.append("insert into data_orderreciver (Name,Tel,Address,"
+					+ "SalerID) VALUES (");
+			JSONObject receiverInfo= receiverList.getJSONObject(i);
+			String name = receiverInfo.getString("Name");
+			String tel = receiverInfo.getString("Tel");
+			String address = receiverInfo.getString("Address");
+			sb.append("'"+name+"',");
+			sb.append("'"+tel+"',");
+			sb.append("'"+address+"',");
+			sb.append(salerID+");");
+			ps.addBatch(sb.toString());
+		}
+		int[] counts = ps.executeBatch();
+		if(counts!=null){
+			for(int value :counts){
+				if(value<=0)return false;
+			}
+		}
+		return true;
+	}
+	
+	private Boolean UpdateOrderReceicer(JSONArray receiverList, 
+			int salerID, Connection conn) throws SQLException, JSONException{
+		if(receiverList==null)return true;
+//		"UPDATE data_orderreciver "
+//		+ "SET Name = ?, Tel = ? Address =? "
+//		+ "WHERE ID = ?";
+		
+		java.sql.Statement ps=conn.createStatement();
+		for(int i=0;i<receiverList.length();i++){
+			StringBuilder sb=new StringBuilder();
+			sb.append("UPDATE data_orderreciver SET ");
+			JSONObject receiverInfo= receiverList.getJSONObject(i);
+			int id = receiverInfo.getInt("ID");
+			Boolean hasItem = false;
+			if(receiverInfo.has("Name")){
+				String name = receiverInfo.getString("Name");
+				if(hasItem){
+					sb.append(",");
+				}
+				sb.append("Name = '"+name+"'");
+				hasItem=true;
+			}
+			if(receiverInfo.has("Tel")){
+				String tel = receiverInfo.getString("Tel");
+				if(hasItem){
+					sb.append(",");
+				}
+				sb.append("Tel = '"+tel+"'");
+				hasItem=true;
+			}
+			if(receiverInfo.has("Address")){
+				String address = receiverInfo.getString("Address");
+				if(hasItem){
+					sb.append(",");
+				}
+				sb.append("Address = '"+address+"'");
+				hasItem=true;
+			}
+			sb.append(" WHERE ID = "+id);
+			ps.addBatch(sb.toString());
+		}
+		int[] counts = ps.executeBatch();
+		if(counts!=null){
+			for(int value :counts){
+				if(value<=0)return false;
+			}
+		}
+		return true;
+	}
+	
+	// Insert or update receivers
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		Date beginDate = new Date();
+		Date endDate = null;
+		resp.setContentType("application/json; charset=utf-8");
+		resp.setCharacterEncoding("UTF-8");
+		Connection conn = null;
+		PreparedStatement ps = null;
+		PrintWriter writer = resp.getWriter();
+		JSONObject jObject = null;
+		if(!HttpUtil.doBeforeProcessing(req)){
+			endDate = new Date();
+			jObject = HttpUtil.getResponseJson(false, null,
+					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+			writer.append(jObject.toString());
+			writer.close();
+			return;
+		}
+		int salerID = getUserID(req,conn);
+		String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
+		JSONObject object;
+		
+		try {
+			pJasonStr = pJasonStr.replace(" ", "");
+			object = new JSONObject(pJasonStr);
+			conn = DBController.getConnection();
+			
+			JSONArray tempArray;
+			Boolean editResult=true;
+			Boolean addResult=true;
+			if(object.has("Add")){
+				tempArray = object.getJSONArray("Add");
+				if(tempArray!=null){
+					addResult = InsertOrderReceicer(tempArray, salerID, conn);
+				}
+				
+			}
+			if(object.has("Edit")){
+				tempArray = object.getJSONArray("Edit");
+				if(tempArray!=null){
+					editResult = UpdateOrderReceicer(tempArray, salerID,  conn);
+				}
+			}
+			
+			endDate=new Date();
+			if(addResult&&editResult){
+				jObject = HttpUtil.getResponseJson(true, null,
+						endDate.getTime() - beginDate.getTime(), "success",0,1,-1);
+				writer.append(jObject.toString());
+			}else
+			{
+				jObject = HttpUtil.getResponseJson(false, null, endDate.getTime() - beginDate.getTime(),
+						"Add or edit operation has error",0,1,-1);
+				writer.append(jObject.toString());
+			}
+			writer.close();
+			conn.close();
+		} catch (SQLException |JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

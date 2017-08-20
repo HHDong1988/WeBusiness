@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -26,30 +27,29 @@ public class Order extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	private int getUserID(HttpServletRequest req,Connection conn){
-		return 41;
-//		Cookie[] cookies = req.getCookies();
-//		String username = null;
-//		if (cookies != null) {
-//			for (Cookie c : cookies) {
-//				if (c.getName().equals("username")) {
-//					username = c.getValue();
-//				}
-//			}
-//			PreparedStatement ps = null;
-//			try {
-//				ps = conn.prepareStatement(Constant.SQL_SELECT_USERIDBYNAME);
-//				ps.setString(1, username);
-//				int id = DBController.getIntNumber(ps, conn);
-//				return id;
-//			} catch (SQLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//				return -1;
-//			}
-//			
-//				
-//		}
-//		return -1;
+		Cookie[] cookies = req.getCookies();
+		String username = null;
+		if (cookies != null) {
+			for (Cookie c : cookies) {
+				if (c.getName().equals("username")) {
+					username = c.getValue();
+				}
+			}
+			PreparedStatement ps = null;
+			try {
+				ps = conn.prepareStatement(Constant.SQL_SELECT_USERIDBYNAME);
+				ps.setString(1, username);
+				int id = DBController.getIntNumber(ps, conn);
+				return id;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return -1;
+			}
+			
+				
+		}
+		return -1;
 	}
 	
 	
@@ -83,7 +83,7 @@ public class Order extends HttpServlet{
 	}
 	
 	private int InsertCart(int userId, String receiverName,String receiverTel, String reveiver,
-			int totalCount, double totalPrice, String postNum,Connection conn){
+			int totalCount, double totalPrice,Connection conn){
 		PreparedStatement ps = null;
 		try {
 			ps = conn.prepareStatement(Constant.SQL_INSERT_CART);
@@ -93,7 +93,6 @@ public class Order extends HttpServlet{
 			ps.setString(4, reveiver);
 			ps.setInt(5, totalCount);
 			ps.setDouble(6, totalPrice);
-			ps.setString(7, postNum);
 			int itemCount = ps.executeUpdate();
 			if(itemCount<=0)return -1;
 			ps = conn.prepareStatement(Constant.SQL_Get_AUTOID);
@@ -104,6 +103,39 @@ public class Order extends HttpServlet{
 			e.printStackTrace();
 		}
 		return -1;
+	}
+	
+	//return is salesID List
+	private ArrayList<Integer> CheckRemainingAmount(JSONArray orderArray,PreparedStatement ps,
+			Connection conn) throws JSONException, SQLException{
+		ArrayList<Integer> errorItemList = new ArrayList<Integer>();
+		if(orderArray!=null){
+			for(int i=0;i<orderArray.length();i++){
+				JSONObject oderitem= orderArray.getJSONObject(i);
+				int productID = oderitem.getInt("ProductID");
+				int salesID = oderitem.getInt("SaleProductID");
+				int amount = oderitem.getInt("Amount");
+				ps = conn.prepareStatement(Constant.SQL_GET_PRODUCTCURRENTAMOUNT);
+				ps.setInt(1, productID);
+				int currentAmount = DBController.getIntNumber(ps, conn);
+				if(amount>currentAmount){
+					errorItemList.add(salesID);
+				}
+			}
+		}
+		return errorItemList;
+	}
+	
+	private Boolean UpdateCartCountInReceiverTable(String receiverName, String receiverTel,
+			String receiverAddr, PreparedStatement ps,Connection conn ) throws SQLException{
+		ps = conn.prepareStatement(Constant.SQL_UPDATE_RECEIVERCARTCOUNTBYDETAIL);
+		ps.setInt(1, 1);
+		ps.setString(2, receiverName);
+		ps.setString(3, receiverTel);
+		ps.setString(4, receiverAddr);
+		int count = ps.executeUpdate();
+		if(count<=0)return false;
+		return true;
 	}
 	
     // Insert
@@ -118,14 +150,14 @@ public class Order extends HttpServlet{
 		PreparedStatement ps = null;
 		PrintWriter writer = resp.getWriter();
 		JSONObject jObject = null;
-//		if(!HttpUtil.doBeforeProcessing(req)){
-//			endDate = new Date();
-//			jObject = HttpUtil.getResponseJson(false, null,
-//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
-//			writer.append(jObject.toString());
-//			writer.close();
-//			return;
-//		}
+		if(!HttpUtil.doBeforeProcessing(req)){
+			endDate = new Date();
+			jObject = HttpUtil.getResponseJson(false, null,
+					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+			writer.append(jObject.toString());
+			writer.close();
+			return;
+		}
 		
 		String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
 		JSONObject object;
@@ -138,7 +170,7 @@ public class Order extends HttpServlet{
 			double totalPrice=.0;
 			int totalAmount=0;
 			if(!object.has("ReceiverName")||!object.has("ReceiverTel")||!object.has("ReceiverAddr")
-					||!object.has("PostNum")||!object.has("Orders")){
+					||!object.has("Orders")){
 				endDate=new Date();
 				jObject = HttpUtil.getResponseJson(false, null, endDate.getTime() - beginDate.getTime(), 
 						"please check input data, it may lack of ReceiverName or ReceiverTel "
@@ -150,7 +182,6 @@ public class Order extends HttpServlet{
 			String receiverName = object.getString("ReceiverName");
 			String receiverTel = object.getString("ReceiverTel");
 			String receiverAddr = object.getString("ReceiverAddr");
-			String postNum = object.getString("PostNum");
 			
 			
 			orderArray = object.getJSONArray("Orders");
@@ -177,10 +208,29 @@ public class Order extends HttpServlet{
 					totalPrice+=itemprice*amount;
 					totalAmount+=amount;
 				}
+			}else{
+				endDate = new Date();
+				jObject = HttpUtil.getResponseJson(false, null,
+						endDate.getTime() - beginDate.getTime(), "orders is empty, please check",0,1,-1);
+				writer.append(jObject.toString());
+				writer.close();
+				return;
 			}
-			
+			ArrayList<Integer> errorList = CheckRemainingAmount(orderArray,ps,conn);
+			if(errorList.size()>0){
+				endDate=new Date();
+				String errorMessage = "Current Operation has some items which amount is larger than "
+						+ "product current amount. The saleID list:";
+				for(int salesID :errorList){
+					errorMessage += (salesID+" ");
+				}
+				jObject = HttpUtil.getResponseJson(false, null, endDate.getTime() - beginDate.getTime(), 
+						errorMessage,0,1,-1);
+				writer.append(jObject.toString());
+				return;
+			}
 			int cartId = InsertCart(userID,receiverName,receiverTel,receiverAddr,
-					totalAmount,totalPrice,postNum,conn);
+					totalAmount,totalPrice,conn);
 			if(cartId==-1){
 				endDate=new Date();
 				jObject = HttpUtil.getResponseJson(false, null, endDate.getTime() - beginDate.getTime(), 
@@ -207,7 +257,11 @@ public class Order extends HttpServlet{
 					}
 				}
 			}
-
+			
+			Boolean updateCartCountResult = UpdateCartCountInReceiverTable(receiverName,  receiverTel,
+					receiverAddr, ps, conn);
+			
+			
 			endDate=new Date();
 			jObject = HttpUtil.getResponseJson(true, null, endDate.getTime() - beginDate.getTime(), null,0,1,-1);
 			writer.append(jObject.toString());

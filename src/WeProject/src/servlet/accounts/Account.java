@@ -360,6 +360,7 @@ public class Account extends HttpServlet{
 				}
 			}
 			endDate=new Date();
+			//ToDo: Check This
 			if(deleteResult&&editResult&&nameOccupyList!=null){
 				jObject = HttpUtil.getResponseJson(true, nameOccupyList,
 						endDate.getTime() - beginDate.getTime(), Constant.USERNAME_ERROR,0,1,-1);

@@ -51,7 +51,7 @@ public final class Constant {
 	
 	// Orders from Users
 	public static final String SQL_INSERT_CART="INSERT INTO data_cart (SystemUserID,ReceiverName,"
-			+ "ReceiverTel, ReceiverAddr, TotalCount,TotalPrice, PostNum, PassAudit) VALUES (?,?,?,?,?,?,?,1)";
+			+ "ReceiverTel, ReceiverAddr, TotalCount,TotalPrice, PostNum, PassAudit) VALUES (?,?,?,?,?,?,'',1)";
 	public static final String SQL_UPDATETOTALPRICE_CART= "UPDATE data_cart "
 			+ "SET TotalCount = ?, TotalPrice = ? "
 			+ "WHERE CartID = ?";
@@ -64,9 +64,17 @@ public final class Constant {
 	public static final String SQL_UPDATE_REDUCESTORAGEAMOUNT ="UPDATE data_storage_products "
 			+ "SET CurrentAmount=CurrentAmount-?, SoldAmount= SoldAmount+? "
 			+ "WHERE ID = ?";
-	public static final String SQL_GET_RECEIVERBYSALERID="SELECT ID, Name, Tel, Address "
+	public static final String SQL_GET_RECEIVERBYSALERID="SELECT ID, Name, Tel, Address, CartCount "
 			+ " FROM data_orderreciver "
-			+ " WHERE SalerID=?";
+			+ " WHERE SalerID=? "
+			+ " ORDER BY CartCount desc";
+	public static final String SQL_UPDATE_RECEIVERCARTCOUNTBYDETAIL="UPDATE data_orderreciver "
+			+ " SET CartCount =  CartCount+?"
+			+ " WHERE Name = ? and Tel = ? and Address = ?";
+	public static final String SQL_GET_PRODUCTCURRENTAMOUNT= "SELECT CurrentAmount"
+			+ " FROM data_storage_products "
+			+ " WHERE ID = ? ";
+	
 	// End Orders from Users
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
