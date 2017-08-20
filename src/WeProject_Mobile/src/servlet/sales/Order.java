@@ -318,6 +318,7 @@ public class Order extends HttpServlet{
 			//iPagesize * (iPageNum-1) +" ," + iPagesize
 			if(iPagesize==-1){
 				ps = conn.prepareStatement(Constant.SQL_GET_ORDERALL);
+				ps.setInt(1, userID);
 			}else{
 				ps = conn.prepareStatement(Constant.SQL_GET_ORDERCOUNT);
 				ps.setInt(1, userID);
