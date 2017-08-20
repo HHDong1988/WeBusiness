@@ -314,19 +314,6 @@ public class Order extends HttpServlet{
 			conn = DBController.getConnection();
 			int userID = getUserID(req,conn);
 			
-			JSONArray jArrTotalArray = null;
-			try {
-				jArrTotalArray = DBController.getJsonArray(ps, conn);
-				if(jArrTotalArray != null && jArrTotalArray.length() > 0){
-					total = jArrTotalArray.getJSONObject(0).getInt("total");
-				} else {
-					total = 0;
-				}
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
 			int startPoint =iPagesize * (iPageNum-1);
 			//iPagesize * (iPageNum-1) +" ," + iPagesize
 			if(iPagesize==-1){
