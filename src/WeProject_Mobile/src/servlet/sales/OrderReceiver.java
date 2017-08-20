@@ -101,26 +101,24 @@ public class OrderReceiver extends HttpServlet{
 		}
 	}
 	
-	private Boolean InsertOrderReceicer(JSONArray receiverList, 
+	private Boolean InsertOrderReceicer(JSONObject object, 
 			int salerID, Connection conn) throws SQLException, JSONException{
-		if(receiverList==null)return true;
+		
 		//SQL_INSERT_RECEIVER="INSERT INTO data_orderreciver (Name,Tel,Address,"
 		//+ "SalerID) VALUES (?,?,?,?)";
 		java.sql.Statement ps=conn.createStatement();
-		for(int i=0;i<receiverList.length();i++){
-			StringBuilder sb=new StringBuilder();
-			sb.append("insert into data_orderreciver (Name,Tel,Address,"
-					+ "SalerID) VALUES (");
-			JSONObject receiverInfo= receiverList.getJSONObject(i);
-			String name = receiverInfo.getString("Name");
-			String tel = receiverInfo.getString("Tel");
-			String address = receiverInfo.getString("Address");
-			sb.append("'"+name+"',");
-			sb.append("'"+tel+"',");
-			sb.append("'"+address+"',");
-			sb.append(salerID+");");
-			ps.addBatch(sb.toString());
-		}
+		StringBuilder sb=new StringBuilder();
+		sb.append("insert into data_orderreciver (Name,Tel,Address,"
+				+ "SalerID) VALUES (");
+		JSONObject receiverInfo= object;
+		String name = receiverInfo.getString("Name");
+		String tel = receiverInfo.getString("Tel");
+		String address = receiverInfo.getString("Address");
+		sb.append("'"+name+"',");
+		sb.append("'"+tel+"',");
+		sb.append("'"+address+"',");
+		sb.append(salerID+");");
+		ps.addBatch(sb.toString());
 		int[] counts = ps.executeBatch();
 		if(counts!=null){
 			for(int value :counts){
@@ -130,47 +128,44 @@ public class OrderReceiver extends HttpServlet{
 		return true;
 	}
 	
-	private Boolean UpdateOrderReceicer(JSONArray receiverList, 
+	private Boolean UpdateOrderReceicer(JSONObject object, 
 			int salerID, Connection conn) throws SQLException, JSONException{
-		if(receiverList==null)return true;
 //		"UPDATE data_orderreciver "
 //		+ "SET Name = ?, Tel = ? Address =? "
 //		+ "WHERE ID = ?";
 		
 		java.sql.Statement ps=conn.createStatement();
-		for(int i=0;i<receiverList.length();i++){
-			StringBuilder sb=new StringBuilder();
-			sb.append("UPDATE data_orderreciver SET ");
-			JSONObject receiverInfo= receiverList.getJSONObject(i);
-			int id = receiverInfo.getInt("ID");
-			Boolean hasItem = false;
-			if(receiverInfo.has("Name")){
-				String name = receiverInfo.getString("Name");
-				if(hasItem){
-					sb.append(",");
-				}
-				sb.append("Name = '"+name+"'");
-				hasItem=true;
+		StringBuilder sb=new StringBuilder();
+		sb.append("UPDATE data_orderreciver SET ");
+		JSONObject receiverInfo= object;
+		int id = receiverInfo.getInt("ID");
+		Boolean hasItem = false;
+		if(receiverInfo.has("Name")){
+			String name = receiverInfo.getString("Name");
+			if(hasItem){
+				sb.append(",");
 			}
-			if(receiverInfo.has("Tel")){
-				String tel = receiverInfo.getString("Tel");
-				if(hasItem){
-					sb.append(",");
-				}
-				sb.append("Tel = '"+tel+"'");
-				hasItem=true;
-			}
-			if(receiverInfo.has("Address")){
-				String address = receiverInfo.getString("Address");
-				if(hasItem){
-					sb.append(",");
-				}
-				sb.append("Address = '"+address+"'");
-				hasItem=true;
-			}
-			sb.append(" WHERE ID = "+id);
-			ps.addBatch(sb.toString());
+			sb.append("Name = '"+name+"'");
+			hasItem=true;
 		}
+		if(receiverInfo.has("Tel")){
+			String tel = receiverInfo.getString("Tel");
+			if(hasItem){
+				sb.append(",");
+			}
+			sb.append("Tel = '"+tel+"'");
+			hasItem=true;
+		}
+		if(receiverInfo.has("Address")){
+			String address = receiverInfo.getString("Address");
+			if(hasItem){
+				sb.append(",");
+			}
+			sb.append("Address = '"+address+"'");
+			hasItem=true;
+		}
+		sb.append(" WHERE ID = "+id);
+		ps.addBatch(sb.toString());
 		int[] counts = ps.executeBatch();
 		if(counts!=null){
 			for(int value :counts){
@@ -209,21 +204,20 @@ public class OrderReceiver extends HttpServlet{
 			object = new JSONObject(pJasonStr);
 			conn = DBController.getConnection();
 			
-			JSONArray tempArray;
 			Boolean editResult=true;
 			Boolean addResult=true;
-			if(object.has("Add")){
-				tempArray = object.getJSONArray("Add");
-				if(tempArray!=null){
-					addResult = InsertOrderReceicer(tempArray, salerID, conn);
+			
+			if(object.has("ID")){
+				int id = object.getInt("ID");
+				if(id==0){
+					addResult = InsertOrderReceicer(object, salerID, conn);
+				}else{
+					editResult = UpdateOrderReceicer(object, salerID,  conn);
 				}
-				
-			}
-			if(object.has("Edit")){
-				tempArray = object.getJSONArray("Edit");
-				if(tempArray!=null){
-					editResult = UpdateOrderReceicer(tempArray, salerID,  conn);
-				}
+			}else{
+				jObject = HttpUtil.getResponseJson(false, null, endDate.getTime() - beginDate.getTime(),
+						"order receiver api doesn't have id",0,1,-1);
+				writer.append(jObject.toString());
 			}
 			
 			endDate=new Date();
