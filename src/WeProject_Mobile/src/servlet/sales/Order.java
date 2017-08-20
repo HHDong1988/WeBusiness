@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -54,7 +55,7 @@ public class Order extends HttpServlet{
 	
 	
 	private Boolean InsertOrders(int cartId, int saleProductID, int productID, double price, int amount,
-			Date beginDate,Connection conn){
+			int salerId,Date beginDate,Connection conn){
 		PreparedStatement ps = null;
 		try {
 			ps = conn.prepareStatement(Constant.SQL_INSERT_ORDER);
@@ -64,6 +65,7 @@ public class Order extends HttpServlet{
 			ps.setInt(4, amount);
 			java.sql.Timestamp sqlDate=new java.sql.Timestamp(beginDate.getTime());
 			ps.setObject(5, sqlDate);
+			ps.setObject(6, salerId);
 			int count = ps.executeUpdate();
 			if(count<=0)return false;
 			ps = conn.prepareStatement(Constant.SQL_UPDATE_REDUCESTORAGEAMOUNT);
@@ -108,9 +110,11 @@ public class Order extends HttpServlet{
 	//return is salesID List
 	private JSONArray CheckRemainingAmount(JSONArray orderArray,PreparedStatement ps,
 			Connection conn) throws JSONException, SQLException{
-		JSONObject errorObject = new JSONObject();
+		JSONArray returnArray = new JSONArray();
+		HashSet<Integer> idset = new HashSet<Integer>();
 		if(orderArray!=null){
 			for(int i=0;i<orderArray.length();i++){
+				JSONObject errorObject = new JSONObject();
 				JSONObject oderitem= orderArray.getJSONObject(i);
 				int productID = oderitem.getInt("ProductID");
 				int salesID = oderitem.getInt("SaleProductID");
@@ -118,21 +122,16 @@ public class Order extends HttpServlet{
 				ps = conn.prepareStatement(Constant.SQL_GET_PRODUCTCURRENTAMOUNT);
 				ps.setInt(1, productID);
 				int currentAmount = DBController.getIntNumber(ps, conn);
-				if(!errorObject.has(salesID+"")){
-					errorObject.put(salesID+"", currentAmount);
+				if(currentAmount<amount){
+					errorObject.put("SaleProductID", salesID);
+					errorObject.put("CurrentAmount", currentAmount);
 				}
 				
 				
 			}
 		}
 		
-		if(errorObject.length()==0){
-			return null;
-		}else{
-			JSONArray returnArray = new JSONArray();
-			returnArray.put(errorObject);
-			return returnArray;
-		}
+		return returnArray;
 		
 	}
 	
@@ -227,7 +226,7 @@ public class Order extends HttpServlet{
 				return;
 			}
 			JSONArray errorList = CheckRemainingAmount(orderArray,ps,conn);
-			if(errorList!=null){
+			if(errorList.length()>0){
 				endDate=new Date();
 				String errorMessage = "Current Operation has some items which amount is larger than "
 						+ "product current amount.";
@@ -254,7 +253,7 @@ public class Order extends HttpServlet{
 					int amount = oderitem.getInt("Amount");
 					double price = oderitem.getDouble("Price");
 					Boolean insertResult = InsertOrders(cartId, saleProductID,productID, price, 
-							amount,beginDate,conn);
+							amount,userID,beginDate,conn);
 					if(!insertResult){
 						endDate=new Date();
 						jObject = HttpUtil.getResponseJson(false, null, endDate.getTime() - beginDate.getTime(), 

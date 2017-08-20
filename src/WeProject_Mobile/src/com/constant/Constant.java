@@ -63,7 +63,7 @@ public final class Constant {
 			+ " FROM data_saleproducts "
 			+ " WHERE ID = ?";
 	public static final String SQL_INSERT_ORDER="INSERT INTO data_orders (CartID,SaleProductID,Price,"
-			+ "Amount,LogTime) VALUES (?,?,?,?,?)";
+			+ "Amount,LogTime, SalerID) VALUES (?,?,?,?,?,?)";
 	public static final String SQL_UPDATE_REDUCESTORAGEAMOUNT ="UPDATE data_storage_products "
 			+ "SET CurrentAmount=CurrentAmount-?, SoldAmount= SoldAmount+? "
 			+ "WHERE ID = ?";
