@@ -78,7 +78,7 @@ public final class Constant {
 			+ " FROM data_storage_products "
 			+ " WHERE ID = ? ";
 	public static final String SQL_GET_ORDERCOUNT="SELECT COUNT(ID) as total, ID"
-			+ " FROM data_saleproducts "
+			+ " FROM data_orders "
 			+ " WHERE SalerID=?";
 	public static final String SQL_GET_ORDERBYPAGE="SELECT * "
 			+ " FROM data_orders "
