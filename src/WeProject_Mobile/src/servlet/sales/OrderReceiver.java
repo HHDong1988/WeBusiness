@@ -195,7 +195,7 @@ public class OrderReceiver extends HttpServlet{
 			writer.close();
 			return;
 		}
-		int salerID = getUserID(req,conn);
+		
 		String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
 		JSONObject object;
 		
@@ -203,7 +203,7 @@ public class OrderReceiver extends HttpServlet{
 			pJasonStr = pJasonStr.replace(" ", "");
 			object = new JSONObject(pJasonStr);
 			conn = DBController.getConnection();
-			
+			int salerID = getUserID(req,conn);
 			Boolean editResult=true;
 			Boolean addResult=true;
 			
