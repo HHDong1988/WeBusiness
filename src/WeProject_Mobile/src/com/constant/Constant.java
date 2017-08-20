@@ -77,12 +77,16 @@ public final class Constant {
 	public static final String SQL_GET_PRODUCTCURRENTAMOUNT= "SELECT CurrentAmount"
 			+ " FROM data_storage_products "
 			+ " WHERE ID = ? ";
+	public static final String SQL_GET_ORDERCOUNT="SELECT COUNT(ID) as total, ID"
+			+ " FROM data_saleproducts "
+			+ " WHERE SalerID=?";
 	public static final String SQL_GET_ORDERBYPAGE="SELECT * "
 			+ " FROM data_orders "
-			+ " WHERE CartID=?";
+			+ " WHERE SalerID=?"
+			+ " ORDER BY ID LIMIT ?,?";
 	public static final String SQL_GET_ORDERALL="SELECT * "
 			+ " FROM data_orders "
-			+ " WHERE Online = 1 and ID=?";
+			+ " WHERE SalerID=?";
 	// End Orders from Users
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";

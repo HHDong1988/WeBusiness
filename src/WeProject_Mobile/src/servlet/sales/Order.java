@@ -125,9 +125,8 @@ public class Order extends HttpServlet{
 				if(currentAmount<amount){
 					errorObject.put("SaleProductID", salesID);
 					errorObject.put("CurrentAmount", currentAmount);
+					returnArray.put(errorObject);
 				}
-				
-				
 			}
 		}
 		
@@ -311,11 +310,10 @@ public class Order extends HttpServlet{
 		}
 		int userID = getUserID(req,conn);
 		int total=0;
-		
-		
+
 		try {
 			conn = DBController.getConnection();
-			//ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOCOUNT);
+			
 			
 			JSONArray jArrTotalArray = null;
 			try {
@@ -333,12 +331,15 @@ public class Order extends HttpServlet{
 			int startPoint =iPagesize * (iPageNum-1);
 			//iPagesize * (iPageNum-1) +" ," + iPagesize
 			if(iPagesize==-1){
-				ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOALL);
+				ps = conn.prepareStatement(Constant.SQL_GET_ORDERALL);
 			}else{
-				
-				ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOBYPAGE);
-	        	ps.setInt(1, startPoint);
-				ps.setInt(2, iPagesize);
+				ps = conn.prepareStatement(Constant.SQL_GET_ORDERCOUNT);
+				ps.setInt(1, userID);
+				total = DBController.getIntNumber(ps, conn);
+				ps = conn.prepareStatement(Constant.SQL_GET_ORDERBYPAGE);
+				ps.setInt(1, userID);
+	        	ps.setInt(2, startPoint);
+				ps.setInt(3, iPagesize);
 			}
 			resultarray = DBController.getJsonArray(ps, conn);
 
