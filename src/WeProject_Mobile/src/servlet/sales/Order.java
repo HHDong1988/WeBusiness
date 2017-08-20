@@ -308,12 +308,11 @@ public class Order extends HttpServlet{
 		if(req.getParameter("pageSize")!=null){
 			iPagesize = Integer.parseInt(req.getParameter("pageSize").trim());
 		}
-		int userID = getUserID(req,conn);
 		int total=0;
 
 		try {
 			conn = DBController.getConnection();
-			
+			int userID = getUserID(req,conn);
 			
 			JSONArray jArrTotalArray = null;
 			try {
