@@ -92,9 +92,14 @@ public class SalesInfo extends HttpServlet{
 
 				int startPoint =iPagesize * (iPageNum-1);
 				//iPagesize * (iPageNum-1) +" ," + iPagesize
-				ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOBYPAGE);
-	        	ps.setInt(1, startPoint);
-				ps.setInt(2, iPagesize);
+				if(iPagesize==-1){
+					ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOALL);
+				}else{
+					ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOBYPAGE);
+		        	ps.setInt(1, startPoint);
+					ps.setInt(2, iPagesize);
+				}
+				
 			}else{//sales id has value
 				ps = conn.prepareStatement(Constant.SQL_GET_OnlineSALESINFOBYID);
 	        	ps.setInt(1, salesID);
