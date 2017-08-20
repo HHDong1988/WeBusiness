@@ -106,9 +106,9 @@ public class Order extends HttpServlet{
 	}
 	
 	//return is salesID List
-	private ArrayList<Integer> CheckRemainingAmount(JSONArray orderArray,PreparedStatement ps,
+	private JSONArray CheckRemainingAmount(JSONArray orderArray,PreparedStatement ps,
 			Connection conn) throws JSONException, SQLException{
-		ArrayList<Integer> errorItemList = new ArrayList<Integer>();
+		JSONObject errorObject = new JSONObject();
 		if(orderArray!=null){
 			for(int i=0;i<orderArray.length();i++){
 				JSONObject oderitem= orderArray.getJSONObject(i);
@@ -118,12 +118,22 @@ public class Order extends HttpServlet{
 				ps = conn.prepareStatement(Constant.SQL_GET_PRODUCTCURRENTAMOUNT);
 				ps.setInt(1, productID);
 				int currentAmount = DBController.getIntNumber(ps, conn);
-				if(amount>currentAmount){
-					errorItemList.add(salesID);
+				if(!errorObject.has(salesID+"")){
+					errorObject.put(salesID+"", currentAmount);
 				}
+				
+				
 			}
 		}
-		return errorItemList;
+		
+		if(errorObject.length()==0){
+			return null;
+		}else{
+			JSONArray returnArray = new JSONArray();
+			returnArray.put(errorObject);
+			return returnArray;
+		}
+		
 	}
 	
 	private Boolean UpdateCartCountInReceiverTable(String receiverName, String receiverTel,
@@ -216,15 +226,12 @@ public class Order extends HttpServlet{
 				writer.close();
 				return;
 			}
-			ArrayList<Integer> errorList = CheckRemainingAmount(orderArray,ps,conn);
-			if(errorList.size()>0){
+			JSONArray errorList = CheckRemainingAmount(orderArray,ps,conn);
+			if(errorList!=null){
 				endDate=new Date();
 				String errorMessage = "Current Operation has some items which amount is larger than "
-						+ "product current amount. The saleID list:";
-				for(int salesID :errorList){
-					errorMessage += (salesID+" ");
-				}
-				jObject = HttpUtil.getResponseJson(false, null, endDate.getTime() - beginDate.getTime(), 
+						+ "product current amount.";
+				jObject = HttpUtil.getResponseJson(false, errorList, endDate.getTime() - beginDate.getTime(), 
 						errorMessage,0,1,-1);
 				writer.append(jObject.toString());
 				return;
