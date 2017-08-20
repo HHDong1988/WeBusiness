@@ -10,6 +10,12 @@
       </div>
     </nav>
   </header>
+  <div class="row">
+    <div class="col-xs-12">
+      <button class="btn btn-default">{{vm.language.SELECT_ALL}}</button>
+      <button class="btn btn-default">{{vm.language.REMOVE}}</button>
+    </div>
+  </div>
   <div ng-repeat="product in vm.products" ng-if="vm.products.length != 0">
     <div class="row">
       <div class="col-xs-4 center-block">
@@ -20,13 +26,16 @@
         <p>{{product.productDescription}}</p>
         <p>{{product.productPrice * product.productCount | currency:'￥'}}</p>
       </div>
-      <div class="col-xs-4 text-center nonPadding">
+      <div class="col-xs-4 text-center pull-left">
         <div class="input-group myGroup">
           <span class="input-group-btn"><button class="btn btn-default myIcon" ng-click="vm.decreaseCount(product)"><span class="glyphicon glyphicon-minus"></span></button>
           </span>
           <input type="number" class="form-control myInput" ng-model="product.productCount">
           <span class="input-group-btn"><button class="btn btn-default myIcon" ng-click="vm.increaseCount(product)"><span class="glyphicon glyphicon-plus"></span></button>
           </span>
+        </div>
+        <div ng-if="product.CurrentAmount < product.productCount">
+          <span>产品剩余数量<span>{{product.CurrentAmount}}</span><pan>
         </div>
       </div>
     </div>

@@ -1,0 +1,40 @@
+<div>
+  <header>
+    <nav class="navbar navbar-default navbar-fixed-top my-nav">
+      <div class="container-fluid my-nav-container">
+        <div class="row">
+          <div class="col-xs-2 pull-left">
+            <a ng-click="vm.onClickBack()"><span class="glyphicon glyphicon-chevron-left"></span></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="row">
+    <div class="col-xs-12">
+      <form>
+        <div class="form-group">
+          <label for="name">{{vm.language.RECEIVER_NAME}}</label>
+          <input type="text" class="form-control" id="name" ng-model="vm.receiver.Name">
+        </div>
+        <div class="form-group">
+          <label for="tel">{{vm.language.RECEIVER_TEL}}</label>
+          <input type="text" class="form-control" id="tel" ng-model="vm.receiver.Tel">
+        </div>
+        <div class="form-group">
+          <label for="address">{{vm.language.RECEIVER_ADDR}}</label>
+          <input type="text" class="form-control" id="address" ng-model="vm.receiver.Address">
+        </div>
+      </form>
+    </div>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="col-xs-12 text-center">
+      <button class="btn btn-success" ng-click="vm.onSave()">{{vm.language.SAVE}}</button>
+    </div>
+  </div>
+
+
+
+</div>

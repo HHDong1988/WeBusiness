@@ -10,6 +10,26 @@
       </div>
     </nav>
   </header>
+  <div class="row">
+    <div class="col-xs-10">
+      <div class="row">
+        <div class="col-xs-4">
+          <strong>{{vm.receiver.Name}}</strong>
+        </div>
+        <div class="col-xs-6">
+          <strong>{{vm.receiver.Tel}}</strong>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10">
+          <p>{{vm.receiver.Address}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-2 pull-right">
+      <a href="#!/receivers"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
+  </div>
   <div ng-repeat="product in vm.products">
     <div class="row">
       <div class="col-xs-4 center-block">
@@ -21,36 +41,6 @@
         <p>{{product.productPrice * product.productCount | currency:'￥'}}</p>
       </div>
     </div>
-  </div>
-  <div class="row receiverInfoContainer">
-    <form>
-      <div class="form-group">
-        <label for="receiverName">{{vm.language.RECEIVER_NAME}}</label>
-        <div>
-          <div class="input-group dropdown">
-            <input type="text" class="form-control" id="receiverName" ng-model="vm.receiverName">
-            <div class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="vm.onShowReceiverList()"><span class="caret"></span></button>
-            </div>
-          </div>
-          <div class="list-group" ng-show="vm.bShowReceierList">
-            <button type="button" class="list-group-item"  ng-repeat="receiver in vm.receivers" ng-click="vm.onSetReceiver(receiver)">{{receiver.Name}}</button>
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="receiverTel">{{vm.language.RECEIVER_TEL}}</label>
-        <input type="text" class="form-control" id="receiverTel" ng-model="vm.receiverTel">
-      </div>
-      <div class="form-group">
-        <label for="receiverAddr">{{vm.language.RECEIVER_ADDR}}</label>
-        <input type="text" class="form-control" id="receiverAddr" ng-model="vm.receiverAddr">
-      </div>
-      <div class="form-group">
-        <label for="postNum">{{vm.language.POST_NUM}}</label>
-        <input type="text" class="form-control" id="postNum" ng-model="vm.postNum">
-      </div>
-    </form>
   </div>
   <footer>
     <nav class="navbar navbar-default navbar-fixed-bottom my-nav">

@@ -1,0 +1,37 @@
+<div>
+    <header>
+      <nav class="navbar navbar-default navbar-fixed-top my-nav">
+        <div class="container-fluid my-nav-container">
+          <div class="row">
+            <div class="col-xs-2 pull-left">
+              <a href="#"><span class="glyphicon glyphicon-home"></span></a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div>
+      <div class="row">
+        <div class="col-xs-6 text-ceter">
+          <a ng-click="vm.onGotoMyOrders()">{{vm.language.MY_ORDERS}}</a>
+        </div>
+        <div class="col-xs-6 text-ceter">
+          <a ng-click="vm.onGotoMyReceivers()">{{vm.language.MY_RECEIVERS}}</a>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <nav class="navbar navbar-default navbar-fixed-bottom my-nav">
+        <div class="container-fluid my-nav-container">
+          <div class="row">
+            <div class="col-xs-4 text-center">
+              <a href="/"><span class="glyphicon glyphicon-home"></span></a>
+            </div>
+            <div class="col-xs-4 text-center badgeContainer">
+              <a ng-click="vm.onShoppingCartClick()"><span class="glyphicon glyphicon-shopping-cart"><span class="badge">{{vm.cartItemCount}}</span></span></a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </footer>
+  </div>

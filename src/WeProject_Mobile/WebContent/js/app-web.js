@@ -76,16 +76,6 @@
           return error;
         });
       }
-
-      userService.getAllReceivers = function () {
-        var url = '/api/orderreceiver';
-        return $http.get(url).then(function (res) {
-          return res;
-        }, function (error) {
-          return error;
-        });
-      }
-
     })
     .service('productService', function ($http) {
       var productService = this;
@@ -134,8 +124,68 @@
       cartService.clearCart = function () {
         products = [];
       }
+      cartService.updateCurrentAmount = function (errorProduct) {
+        for (var i = 0; i < errorProduct.length; i++) {
+          var product = errorProduct[i];
+          
+          for (var j = 0; j < products.length; j++) {
+            var prod = products[j];
+            if (product.SaleProductID == prod.productID) {
+              prod.CurrentAmount = product.CurrentAmount;
+            }
+          }
+        }
+      }
     })
+    .service('receiversService', function ($http) {
+      var receiversService = this;
+      var receiver = null;
+      var editReceiver = null;
+      var receivers = [
+        {ID:1, Name: '张三', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
+        {ID:2, Name: '李四', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
+        {ID:3, Name: '王五', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
+        {ID:4, Name: '赵六', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
+        {ID:5, Name: '周七', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
+        {ID:6, Name: '吴八', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' }
+      ];
 
+      receiversService.getReceivers = function () {
+        return receivers;
+      }
+
+      receiversService.getAllReceivers = function () {
+        var url = '/api/orderreceiver';
+        return $http.get(url).then(function (res) {
+          angular.copy(res.data.data, receivers);
+          return receivers;
+        }, function (error) {
+          return error;
+        });
+      }
+
+      receiversService.saveReceiver = function (receiverData) {
+        var url = '/api/orderreceiver';
+        return $http.post(url, receiverData).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      }
+    })
+    .service('orderService', function ($http) {
+      var orderService = this;
+      var orders = null;
+
+      orderService.getAllOrders = function () {
+        var url = '/api/orders?page=1&pageSize=-1';
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      }
+    })
     .factory('authService', function ($q, $http, sessionService, AUTH_MESSAGE_ZH) {
       var authService = {};
       authService.logIn = function (credentials) {
@@ -161,7 +211,7 @@
       }
 
       authService.isAuthenticated = function () {
-        return sessionService.userId != 0; 
+        return sessionService.userId != 0;
       };
 
       authService.isAuthorized = function (authorizedRoles) {
@@ -201,7 +251,7 @@
         controllerAs: 'vm',
         templateUrl: 'views/productList.html'
       });
-      
+
       $routeProvider.when('/login', {
         controller: 'loginController',
         controllerAs: 'vm',
@@ -232,6 +282,30 @@
         templateUrl: 'views/settle.html'
       });
 
+      $routeProvider.when('/selfInfo', {
+        controller: 'selfInfoController',
+        controllerAs: 'vm',
+        templateUrl: 'views/selfInfo.html'
+      });
+
+      $routeProvider.when('/receivers', {
+        controller: 'receiversController',
+        controllerAs: 'vm',
+        templateUrl: 'views/receivers.html'
+      });
+
+      $routeProvider.when('/editReceiver', {
+        controller: 'editReceiverController',
+        controllerAs: 'vm',
+        templateUrl: 'views/editReceiver.html'
+      });
+
+      $routeProvider.when('/orders', {
+        controller: 'ordersController',
+        controllerAs: 'vm',
+        templateUrl: 'views/orders.html'
+      });
+
       $routeProvider.otherwise({ redirectTo: "/" });
 
       $httpProvider.defaults.withCredentials = true;
@@ -241,7 +315,7 @@
           return $injector.get('authInterceptor');
         }
       ]);
-    }]).run(function ($rootScope, $location,productService) {
+    }]).run(function ($rootScope, $location, productService) {
       $rootScope.$on('$locationChangeStart', function (event, next, current) {
         var path = /#!\/productDetail\/(\d)+/i.exec(next);
         if (path && path[1]) {
