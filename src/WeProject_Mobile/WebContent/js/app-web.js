@@ -98,6 +98,15 @@
           return error;
         })
       }
+
+      productService.getProductDetail2 = function (saleProductID) {
+        var url = '/api/products?ID=' + saleProductID;
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        })
+      }
     })
     .service('cartService', function ($http) {
       var cartService = this;
@@ -124,10 +133,24 @@
       cartService.clearCart = function () {
         products = [];
       }
+
+      cartService.removeProduct = function (id) {
+        var index = -1;
+        for (var i = 0; i < products.length; i++) {
+          var product = products[i];
+          if (id == product.productID) {
+            index = i;
+            break;
+          }
+        }
+        if (index != -1) {
+          products.splice(index,1);
+        }
+      }
       cartService.updateCurrentAmount = function (errorProduct) {
         for (var i = 0; i < errorProduct.length; i++) {
           var product = errorProduct[i];
-          
+
           for (var j = 0; j < products.length; j++) {
             var prod = products[j];
             if (product.SaleProductID == prod.productID) {
@@ -142,12 +165,12 @@
       var receiver = null;
       var editReceiver = null;
       var receivers = [
-        {ID:1, Name: '张三', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
-        {ID:2, Name: '李四', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
-        {ID:3, Name: '王五', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
-        {ID:4, Name: '赵六', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
-        {ID:5, Name: '周七', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
-        {ID:6, Name: '吴八', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' }
+        { ID: 1, Name: '张三', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
+        { ID: 2, Name: '李四', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
+        { ID: 3, Name: '王五', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
+        { ID: 4, Name: '赵六', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
+        { ID: 5, Name: '周七', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' },
+        { ID: 6, Name: '吴八', Tel: '1234567', Address: '大连市高新园区 中铁诺德滨海花园' }
       ];
 
       receiversService.getReceivers = function () {

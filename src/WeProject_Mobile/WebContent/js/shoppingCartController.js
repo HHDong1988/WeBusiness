@@ -29,6 +29,11 @@
       vm.amount = vm.getTotal();
     }
 
+    vm.onRemoveProduct = function (product) {
+      cartService.removeProduct(product.productID);
+      vm.amount = vm.getTotal()
+    }
+
     vm.init = function () {
       vm.language = new LanguageUtility();
       vm.tittle = vm.language.LOGIN;
