@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('app-web', ['ngRoute', 'ngCookies'])
+  angular.module('app-web', ['ngRoute', 'ngCookies', 'file-model'])
     .constant('AUTH_EVENTS', {
       loginSuccess: 'auth-login-success',
       loginFailed: 'auth-login-failed',

@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('stockManageController', ['$scope', 'stockService','toastService', 'PAGE_SIZE_OPTIONS', stockManageController])
+  angular.module('app-web').controller('stockManageController', ['$scope','$location', 'stockService','salesProductService', 'toastService', 'PAGE_SIZE_OPTIONS', stockManageController])
 
-  function stockManageController($scope, stockService,toastService, PAGE_SIZE_OPTIONS) {
+  function stockManageController($scope,$location, stockService,salesProductService,toastService, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onAdd = function () {
@@ -99,7 +99,7 @@
       }
 
       vm.currentPage = page;
-      vm.stocks = [];
+      //vm.stocks = [];
       stockService.getAllStocks(vm.currentPage, vm.pageSize).then(function (res) {
         for (var i = 0; i < res.data.data.length; i++) {
           var stock = res.data.data[i];
@@ -146,6 +146,11 @@
 
     }
 
+    vm.onSale = function (ID, Name) {
+      salesProductService.setOnSaleProudct(ID,Name);
+      $location.path('/onSale');
+    }
+
     vm.init = function () {
 
       vm.language = new LanguageUtility();
@@ -172,37 +177,38 @@
       vm.language.STOCK_STOCK_COUNT,
       vm.language.STOCK_PURCHASE_INFORMATION,
       vm.language.STOCK_SALES_INFORMATION,
-      vm.language.STOCK_SALES_STATICS];
+      vm.language.STOCK_SALES_STATICS,
+      vm.language.STOCK_ON_SALE];
 
       vm.stocks = [{
         ID: 1,
         Name: { value: "西班牙等离子鸭蛋", bDirty: false },
-        purchaseCount: { value: 3000, bDirty: false },
-        currentCount: { value: 2000, bDirty: false },
+        TotalAmount: 3000,
+        CurrentAmount: 2000,
         imgUrl: '',
         bDirty: false
       },
       {
         ID: 2,
         Name: { value: "日本北海道鞋垫", bDirty: false },
-        purchaseCount: { value: 2000, bDirty: false },
-        currentCount: { value: 1500, bDirty: false },
+        TotalAmount: 3000,
+        CurrentAmount: 2000,
         imgUrl: '',
         bDirty: false
       },
       {
         ID: 3,
         Name: { value: "南美肌肉拖鞋", bDirty: false },
-        purchaseCount: { value: 3000, bDirty: false },
-        currentCount: { value: 2000, bDirty: false },
+        TotalAmount: 3000,
+        CurrentAmount: 2000,
         imgUrl: '',
         bDirty: false
       },
       {
         ID: 4,
         Name: { value: "菲律宾跳楼槟榔", bDirty: false },
-        purchaseCount: { value: 3000, bDirty: false },
-        currentCount: { value: 2000, bDirty: false },
+        TotalAmount: 3000,
+        CurrentAmount: 2000,
         imgUrl: '',
         bDirty: false
       }];

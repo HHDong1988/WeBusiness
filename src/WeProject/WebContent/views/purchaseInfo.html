@@ -50,11 +50,6 @@
                   </div>
                 </td>
                 <td>
-                  <div ng-class="stockForm['Remaining_' + $index].$valid ? '':'invalidData'">
-                    <input type="number" name="Remaining_{{$index}}" class="form-control" ng-model="stock.Remaining" ng-disabled="stock.ID != ''">
-                  </div>
-                </td>
-                <td>
                   <div ng-class="stockForm['PurchasePrice_' + $index].$valid ? '':'invalidData'">
                     <input type="text" name="PurchasePrice_{{$index}}" class="form-control" ng-model="stock.PurchasePrice" ng-disabled="stock.ID != ''" required>
                   </div>

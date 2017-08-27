@@ -212,6 +212,18 @@
         });
       };
     })
+    .service('salesProductService', function ($http) {
+      var salesProductService = this;
+      var onSaleProduct = { ID: 0, Name: '' };
+      salesProductService.setOnSaleProudct = function (id, name) {
+        onSaleProduct.ID = id;
+        onSaleProduct.Name = name;
+      }
+      salesProductService.getOnSaleProudct = function () {
+        return onSaleProduct;
+      }
+    })
+
     .service('salesStatisticsService', function ($http) {
       var salesStatisticsService = this;
       salesStatisticsService.getStatistics = function (startTime, endTime, productID) {
@@ -446,74 +458,87 @@
       };
     })
     .config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
-      $routeProvider.when('/', {
-        controller: 'homeController',
-        controllerAs: 'vm',
-        templateUrl: 'views/wbHome.html'
-      });
+    $routeProvider.when('/', {
+      controller: 'homeController',
+      controllerAs: 'vm',
+      templateUrl: 'views/wbHome.html'
+    });
 
-      $routeProvider.when('/userManagement', {
-        controller: 'userManageController',
-        controllerAs: 'vm',
-        templateUrl: 'views/wbUserManagement.html'
-      });
+    $routeProvider.when('/userManagement', {
+      controller: 'userManageController',
+      controllerAs: 'vm',
+      templateUrl: 'views/wbUserManagement.html'
+    });
 
-      $routeProvider.when('/stockManagement', {
-        controller: 'stockManageController',
-        controllerAs: 'vm',
-        templateUrl: 'views/wbStockManagement.html'
-      });
-      $routeProvider.when('/stockManagement', {
-        controller: 'stockManageController',
-        controllerAs: 'vm',
-        templateUrl: 'views/wbStockManagement.html'
-      });
-      $routeProvider.when('/purchaseInfo', {
-        controller: 'purchaseInfoController',
-        controllerAs: 'vm',
-        templateUrl: 'views/purchaseInfo.html'
-      });
-      $routeProvider.when('/salesInfo', {
-        controller: 'salesInfoController',
-        controllerAs: 'vm',
-        templateUrl: 'views/salesInfo.html'
-      });
+    $routeProvider.when('/stockManagement', {
+      controller: 'stockManageController',
+      controllerAs: 'vm',
+      templateUrl: 'views/wbStockManagement.html'
+    });
+    $routeProvider.when('/stockManagement', {
+      controller: 'stockManageController',
+      controllerAs: 'vm',
+      templateUrl: 'views/wbStockManagement.html'
+    });
 
-      $routeProvider.when('/salesStatics', {
-        controller: 'salesStaticsController',
-        controllerAs: 'vm',
-        templateUrl: 'views/salesStatics.html'
-      });
+    $routeProvider.when('/onSale', {
+      controller: 'onSaleController',
+      controllerAs: 'vm',
+      templateUrl: 'views/wbOnSale.html'
+    });
 
-      $routeProvider.when('/outOfStore', {
-        controller: 'outOfStoreController',
-        controllerAs: 'vm',
-        templateUrl: 'views/outOfStore.html'
-      });
+    $routeProvider.when('/productManagement', {
+      controller: 'productManageController',
+      controllerAs: 'vm',
+      templateUrl: 'views/wbProductManagement.html'
+    });
 
-      $routeProvider.when('/resetpassword', {
-        controller: 'personalInfoController',
-        controllerAs: 'appVm',
-        templateUrl: 'views/wbResetPassword.html'
-      });
+    $routeProvider.when('/purchaseInfo', {
+      controller: 'purchaseInfoController',
+      controllerAs: 'vm',
+      templateUrl: 'views/purchaseInfo.html'
+    });
+    $routeProvider.when('/salesInfo', {
+      controller: 'salesInfoController',
+      controllerAs: 'vm',
+      templateUrl: 'views/salesInfo.html'
+    });
+
+    $routeProvider.when('/salesStatics', {
+      controller: 'salesStaticsController',
+      controllerAs: 'vm',
+      templateUrl: 'views/salesStatics.html'
+    });
+
+    $routeProvider.when('/outOfStore', {
+      controller: 'outOfStoreController',
+      controllerAs: 'vm',
+      templateUrl: 'views/outOfStore.html'
+    });
+
+    $routeProvider.when('/resetpassword', {
+      controller: 'personalInfoController',
+      controllerAs: 'appVm',
+      templateUrl: 'views/wbResetPassword.html'
+    });
 
 
-      $routeProvider.when('/setPersonalInfo', {
-        controller: 'personalInfoController',
-        controllerAs: 'appVm',
-        templateUrl: 'views/wbSetPersonalInfo.html'
-      });
+    $routeProvider.when('/setPersonalInfo', {
+      controller: 'personalInfoController',
+      controllerAs: 'appVm',
+      templateUrl: 'views/wbSetPersonalInfo.html'
+    });
 
-      $routeProvider.otherwise({ redirectTo: "/" });
+    $routeProvider.otherwise({ redirectTo: "/" });
 
-      $httpProvider.defaults.withCredentials = true;
-      $httpProvider.interceptors.push([
-        '$injector',
-        function ($injector) {
-          return $injector.get('authInterceptor');
-        }
-      ]);
-    }])
+    $httpProvider.defaults.withCredentials = true;
+    $httpProvider.interceptors.push([
+      '$injector',
+      function ($injector) {
+        return $injector.get('authInterceptor');
+      }
+    ]);
+  }])
     .run(function (sessionService, userService, menuService, AUTH_EVENTS, MENU_EVENT, $rootScope, $cookieStore, $cookies) {
 
       var currentUser = $cookies.get('username');

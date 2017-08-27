@@ -76,6 +76,12 @@ function LanguageUtility() {
   this.STOCK_PURCHASE_INFORMATION = '采购信息';
   this.STOCK_SALES_INFORMATION = '销售信息';
   this.STOCK_SALES_STATICS = '销售统计';
+  this.STOCK_ON_SALE = '上架';
+  this.PRODUCT_DESCRIPTION = '商品描述';
+  this.PRODUCT_IMG_1 = '图片1';
+  this.PRODUCT_IMG_2 = '图片2';
+  this.PRODUCT_IMG_3 = '图片3';
+  this.PRODUCT_IMG_4 = '图片4';
   this.PURCHASE_REST_COUNT = '剩余数量';
   this.PURCHASE_PRICE = '采购价格';
   this.PURCHASE_VENDOR = '供货商';

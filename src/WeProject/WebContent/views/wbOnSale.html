@@ -1,0 +1,18 @@
+<div>
+  <form>
+    <div class="form-group">
+      <label for="name">{{vm.language.STOCK_NAME}}</label>
+      <input type="text" class="form-control" id="name" ng-model="vm.product.Name">
+    </div>
+    <div class="form-group">
+      <label for="description">{{vm.language.PRODUCT_DESCRIPTION}}</label>
+      <textarea class="form-control" rows="3" id="description" ng-model="vm.product.Description"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="img1">{{vm.language.PRODUCT_IMG_1}}</label>
+      <input type="file" id="img1" file-model="vm.product.Pic1" >
+      <img class="img-thumbnail" ng-src="{{vm.product.ImgSrc1}}" />
+    </div>
+    <button type="submit" class="btn btn-default" ng-click="vm.onSave()">{{vm.language.SAVE}}</button>
+  </form>
+</div>

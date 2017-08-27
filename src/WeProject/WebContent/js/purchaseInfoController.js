@@ -199,7 +199,6 @@
       vm.columnHeaders = [vm.language.ITEM_ID,
       vm.language.STOCK_NAME,
       vm.language.STOCK_PURCHASE_COUNT,
-      vm.language.PURCHASE_REST_COUNT,
       vm.language.PURCHASE_PRICE,
       vm.language.PURCHASE_VENDOR,
       vm.language.PURCHASE_PRODUCTION_DATE,
