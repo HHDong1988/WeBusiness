@@ -457,88 +457,152 @@
         }
       };
     })
-    .config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
-    $routeProvider.when('/', {
-      controller: 'homeController',
-      controllerAs: 'vm',
-      templateUrl: 'views/wbHome.html'
-    });
+    .factory('fileReader', function ($q) {
+      var onLoad = function (reader, deferred, scope) {
+        return function () {
+          scope.$apply(function () {
+            deferred.resolve(reader.result);
+          });
+        };
+      };
 
-    $routeProvider.when('/userManagement', {
-      controller: 'userManageController',
-      controllerAs: 'vm',
-      templateUrl: 'views/wbUserManagement.html'
-    });
+      var onError = function (reader, deferred, scope) {
+        return function () {
+          scope.$apply(function () {
+            deferred.reject(reader.result);
+          });
+        };
+      };
 
-    $routeProvider.when('/stockManagement', {
-      controller: 'stockManageController',
-      controllerAs: 'vm',
-      templateUrl: 'views/wbStockManagement.html'
-    });
-    $routeProvider.when('/stockManagement', {
-      controller: 'stockManageController',
-      controllerAs: 'vm',
-      templateUrl: 'views/wbStockManagement.html'
-    });
+      var onProgress = function (reader, scope) {
+        return function (event) {
+          scope.$broadcast("fileProgress",
+            {
+              total: event.total,
+              loaded: event.loaded
+            });
+        };
+      };
 
-    $routeProvider.when('/onSale', {
-      controller: 'onSaleController',
-      controllerAs: 'vm',
-      templateUrl: 'views/wbOnSale.html'
-    });
+      var getReader = function (deferred, scope) {
+        var reader = new FileReader();
+        reader.onload = onLoad(reader, deferred, scope);
+        reader.onerror = onError(reader, deferred, scope);
+        reader.onprogress = onProgress(reader, scope);
+        return reader;
+      };
 
-    $routeProvider.when('/productManagement', {
-      controller: 'productManageController',
-      controllerAs: 'vm',
-      templateUrl: 'views/wbProductManagement.html'
-    });
+      var readAsDataURL = function (file, scope) {
+        var deferred = $q.defer();
 
-    $routeProvider.when('/purchaseInfo', {
-      controller: 'purchaseInfoController',
-      controllerAs: 'vm',
-      templateUrl: 'views/purchaseInfo.html'
-    });
-    $routeProvider.when('/salesInfo', {
-      controller: 'salesInfoController',
-      controllerAs: 'vm',
-      templateUrl: 'views/salesInfo.html'
-    });
+        var reader = getReader(deferred, scope);
+        reader.readAsDataURL(file);
 
-    $routeProvider.when('/salesStatics', {
-      controller: 'salesStaticsController',
-      controllerAs: 'vm',
-      templateUrl: 'views/salesStatics.html'
-    });
+        return deferred.promise;
+      };
 
-    $routeProvider.when('/outOfStore', {
-      controller: 'outOfStoreController',
-      controllerAs: 'vm',
-      templateUrl: 'views/outOfStore.html'
-    });
+      return {
+        readAsDataUrl: readAsDataURL
+      };
+    })
+    .directive("ngFileSelect", function () {
 
-    $routeProvider.when('/resetpassword', {
-      controller: 'personalInfoController',
-      controllerAs: 'appVm',
-      templateUrl: 'views/wbResetPassword.html'
-    });
-
-
-    $routeProvider.when('/setPersonalInfo', {
-      controller: 'personalInfoController',
-      controllerAs: 'appVm',
-      templateUrl: 'views/wbSetPersonalInfo.html'
-    });
-
-    $routeProvider.otherwise({ redirectTo: "/" });
-
-    $httpProvider.defaults.withCredentials = true;
-    $httpProvider.interceptors.push([
-      '$injector',
-      function ($injector) {
-        return $injector.get('authInterceptor');
+      return {
+        restrict:'A',
+        scope: {
+          fileVm: '=',
+          fileIndex:'='
+        },
+        link: function (scope, el) {
+          el.bind("change", function (e) {
+            scope.fileVm.file = (e.srcElement || e.target).files[0];
+            scope.fileVm.getFile(scope.fileIndex);
+          })
+        }
       }
-    ]);
-  }])
+    })
+    .config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
+      $routeProvider.when('/', {
+        controller: 'homeController',
+        controllerAs: 'vm',
+        templateUrl: 'views/wbHome.html'
+      });
+
+      $routeProvider.when('/userManagement', {
+        controller: 'userManageController',
+        controllerAs: 'vm',
+        templateUrl: 'views/wbUserManagement.html'
+      });
+
+      $routeProvider.when('/stockManagement', {
+        controller: 'stockManageController',
+        controllerAs: 'vm',
+        templateUrl: 'views/wbStockManagement.html'
+      });
+      $routeProvider.when('/stockManagement', {
+        controller: 'stockManageController',
+        controllerAs: 'vm',
+        templateUrl: 'views/wbStockManagement.html'
+      });
+
+      $routeProvider.when('/onSale', {
+        controller: 'onSaleController',
+        controllerAs: 'vm',
+        templateUrl: 'views/wbOnSale.html'
+      });
+
+      $routeProvider.when('/productManagement', {
+        controller: 'productManageController',
+        controllerAs: 'vm',
+        templateUrl: 'views/wbProductManagement.html'
+      });
+
+      $routeProvider.when('/purchaseInfo', {
+        controller: 'purchaseInfoController',
+        controllerAs: 'vm',
+        templateUrl: 'views/purchaseInfo.html'
+      });
+      $routeProvider.when('/salesInfo', {
+        controller: 'salesInfoController',
+        controllerAs: 'vm',
+        templateUrl: 'views/salesInfo.html'
+      });
+
+      $routeProvider.when('/salesStatics', {
+        controller: 'salesStaticsController',
+        controllerAs: 'vm',
+        templateUrl: 'views/salesStatics.html'
+      });
+
+      $routeProvider.when('/outOfStore', {
+        controller: 'outOfStoreController',
+        controllerAs: 'vm',
+        templateUrl: 'views/outOfStore.html'
+      });
+
+      $routeProvider.when('/resetpassword', {
+        controller: 'personalInfoController',
+        controllerAs: 'appVm',
+        templateUrl: 'views/wbResetPassword.html'
+      });
+
+
+      $routeProvider.when('/setPersonalInfo', {
+        controller: 'personalInfoController',
+        controllerAs: 'appVm',
+        templateUrl: 'views/wbSetPersonalInfo.html'
+      });
+
+      $routeProvider.otherwise({ redirectTo: "/" });
+
+      $httpProvider.defaults.withCredentials = true;
+      $httpProvider.interceptors.push([
+        '$injector',
+        function ($injector) {
+          return $injector.get('authInterceptor');
+        }
+      ]);
+    }])
     .run(function (sessionService, userService, menuService, AUTH_EVENTS, MENU_EVENT, $rootScope, $cookieStore, $cookies) {
 
       var currentUser = $cookies.get('username');

@@ -78,6 +78,7 @@ function LanguageUtility() {
   this.STOCK_SALES_STATICS = '销售统计';
   this.STOCK_ON_SALE = '上架';
   this.PRODUCT_DESCRIPTION = '商品描述';
+  this.PRODUCT_PRICE = '价格';
   this.PRODUCT_IMG_1 = '图片1';
   this.PRODUCT_IMG_2 = '图片2';
   this.PRODUCT_IMG_3 = '图片3';
