@@ -9,6 +9,9 @@ public final class Constant {
 	public static final String SQL_CHECK_USERNAME = "SELECT ID, UserName"
 			+ " FROM sys_conf_userinfo "
 			+ " WHERE UserName = ? ";
+	public static final String SQL_SELECT_USERIDBYNAME = "SELECT ID"
+			+ " FROM sys_conf_userinfo "
+			+ " WHERE UserName = ? ";
 	public static final String SQL_SELECT_USERTypeId = "SELECT UserTypeID"
 			+ " FROM sys_conf_userinfo "
 			+ " WHERE UserName = ? ";

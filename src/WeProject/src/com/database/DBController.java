@@ -209,7 +209,7 @@ public class DBController {
 		return jArray;
 	}
 	
-	public static int getNumber(PreparedStatement ps, Connection conn){
+public static int getIntNumber(PreparedStatement ps, Connection conn){
 		
 		ResultSet rs = null;
 		ResultSetMetaData  rsMetaData = null;
@@ -223,6 +223,33 @@ public class DBController {
 				columnCount = rsMetaData.getColumnCount();
 				if(columnCount==1){
 					result = rs.getInt(1);
+				}
+				
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return result;
+		}
+		
+		return result;
+	}
+	
+public static Double getDoubleNumber(PreparedStatement ps, Connection conn){
+		
+		ResultSet rs = null;
+		ResultSetMetaData  rsMetaData = null;
+		Double result=-1.0;
+		int columnCount = 0;
+		try {
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				rsMetaData = rs.getMetaData();
+				columnCount = rsMetaData.getColumnCount();
+				if(columnCount==1){
+					result = rs.getDouble(1);
 				}
 				
 			}
