@@ -7,7 +7,11 @@
     var vm = this;
 
     vm.onSave = function () {
-
+      salesProductService.onSale(vm.product).then(function (res) {
+        toastService.toast('success', '上架成功', '上架');
+      },function (error) {
+        toastService.toast('error', '上架失败', '上架');
+      });
     }
 
     vm.getFile = function (index) {
@@ -15,16 +19,16 @@
         .then(function (result) {
           switch (index) {
           case 0:
-            vm.product.ImgSrc1 = result;
+            vm.product.Picture1 = result;
             break;
           case 1:
-            vm.product.ImgSrc2 = result;
+            vm.product.Picture2 = result;
             break;
           case 2:
-            vm.product.ImgSrc3 = result;
+            vm.product.Picture3 = result;
             break;
           case 3:
-            vm.product.ImgSrc4 = result;
+            vm.product.Picture4 = result;
             break;
           default:
             break;
@@ -37,7 +41,7 @@
       vm.reader = new FileReader();
       vm.file = {};
       var onSaleProduct = salesProductService.getOnSaleProudct();
-      vm.product = { ID: onSaleProduct.ID, Name: onSaleProduct.Name, Price:0, ImgSrc1:"", ImgSrc2: "", ImgSrc3: "", ImgSrc4: "", Description: "" };
+      vm.product = {ID:0, ProductID: onSaleProduct.ID, Title: onSaleProduct.Name, Price:0, Picture1:"", Picture2: "", Picture3: "", Picture4: "", Description: "" };
     };
 
     vm.init();

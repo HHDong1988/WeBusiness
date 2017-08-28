@@ -222,6 +222,14 @@
       salesProductService.getOnSaleProudct = function () {
         return onSaleProduct;
       }
+      salesProductService.onSale = function (onSaleData) {
+        var url = '/api/sales';
+        return $http.post(url,onSaleData).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      }
     })
 
     .service('salesStatisticsService', function ($http) {
@@ -508,10 +516,10 @@
     .directive("ngFileSelect", function () {
 
       return {
-        restrict:'A',
+        restrict: 'A',
         scope: {
           fileVm: '=',
-          fileIndex:'='
+          fileIndex: '='
         },
         link: function (scope, el) {
           el.bind("change", function (e) {

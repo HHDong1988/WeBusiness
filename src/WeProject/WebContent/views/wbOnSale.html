@@ -2,7 +2,7 @@
   <form>
     <div class="form-group">
       <label for="name">{{vm.language.STOCK_NAME}}</label>
-      <input type="text" class="form-control" id="name" ng-model="vm.product.Name">
+      <input type="text" class="form-control" id="name" ng-model="vm.product.Title">
     </div>
     <div class="form-group">
       <label for="description">{{vm.language.PRODUCT_DESCRIPTION}}</label>
@@ -31,19 +31,17 @@
   </form>
 
   <div class="row">
-    <div class="col-md-6">
-      <img class="img-thumbnail" ng-src="{{vm.product.ImgSrc1}}" />
+    <div class="col-md-3">
+      <img class="img img-thumbnail" ng-src="{{vm.product.Picture1}}" />
     </div>
-    <div class="col-md-6">
-      <img class="img-thumbnail" ng-src="{{vm.product.ImgSrc2}}" />
+    <div class="col-md-3">
+      <img class="img img-thumbnail" ng-src="{{vm.product.Picture2}}" />
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      <img class="img-thumbnail" ng-src="{{vm.product.ImgSrc3}}" />
+    <div class="col-md-3">
+      <img class="img img-thumbnail" ng-src="{{vm.product.Picture3}}" />
     </div>
-    <div class="col-md-6">
-      <img class="img-thumbnail" ng-src="{{vm.product.ImgSrc4}}" />
+    <div class="col-md-3">
+      <img class="img img-thumbnail" ng-src="{{vm.product.Picture4}}" />
     </div>
   </div>
 

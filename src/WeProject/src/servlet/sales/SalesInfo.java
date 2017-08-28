@@ -1,5 +1,6 @@
 package servlet.sales;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -235,7 +236,7 @@ public class SalesInfo extends HttpServlet{
 		StringBuilder sbForPrefix=new StringBuilder();
 		StringBuilder sbForPostfix=new StringBuilder();
 		sbForPrefix.append("insert into data_saleproducts (ProductID,Price,Title,"
-				+ "Description,EditerID,Online)");
+				+ "Description,EditerID");
 		
 		JSONObject receiverInfo= object;
 		if(!receiverInfo.has("ProductID")||!receiverInfo.has("Price")||
@@ -252,33 +253,46 @@ public class SalesInfo extends HttpServlet{
 		
 		if(receiverInfo.has("Picture1")){
 			String pictureStr = receiverInfo.getString("Picture1");
-			String path = GenerateImageToServer(pictureStr);
-			sbForPrefix.append(",Picture1");
-			sbForPostfix.append(","+path);
+			if(!pictureStr.equals("")){
+				String path = GenerateImageToServer(pictureStr);
+				sbForPrefix.append(",Picture1");
+				sbForPostfix.append(",'"+path+"'");
+			}
+			
 		}
 		if(receiverInfo.has("Picture2")){
 			String pictureStr = receiverInfo.getString("Picture2");
-			String path = GenerateImageToServer(pictureStr);
-			sbForPrefix.append(",Picture2");
-			sbForPostfix.append(","+path);
+			if(!pictureStr.equals("")){
+				String path = GenerateImageToServer(pictureStr);
+				sbForPrefix.append(",Picture2");
+				sbForPostfix.append(",'"+path+"'");
+			}
+			
 		}
 		if(receiverInfo.has("Picture3")){
 			String pictureStr = receiverInfo.getString("Picture3");
-			String path = GenerateImageToServer(pictureStr);
-			sbForPrefix.append(",Picture3");
-			sbForPostfix.append(","+path);
+			if(!pictureStr.equals("")){
+				String path = GenerateImageToServer(pictureStr);
+				sbForPrefix.append(",Picture3");
+				sbForPostfix.append(",'"+path+"'");
+			}
+			
 		}
 		if(receiverInfo.has("Picture4")){
 			String pictureStr = receiverInfo.getString("Picture4");
-			String path = GenerateImageToServer(pictureStr);
-			sbForPrefix.append(",Picture4");
-			sbForPostfix.append(","+path);
+			if(!pictureStr.equals("")){
+				String path = GenerateImageToServer(pictureStr);
+				sbForPrefix.append(",Picture4");
+				sbForPostfix.append(",'"+path+"'");
+			}
+			
 		}
-		
+		sbForPrefix.append(")");
 		sbForPrefix.append(" VALUES (");
 		sbForPostfix.append(");");
 		
 		String sqlstatement = sbForPrefix.toString()+sbForPostfix.toString();
+		System.out.println(sqlstatement);
 		ps.addBatch(sqlstatement);
 		int[] counts = ps.executeBatch();
 		if(counts!=null){
@@ -448,7 +462,7 @@ public class SalesInfo extends HttpServlet{
 	private String GenerateImageToServer(String imgStr)
 	{
 		UUID id = java.util.UUID.randomUUID();
-		String path = "img\\"+id.toString();
+		String path = getServletContext().getRealPath("/")+"\\UploadImg\\"+ id.toString()+ ".jpg";
 		GenerateImage(imgStr,path);
 		return path;
 	}
@@ -459,13 +473,18 @@ public class SalesInfo extends HttpServlet{
 	        BASE64Decoder decoder = new BASE64Decoder();
 	        try {
 	            // Base64解码
-	            byte[] bytes = decoder.decodeBuffer(imgStr);
+	        	String info = imgStr.replaceAll("data:image/jpeg;base64,", "");
+	            byte[] bytes = decoder.decodeBuffer(info);
 	            for (int i = 0; i < bytes.length; ++i) {
 	                if (bytes[i] < 0) {// 调整异常数据
 	                    bytes[i] += 256;
 	                }
 	            }
 	            // 生成jpeg图片
+	            File file =  new File(imgFilePath);
+	            if(!file.exists()){
+	            	file.createNewFile();
+	            }
 	            OutputStream out = new FileOutputStream(imgFilePath);
 	            out.write(bytes);
 	            out.flush();

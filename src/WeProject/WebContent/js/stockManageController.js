@@ -101,6 +101,7 @@
       vm.currentPage = page;
       //vm.stocks = [];
       stockService.getAllStocks(vm.currentPage, vm.pageSize).then(function (res) {
+        vm.stocks = [];
         for (var i = 0; i < res.data.data.length; i++) {
           var stock = res.data.data[i];
           var newStock = {
