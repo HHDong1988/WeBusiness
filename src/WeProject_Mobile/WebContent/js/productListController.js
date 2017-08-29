@@ -12,7 +12,9 @@
     }
     vm.getAllProducts = function () {
       productService.getAllProducts(1, -1).then(function (res) {
-      angular.copy(res.data.data, vm.productList);
+        if (res.data.success == true) {
+          angular.copy(res.data.data, vm.productList);
+        }
       }, function (error) {
 
       })
