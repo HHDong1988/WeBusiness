@@ -255,6 +255,7 @@ public class SalesInfo extends HttpServlet{
 			String pictureStr = receiverInfo.getString("Picture1");
 			if(!pictureStr.equals("")){
 				String path = GenerateImageToServer(pictureStr);
+				path = path.replace("\\", "\\\\");
 				sbForPrefix.append(",Picture1");
 				sbForPostfix.append(",'"+path+"'");
 			}
@@ -264,6 +265,7 @@ public class SalesInfo extends HttpServlet{
 			String pictureStr = receiverInfo.getString("Picture2");
 			if(!pictureStr.equals("")){
 				String path = GenerateImageToServer(pictureStr);
+				path =path.replace("\\", "\\\\");
 				sbForPrefix.append(",Picture2");
 				sbForPostfix.append(",'"+path+"'");
 			}
@@ -273,6 +275,7 @@ public class SalesInfo extends HttpServlet{
 			String pictureStr = receiverInfo.getString("Picture3");
 			if(!pictureStr.equals("")){
 				String path = GenerateImageToServer(pictureStr);
+				path =path.replace("\\", "\\\\");
 				sbForPrefix.append(",Picture3");
 				sbForPostfix.append(",'"+path+"'");
 			}
@@ -282,6 +285,7 @@ public class SalesInfo extends HttpServlet{
 			String pictureStr = receiverInfo.getString("Picture4");
 			if(!pictureStr.equals("")){
 				String path = GenerateImageToServer(pictureStr);
+				path =path.replace("\\", "\\\\");
 				sbForPrefix.append(",Picture4");
 				sbForPostfix.append(",'"+path+"'");
 			}
@@ -337,6 +341,14 @@ public class SalesInfo extends HttpServlet{
 				sb.append(",");
 			}
 			sb.append("Title = '"+title+"'");
+			hasItem=true;
+		}
+		if(receiverInfo.has("Online")){
+			int online = receiverInfo.getInt("Online");
+			if(hasItem){
+				sb.append(",");
+			}
+			sb.append("Title = "+online);
 			hasItem=true;
 		}
 		if(receiverInfo.has("Description")){
@@ -463,8 +475,9 @@ public class SalesInfo extends HttpServlet{
 	{
 		UUID id = java.util.UUID.randomUUID();
 		String path = getServletContext().getRealPath("/")+"\\UploadImg\\"+ id.toString()+ ".jpg";
+		String returnpath = "/UploadImg/"+ id.toString()+ ".jpg";
 		GenerateImage(imgStr,path);
-		return path;
+		return returnpath;
 	}
 	
 	 public boolean GenerateImage(String imgStr, String imgFilePath) {// 对字节数组字符串进行Base64解码并生成图片
