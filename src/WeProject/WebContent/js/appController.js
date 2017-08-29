@@ -105,7 +105,8 @@
       vm.menuList = [{ value: vm.language.USER_MANAGEMENT, href: '#!/userManagement' },
       { value: vm.language.FINANCE_MANAGEMENT, href: '#!/financeManagement' },
       { value: vm.language.STOCK_MANAGEMENT, href: '#!/stockManagement' },
-      { value: vm.language.SALES_MENU_SALES_INFO, href: '#!/salesInfo' }];
+      { value: vm.language.SALES_MENU_SALES_INFO, href: '#!/salesInfo' },
+      { value: vm.language.PRODUCTS_MANAGEMENT, href: '#!/productManagement' }];
       vm.menus = vm.menuList;
     };
 

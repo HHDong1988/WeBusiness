@@ -1,0 +1,64 @@
+<div class="tableContainer">
+  
+    <div class="row">
+  
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-left">
+        <form class="form-inline">
+          <div class="form-group">
+            <span>每页显示</span>
+            <select class="form-control" ng-model="vm.pageSize" ng-options="size for size in vm.pageSizeOptions"></select>
+            <span>条数据</span>
+          </div>
+        </form>
+      </div>
+  
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default" ng-click="vm.onRefresh()"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+          <button type="button" class="btn btn-default" ng-click="vm.onSync()" ng-disabled="!vm.dataDirty"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <ng-form>
+          <table class="table table-striped table-bordered table-hover storageTable">
+            <tr>
+              <th ng-repeat="colHeader in vm.columnHeaders" class="text-center">{{colHeader}}</th>
+            </tr>
+            <tr ng-repeat="product in vm.productList  | limitTo: vm.pageSize + 1">
+              <td>{{$index + vm.pageSize*(vm.currentPage - 1) + 1}}</td>
+              <td>
+                {{product.Title}}
+              </td>
+              <td>
+                {{product.Price}}
+              </td>
+              <td>
+                {{product.Description}}
+              </td>
+            </tr>
+          </table>
+        </ng-form>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-left">
+        <form class="form-inline">
+          <div class="form-group">
+            <span>{{'显示'+ vm.dataBegin + '到' + vm.dataEnd + '条数据, 共' + vm.dataTotal + '条数据'}}</span>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
+        <ul class="pagination">
+          <li ng-class="vm.currentPage > 1 ?'':'disabled'"><span ng-click="vm.prevPage()" ng-disabled="vm.currentPage <= 1">&laquo;</span></li>
+          <li ng-repeat="page in vm.pages" ng-class="vm.currentPage == page?'active':''">
+            <span ng-click="vm.gotoPage(page)">{{page}}</span>
+          </li>
+          <li ng-class="vm.currentPage < vm.totalPage ?'':'disabled'"><span ng-click="vm.nextPage()">&raquo;</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>

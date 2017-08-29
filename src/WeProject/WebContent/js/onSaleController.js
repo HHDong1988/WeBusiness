@@ -1,14 +1,19 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('onSaleController', ['$scope', 'stockService', 'salesProductService','fileReader', 'toastService', 'PAGE_SIZE_OPTIONS', onSaleController])
+  angular.module('app-web').controller('onSaleController', ['$scope','$location', 'stockService', 'salesProductService','fileReader', 'toastService', 'PAGE_SIZE_OPTIONS', onSaleController])
 
-  function onSaleController($scope, stockService, salesProductService,fileReader, toastService, PAGE_SIZE_OPTIONS) {
+  function onSaleController($scope,$location, stockService, salesProductService,fileReader, toastService, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onSave = function () {
       salesProductService.onSale(vm.product).then(function (res) {
-        toastService.toast('success', '上架成功', '上架');
+        if (res.data.success == true) {
+          $location.path('/productManagement');
+        }else{
+          toastService.toast('error', '上架失败', '上架');
+        }
+        
       },function (error) {
         toastService.toast('error', '上架失败', '上架');
       });

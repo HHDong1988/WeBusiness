@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('stockManageController', ['$scope','$location', 'stockService','salesProductService', 'toastService', 'PAGE_SIZE_OPTIONS', stockManageController])
+  angular.module('app-web').controller('stockManageController', ['$scope', '$location', 'stockService', 'salesProductService', 'toastService', 'PAGE_SIZE_OPTIONS', stockManageController])
 
-  function stockManageController($scope,$location, stockService,salesProductService,toastService, PAGE_SIZE_OPTIONS) {
+  function stockManageController($scope, $location, stockService, salesProductService, toastService, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onAdd = function () {
@@ -48,7 +48,7 @@
         }
       }
 
-      var stockData = { Add: addItems, Edit: editItems};
+      var stockData = { Add: addItems, Edit: editItems };
       stockService.syncStockData(stockData).then(function (res) {
         vm.onRefresh();
         toastService.toast('success', vm.language.SUCCESS_MESAAGE_SYNC_STOCKS, vm.language.SUCCESS_TITTLE);
@@ -101,25 +101,28 @@
       vm.currentPage = page;
       //vm.stocks = [];
       stockService.getAllStocks(vm.currentPage, vm.pageSize).then(function (res) {
-        vm.stocks = [];
-        for (var i = 0; i < res.data.data.length; i++) {
-          var stock = res.data.data[i];
-          var newStock = {
-            ID: stock.ID,
-            Name: { value: stock.Name, bDirty: false },
-            TotalAmount: stock.TotalAmount,
-            CurrentAmount: stock.CurrentAmount,
-            imgUrl: '',
-            bDirty: false,
-          };
+        if (res.data.success == true) {
+          vm.stocks = [];
+          for (var i = 0; i < res.data.data.length; i++) {
+            var stock = res.data.data[i];
+            var newStock = {
+              ID: stock.ID,
+              Name: { value: stock.Name, bDirty: false },
+              TotalAmount: stock.TotalAmount,
+              CurrentAmount: stock.CurrentAmount,
+              imgUrl: '',
+              bDirty: false,
+            };
 
-          vm.stocks.push(newStock);
+            vm.stocks.push(newStock);
 
-          vm.dataTotal = res.data.total;
-          vm.dataDirty = false;
-          vm.bSelectCurrentPage = false;
-          vm.refreshPaginator();
+            vm.dataTotal = res.data.total;
+            vm.dataDirty = false;
+            vm.bSelectCurrentPage = false;
+            vm.refreshPaginator();
+          }
         }
+
       }, function (error) {
 
       });
@@ -132,7 +135,7 @@
     vm.onStockChange = function (stock, stockInfo) {
       stockInfo.bDirty = true;
       stock.bDirty = true;
-      vm.dataDirty = true; 
+      vm.dataDirty = true;
     }
 
     vm.onViewPurchaseInfo = function (stock) {
@@ -148,7 +151,7 @@
     }
 
     vm.onSale = function (ID, Name) {
-      salesProductService.setOnSaleProudct(ID,Name);
+      salesProductService.setOnSaleProudct(ID, Name);
       $location.path('/onSale');
     }
 

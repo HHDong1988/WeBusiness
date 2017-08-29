@@ -230,8 +230,54 @@
           return error;
         });
       }
+      salesProductService.getAllProducts = function (page, pageSize) {
+        var url = '/api/sales?page=' + page + '&pageSize=' + pageSize;
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        })
+      }
+      salesProductService.getProductDetail = function (saleProductID) {
+        var url = '/api/sales?ID=' + saleProductID;
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        })
+      }
     })
+    .service('productService', function ($http) {
+      var productService = this;
+      productService.productID = 0;
 
+      productService.getAllProducts = function (page, pageSize) {
+        var url = '/api/sales?page=' + page + '&pageSize=' + pageSize;
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        })
+      }
+
+      productService.getProductDetail = function () {
+        var url = '/api/sales?ID=' + productService.productID;
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        })
+      }
+
+      productService.getProductDetail2 = function (saleProductID) {
+        var url = '/api/sales?ID=' + saleProductID;
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        })
+      }
+    })
     .service('salesStatisticsService', function ($http) {
       var salesStatisticsService = this;
       salesStatisticsService.getStatistics = function (startTime, endTime, productID) {
