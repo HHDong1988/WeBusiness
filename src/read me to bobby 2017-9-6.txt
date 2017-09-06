@@ -1,0 +1,15 @@
+hi, in 2017-9-6, I've tried to deploy these two project to tomcat and it works.
+When next time I go to your home, I can configure it. The debug behavior is not changed, I suppose my change will not block your coding
+
+
+From code perspective, you just need to items below:
+1) I've changed the context to "computer" and "mobile", while web.xml doesn't change.
+   So for desktop version, the url will change to something like computer/api/sales.
+      for mobile version, the url will change to something like mobile/api/products.
+   If you would like to debug, you just need to keep one server avaiable and use eclipse to debug.(debug behavior doesn't change)
+
+2) I've changed several reference in project. But you don't need to extra changes.
+
+3) I've changed tomecat version, you need to some update to your computer.
+   You could find "apache-tomcat-7.0.79.rar" in your src folder, you need to copy this file to C:\, then decompress this file.
+   You don't need to config this server if you just want to debug with Eclipse.
