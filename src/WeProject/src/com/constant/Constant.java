@@ -88,6 +88,16 @@ public final class Constant {
 			+ " FROM data_storage_products "
 			+ " WHERE Name = ? ";
 	
+	// Audit
+	public static final String SQL_Get_OrderByIDAndTime = "SELECT *"
+			+ " FROM data_orders "
+			+ " WHERE LogTime > ? and LogTime < ? and SalerID = ?";
+	public static final String SQL_Get_PriceBYCartID = "SELECT TotalPrice"
+			+ " FROM data_cart "
+			+ " WHERE ID = ?";
+	public static final String SQL_UPDATE_PostPassAudit = "UPDATE data_cart "
+			+ "SET PassAudit = 1 "
+			+ "WHERE ID = ?";
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
 	public static final String USERNAME_ERROR = "User name is occupied.";

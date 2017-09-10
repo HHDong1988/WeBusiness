@@ -54,7 +54,7 @@ public final class Constant {
 	
 	// Orders from Users
 	public static final String SQL_INSERT_CART="INSERT INTO data_cart (SystemUserID,ReceiverName,"
-			+ "ReceiverTel, ReceiverAddr, TotalCount,TotalPrice, PostNum, PassAudit) VALUES (?,?,?,?,?,?,'',1)";
+			+ "ReceiverTel, ReceiverAddr, TotalCount,TotalPrice, PostNum, PassAudit) VALUES (?,?,?,?,?,?,'',0)";
 	public static final String SQL_UPDATETOTALPRICE_CART= "UPDATE data_cart "
 			+ "SET TotalCount = ?, TotalPrice = ? "
 			+ "WHERE CartID = ?";
