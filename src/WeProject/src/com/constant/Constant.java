@@ -98,6 +98,9 @@ public final class Constant {
 	public static final String SQL_UPDATE_PostPassAudit = "UPDATE data_cart "
 			+ "SET PassAudit = 1 "
 			+ "WHERE ID = ?";
+	public static final String SQL_GET_TITLEPICFROMSALE = "SELECT Title, Picture1 "
+			+ "FROM data_saleproducts "
+			+ "WHERE ID = ?";
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
 	public static final String USERNAME_ERROR = "User name is occupied.";

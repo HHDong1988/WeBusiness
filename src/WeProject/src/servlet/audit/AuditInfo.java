@@ -61,7 +61,64 @@ public class AuditInfo  extends HttpServlet{
 		return false;
 	}
 	
-
+	private void IntertOrderInformationToCartMap(JSONArray array, HashMap<Integer,JSONArray> cartMap, 
+			HashMap<Integer, Object> cartTimemap,PreparedStatement ps,
+			Connection conn) throws JSONException, SQLException{
+		for(int i=0;i<array.length();i++){
+			JSONObject object = array.getJSONObject(i);
+			if(!object.has("CartID"))continue;
+			int cartID = object.getInt("CartID");
+			ps = conn.prepareStatement(Constant.SQL_GET_TITLEPICFROMSALE);
+			int saleproductID = object.getInt("SaleProductID");
+			ps.setInt(1, saleproductID);
+			JSONArray procutinfoArray = DBController.getJsonArray(ps, conn);
+			if(procutinfoArray.length()<=0)continue;
+			JSONObject procutTitleAndPic = procutinfoArray.getJSONObject(0);
+			object.put("Title", procutTitleAndPic.get("Title"));
+			object.put("Picture1", procutTitleAndPic.get("Picture1"));
+			
+			if(cartMap.containsKey(cartID))
+			{
+				JSONArray orders = cartMap.get(cartID);
+				orders.put(object);
+			}else
+			{
+				JSONArray orders = new JSONArray();
+				orders.put(object);
+				cartMap.put(cartID, orders);
+			}
+			if(!cartTimemap.containsKey(cartID))
+			{
+				Object date = object.get("LogTime");
+				cartTimemap.put(cartID, date);
+			}
+			
+		}
+	}
+	
+	private void SummaryInfoToReturnArray(HashMap<Integer,JSONArray> cartMap, 
+			HashMap<Integer, Object> cartTimemap,JSONArray returnArray,PreparedStatement ps,
+			Connection conn) throws JSONException, SQLException{
+		Iterator iter = cartMap.entrySet().iterator();
+		while (iter.hasNext()) { 
+			Map.Entry entry = (Map.Entry) iter.next(); 
+			Object key = entry.getKey(); 
+			Object val = entry.getValue();
+			int id = (Integer)key;
+			JSONObject cartJsonObject = new JSONObject();
+			cartJsonObject.put("cartid", id);
+			cartJsonObject.put("orders", val);
+			ps = conn.prepareStatement(Constant.SQL_Get_PriceBYCartID);
+			ps.setInt(1, id);
+			Double totalprice = DBController.getDoubleNumber(ps, conn);
+			cartJsonObject.put("price", totalprice);
+			if(cartTimemap.containsKey(id))
+			{
+				cartJsonObject.put("carttime", cartTimemap.get(id));
+			}
+			returnArray.put(cartJsonObject);
+		}
+	}
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -113,45 +170,10 @@ public class AuditInfo  extends HttpServlet{
 			JSONArray array = DBController.getJsonArray(ps, conn);
 			HashMap<Integer,JSONArray> cartMap=new HashMap<Integer,JSONArray>();
 			HashMap<Integer, Object> cartTimemap = new HashMap<Integer,Object>();
-			for(int i=0;i<array.length();i++){
-				JSONObject object = array.getJSONObject(i);
-				if(!object.has("CartID"))continue;
-				int cartID = object.getInt("CartID");
-				if(cartMap.containsKey(cartID))
-				{
-					JSONArray orders = cartMap.get(cartID);
-					orders.put(object);
-				}else
-				{
-					JSONArray orders = new JSONArray();
-					orders.put(object);
-					cartMap.put(cartID, orders);
-				}
-				if(!cartTimemap.containsKey(cartID))
-				{
-					Object date = object.get("LogTime");
-					cartTimemap.put(cartID, date);
-				}
-			}
-			Iterator iter = cartMap.entrySet().iterator();
-			while (iter.hasNext()) { 
-				Map.Entry entry = (Map.Entry) iter.next(); 
-				Object key = entry.getKey(); 
-				Object val = entry.getValue();
-				int id = (Integer)key;
-				JSONObject cartJsonObject = new JSONObject();
-				cartJsonObject.put("cartid", id);
-				cartJsonObject.put("orders", val);
-				ps = conn.prepareStatement(Constant.SQL_Get_PriceBYCartID);
-				ps.setInt(1, id);
-				Double totalprice = DBController.getDoubleNumber(ps, conn);
-				cartJsonObject.put("price", totalprice);
-				if(cartTimemap.containsKey(id))
-				{
-					cartJsonObject.put("carttime", cartTimemap.get(id));
-				}
-				returnArray.put(cartJsonObject);
-			}
+			
+			IntertOrderInformationToCartMap(array,cartMap,cartTimemap,ps,conn);
+			
+			SummaryInfoToReturnArray(cartMap, cartTimemap,returnArray,ps,conn);
 			endDate = new Date();
 			if(returnArray==null||(returnArray!=null&&returnArray.length()==0)){
 				jObject = HttpUtil.getResponseJson(false, null,
