@@ -112,6 +112,7 @@ public class AuditInfo  extends HttpServlet{
 			ps.setInt(3, userId);
 			JSONArray array = DBController.getJsonArray(ps, conn);
 			HashMap<Integer,JSONArray> cartMap=new HashMap<Integer,JSONArray>();
+			HashMap<Integer, Object> cartTimemap = new HashMap<Integer,Object>();
 			for(int i=0;i<array.length();i++){
 				JSONObject object = array.getJSONObject(i);
 				if(!object.has("CartID"))continue;
@@ -125,6 +126,11 @@ public class AuditInfo  extends HttpServlet{
 					JSONArray orders = new JSONArray();
 					orders.put(object);
 					cartMap.put(cartID, orders);
+				}
+				if(!cartTimemap.containsKey(cartID))
+				{
+					Object date = object.get("LogTime");
+					cartTimemap.put(cartID, date);
 				}
 			}
 			Iterator iter = cartMap.entrySet().iterator();
@@ -140,6 +146,10 @@ public class AuditInfo  extends HttpServlet{
 				ps.setInt(1, id);
 				Double totalprice = DBController.getDoubleNumber(ps, conn);
 				cartJsonObject.put("price", totalprice);
+				if(cartTimemap.containsKey(id))
+				{
+					cartJsonObject.put("carttime", cartTimemap.get(id));
+				}
 				returnArray.put(cartJsonObject);
 			}
 			endDate = new Date();
