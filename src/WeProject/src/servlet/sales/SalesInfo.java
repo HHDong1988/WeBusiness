@@ -475,6 +475,7 @@ public class SalesInfo extends HttpServlet{
 	{
 		UUID id = java.util.UUID.randomUUID();
 		String path = getServletContext().getRealPath("/")+"\\UploadImg\\"+ id.toString()+ ".jpg";
+		path = path.replace("\\desktop", "");
 		String returnpath = "/UploadImg/"+ id.toString()+ ".jpg";
 		GenerateImage(imgStr,path);
 		return returnpath;
