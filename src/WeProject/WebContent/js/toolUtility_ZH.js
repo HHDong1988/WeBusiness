@@ -23,7 +23,7 @@ function LanguageUtility() {
   this.USER_MANAGEMENT = '用户管理';
   this.STOCK_MANAGEMENT = '库存管理';
   this.PRODUCTS_MANAGEMENT = '商品管理';
-  this.FINANCE_MANAGEMENT = '财务管理';
+  this.FINANCE_MANAGEMENT = '财务对账';
   this.ADD_ITEM = '新增';
   this.CREATE_ITEM = '创建';
   this.EDIT_ITEM = '编辑';
@@ -76,7 +76,8 @@ function LanguageUtility() {
   this.STOCK_PURCHASE_INFORMATION = '采购信息';
   this.STOCK_SALES_INFORMATION = '销售信息';
   this.STOCK_SALES_STATICS = '销售统计';
-  this.STOCK_ON_SALE = '上架';
+  this.STOCK_ON_SALE = '商品上架';
+  this.PRODUCT_LIST = '商品列表';
   this.PRODUCT_DESCRIPTION = '商品描述';
   this.PRODUCT_PRICE = '价格';
   this.PRODUCT_IMG_1 = '图片1';

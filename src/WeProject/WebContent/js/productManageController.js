@@ -1,18 +1,14 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('productManageController', ['$scope', '$location', 'stockService', 'salesProductService','productService', 'toastService', 'PAGE_SIZE_OPTIONS', productManageController])
+  angular.module('app-web').controller('productManageController', ['$scope', '$location', 'stockService', 'salesProductService', 'productService', 'toastService', 'PAGE_SIZE_OPTIONS', productManageController])
 
-  function productManageController($scope, $location, stockService, salesProductService,productService, toastService, PAGE_SIZE_OPTIONS) {
+  function productManageController($scope, $location, stockService, salesProductService, productService, toastService, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onRefresh = function () {
       vm.gotoPage(vm.currentPage);
     }
-
-    vm.onSync = function () {
-    }
-
 
     vm.refreshPaginator = function () {
 
@@ -27,7 +23,7 @@
         }
       }
       vm.dataBegin = (vm.currentPage - 1) * vm.pageSize + 1;
-      vm.dataEnd = vm.productList.length + (vm.currentPage - 1) * vm.pageSize;
+      vm.dataEnd = vm.stocks.length + (vm.currentPage - 1) * vm.pageSize;
 
     }
 
@@ -55,23 +51,22 @@
       }
 
       vm.currentPage = page;
-
-      salesProductService.getAllProducts(vm.currentPage, vm.pageSize).then(function (res) {
+      //vm.stocks = [];
+      stockService.getAllStocks(vm.currentPage, vm.pageSize).then(function (res) {
         if (res.data.success == true) {
-          vm.productList = [];
+          vm.stocks = [];
           for (var i = 0; i < res.data.data.length; i++) {
-            var product = res.data.data[i];
-            var newProduct = {
-              ID: product.ID,
-              ProductID: product.ProductID,
-              Picture1: product.Picture1,
-              Title: product.Title,
-              Description: product.Description,
-              Price: product.Price,
+            var stock = res.data.data[i];
+            var newStock = {
+              ID: stock.ID,
+              Name: { value: stock.Name, bDirty: false },
+              TotalAmount: stock.TotalAmount,
+              CurrentAmount: stock.CurrentAmount,
+              imgUrl: '',
               bDirty: false,
             };
 
-            vm.productList.push(newProduct);
+            vm.stocks.push(newStock);
 
             vm.dataTotal = res.data.total;
             vm.dataDirty = false;
@@ -89,10 +84,9 @@
       vm.gotoPage(vm.currentPage);
     }
 
-    vm.onStockChange = function (stock, stockInfo) {
-      stockInfo.bDirty = true;
-      stock.bDirty = true;
-      vm.dataDirty = true;
+    vm.onSale = function (ID, Name) {
+      salesProductService.setOnSaleProudct(ID, Name);
+      $location.path('/onSale');
     }
 
     vm.init = function () {
@@ -116,18 +110,43 @@
 
       vm.columnHeaders = [vm.language.ITEM_ID,
       vm.language.STOCK_NAME,
-      vm.language.PRODUCT_PRICE,
-      vm.language.PRODUCT_DESCRIPTION];
+      vm.language.STOCK_THUMBNAIL,
+      vm.language.STOCK_PURCHASE_COUNT,
+      vm.language.STOCK_STOCK_COUNT,
+      vm.language.STOCK_ON_SALE];
 
-      vm.productList = [
-        {ID:1, ProductID: 1, Picture1: '/img/xianyadan.jpg', Title: '咸鸭蛋', Description: '正宗家养鸭', Price: 100 },
-        {ID:2, ProductID: 2, Picture1: '/img/xianyadan.jpg', Title: '咸鸭蛋', Description: '正宗家养鸭', Price: 100 },
-        {ID:3, ProductID: 3, Picture1: '/img/xianyadan.jpg', Title: '咸鸭蛋', Description: '正宗家养鸭', Price: 100 },
-        {ID:4, ProductID: 4, Picture1: '/img/xianyadan.jpg', Title: '咸鸭蛋', Description: '正宗家养鸭', Price: 100 },
-        {ID:5, ProductID: 5, Picture1: '/img/xianyadan.jpg', Title: '咸鸭蛋', Description: '正宗家养鸭', Price: 100 },
-        {ID:6, ProductID: 6, Picture1: '/img/xianyadan.jpg', Title: '咸鸭蛋', Description: '正宗家养鸭', Price: 100 }
-      ];
-
+      vm.stocks = [{
+        ID: 1,
+        Name: { value: "西班牙等离子鸭蛋", bDirty: false },
+        TotalAmount: 3000,
+        CurrentAmount: 2000,
+        imgUrl: '',
+        bDirty: false
+      },
+      {
+        ID: 2,
+        Name: { value: "日本北海道鞋垫", bDirty: false },
+        TotalAmount: 3000,
+        CurrentAmount: 2000,
+        imgUrl: '',
+        bDirty: false
+      },
+      {
+        ID: 3,
+        Name: { value: "南美肌肉拖鞋", bDirty: false },
+        TotalAmount: 3000,
+        CurrentAmount: 2000,
+        imgUrl: '',
+        bDirty: false
+      },
+      {
+        ID: 4,
+        Name: { value: "菲律宾跳楼槟榔", bDirty: false },
+        TotalAmount: 3000,
+        CurrentAmount: 2000,
+        imgUrl: '',
+        bDirty: false
+      }];
 
       vm.gotoPage(vm.currentPage);
     };

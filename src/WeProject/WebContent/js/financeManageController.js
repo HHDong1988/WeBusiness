@@ -1,99 +1,140 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('financeManageController', ['$scope', 'PAGE_SIZE_OPTIONS', financeManageController]);
+  angular.module('app-web').controller('financeManageController', ['$scope', 'PAGE_SIZE_OPTIONS', '$timeout', '$q', '$log','userService', 'financeService', financeManageController]);
 
-  function financeManageController($scope, PAGE_SIZE_OPTIONS) {
+  function financeManageController($scope, PAGE_SIZE_OPTIONS, $timeout, $q, $log, userService,financeService) {
     var vm = this;
 
     vm.init = function () {
-      vm.selectedItem = {};
-      vm.tree = [
-        {
-          "id": "1",
-          "pid": "0",
-          "name": "家用电器",
-          'icon': 'glyphicon glyphicon-phone',
-          "children": [
-            {
-              "id": "4",
-              "pid": "1",
-              "name": "大家电",
-              'icon': 'glyphicon glyphicon-cd',
-              "children": [
-                {
-                  "id": "7",
-                  "pid": "4",
-                  "name": "空调",
-                  'icon': 'glyphicon glyphicon-flash',
-                  "children": [
-                    {
-                      "id": "15",
-                      "pid": "7",
-                      "name": "海尔空调",
-                      'icon': 'glyphicon glyphicon-flash'
-                    },
-                    {
-                      "id": "16",
-                      "pid": "7",
-                      "name": "美的空调",
-                      'icon': 'glyphicon glyphicon-flash'
-                    }
-                  ]
-                },
-                {
-                  "id": "8",
-                  "pid": "4",
-                  "name": "冰箱",
-                  'icon': 'glyphicon glyphicon-flash'
-                },
-                {
-                  "id": "9",
-                  "pid": "4",
-                  "name": "洗衣机",
-                  'icon': 'glyphicon glyphicon-flash'
-                },
-                {
-                  "id": "10",
-                  "pid": "4",
-                  "name": "热水器",
-                  'icon': 'glyphicon glyphicon-flash'
-                }
-              ]
-            },
-            {
-              "id": "5",
-              "pid": "1",
-              "name": "生活电器",
-              'icon': 'glyphicon glyphicon-flash',
-              "children": [
-                {
-                  "id": "19",
-                  "pid": "5",
-                  "name": "加湿器",
-                  'icon': 'glyphicon glyphicon-flash'
-                },
-                {
-                  "id": "20",
-                  "pid": "5",
-                  "name": "电熨斗",
-                  'icon': 'glyphicon glyphicon-flash'
-                }
-              ]
-            }
-          ]
-        },
-      ];
+      vm.simulateQuery = false;
+      vm.isDisabled = false;
 
+      vm.agencies = loadAll();
+      vm.querySearch = querySearch;
+      vm.selectedItemChange = selectedItemChange;
+      vm.searchTextChange = searchTextChange;
+      vm.dateBegin = null;
+      vm.dateEnd = null;
+
+      vm.myDate = new Date();
+      vm.isOpen = false;
+
+      vm.carts = [{
+        cardID: 1,
+        carttime:"2017-12-06",
+        orders: [
+          { Title: '鞋垫',Amount:10, Price: 250, img: "" },
+          { Title: '咸鱼',Amount:10, Price: 150, img: "" },
+          { Title: '鸡蛋',Amount:10, Price: 500, img: "" }
+        ],
+        price: 900
+      }, {
+        cardID: 2,
+        carttime:"2017-12-06",
+        orders: [
+          { Title: '鞋垫',Amount:10, Price: 250, img: "" },
+          { Title: '咸鱼',Amount:10, Price: 150, img: "" },
+          { Title: '鸡蛋',Amount:10, Price: 500, img: "" }
+        ],
+        price: 900
+      }, {
+        cardID: 3,
+        carttime:"2017-12-06",
+        orders: [
+          { Title: '鞋垫',Amount:10, Price: 250, img: "" },
+          { Title: '咸鱼',Amount:10, Price: 150, img: "" },
+          { Title: '鸡蛋',Amount:10, Price: 500, img: "" }
+        ],
+        price: 900
+      }, {
+        cardID: 4,
+        carttime:"2017-12-06",
+        orders: [
+          { Title: '鞋垫',Amount:10, Price: 250, img: "" },
+          { Title: '咸鱼',Amount:10, Price: 150, img: "" },
+          { Title: '鸡蛋',Amount:10, Price: 500, img: "" }
+        ],
+        price: 900
+      }];
+
+      vm.getAllAgency();
+      
     }
 
-    vm.itemClicked = function ($item) {
-      vm.selectedItem = $item;
-    };
+    vm.onQueryBills = function () {
+      vm.getAllBills();
+    }
 
-    vm.itemCheckedChanged = function ($item) {
+    vm.getAllBills = function () {
+      financeService.getAllBills(1,vm.dateBegin.getTime(),vm.dateEnd.getTime()).then(function (res) {
+        if (res.data.success) {
+          angular.copy(res.data.data, vm.carts);
+        }
+      },function (error) {
+        
+      })
+    }
 
-    };
+    vm.getAllAgency = function () {
+      
+    }
+
+    vm.passAudit = function (id) {
+      financeService.passAudit(id).then(function (res) {
+        
+      },function (error) {
+        
+      });
+    }
+
+    function querySearch(query) {
+      var results = query ? vm.agencies.filter(createFilterFor(query)) : vm.agencies,
+        deferred;
+      if (vm.simulateQuery) {
+        deferred = $q.defer();
+        $timeout(function () { deferred.resolve(results); }, Math.random() * 1000, false);
+        return deferred.promise;
+      } else {
+        return results;
+      }
+    }
+
+    function searchTextChange(text) {
+      $log.info('Text changed to ' + text);
+    }
+
+    function selectedItemChange(item) {
+      $log.info('Item changed to ' + JSON.stringify(item));
+    }
+
+
+    function loadAll() {
+      var allAgencies = [
+        { ID: 1, Name: '张三' },
+        { ID: 2, Name: '李四' },
+        { ID: 3, Name: '王五' },
+        { ID: 4, Name: '赵六' },
+        { ID: 5, Name: '田七' },
+        { ID: 6, Name: '刘八' }
+      ];
+
+      var results = [];
+      for (var i = 0; i < allAgencies.length; i++) {
+        var element = allAgencies[i];
+        results.push({ value: element.Name, display: element.Name });
+
+      }
+
+      return results;
+    }
+
+    function createFilterFor(query) {
+      return function filterFn(state) {
+        return (state.value.indexOf(query) === 0);
+      };
+
+    }
 
     vm.init();
   }

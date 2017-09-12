@@ -7,13 +7,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
   <link rel="stylesheet" href="bower_components/bootstrapvalidator/dist/css/bootstrapValidator.css">
   <link rel="stylesheet" href="bower_components/Font-Awesome/css/font-awesome.css">
-  <link rel="stylesheet" href="plugins/DataTables-1.10.15/media/css/jquery.dataTables.css">
-  <link rel="stylesheet" href="plugins/angular-datatables/css/angular-datatables.css">
   <link rel="stylesheet" href="bower_components/toastr/toastr.css">
-  <link rel="stylesheet" href="bower_components/jquery-editable-select/dist/jquery-editable-select.css">
+  <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
   <link rel="stylesheet" href="css/site.css" />
 </head>
 
@@ -60,10 +57,12 @@
         </div>
       </nav>
     </header>
-    <div class="container-fluid">
+    <div class="container-fluid mainContent">
       <div class="row">
         <div class="col-md-12" ng-view></div>
       </div>
+    </div>
+    <div class="container-fluid">
       <div class="row">
         <div class="navbar navbar-fixed-bottom">
           <footer class="col-md-12">
@@ -76,17 +75,15 @@
     </div>
   </div>
   <script src="bower_components/jquery/dist/jquery.js"></script>
-  <script src="plugins/DataTables-1.10.15/media/js/jquery.dataTables.js"></script>
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-cookies/angular-cookies.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-aria/angular-aria.js"></script>
+  <script src="bower_components/angular-material/angular-material.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
   <script src="bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
-  <script src="plugins/angular-datatables/js/angular-datatables.js"></script>
-  <script src="plugins/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.js"></script>
-  <script src="plugins/DataTables-1.10.15/media/js/dataTables.bootstrap.js"></script>
   <script src="bower_components/toastr/toastr.js"></script>
-  <script src="bower_components/jquery-editable-select/dist/jquery-editable-select.js"></script>
   <script src="bower_components/echarts/dist/echarts.js"></script>
 
   <script src="js/toolUtility_ZH.js"></script>
@@ -102,8 +99,9 @@
   <script src="js/salesInfoController.js"></script>
   <script src="js/salesStaticsController.js"></script>
   <script src="js/outOfStoreController.js"></script>
-  <script src="js/onSaleController.js"></script>   
+  <script src="js/onSaleController.js"></script>
   <script src="js/productManageController.js"></script>
+  <script src="js/productListController.js"></script>
   <script src="js/site.js"></script>
 </body>
 

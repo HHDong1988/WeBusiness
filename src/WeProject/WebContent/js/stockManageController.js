@@ -181,8 +181,7 @@
       vm.language.STOCK_STOCK_COUNT,
       vm.language.STOCK_PURCHASE_INFORMATION,
       vm.language.STOCK_SALES_INFORMATION,
-      vm.language.STOCK_SALES_STATICS,
-      vm.language.STOCK_ON_SALE];
+      vm.language.STOCK_SALES_STATICS];
 
       vm.stocks = [{
         ID: 1,

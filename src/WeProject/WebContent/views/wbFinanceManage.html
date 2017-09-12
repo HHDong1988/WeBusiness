@@ -1,3 +1,75 @@
-<div>
-   <tree-view tree-data="vm.tree" text-field="name" value-field='id' item-clicked="vm.itemClicked($item)" item-checked-changed="vm.itemCheckedChanged($item)" can-checked="false" ></tree-view>
-</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="autocompletedemoBasicUsage" ng-cloak="">
+      <md-content class="md-padding">
+        <form ng-submit="$event.preventDefault()">
+          <md-autocomplete placeholder="请输入用户名" ng-disabled="vm.isDisabled" md-min-length="0" md-item-text="item.display" md-items="item in vm.querySearch(vm.searchText)"
+            md-selected-item-change="vm.selectedItemChange(item)" md-search-text="vm.searchText" md-search-text-change="vm.searchTextChange(vm.searchText)"
+            md-selected-item="vm.selectedItem" md-no-cache="vm.noCache">
+            <md-item-template>
+              <span md-highlight-flags="^i" md-highlight-text="vm.searchText">{{item.display}}</span>
+            </md-item-template>
+            <md-not-found>
+              没有发现 "{{vm.searchText}}".
+            </md-not-found>
+          </md-autocomplete>
+        </form>
+      </md-content>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <h4>开始日期</h4>
+    <md-datepicker ng-model="vm.dateBegin" md-placeholder="Enter date"></md-datepicker>
+  </div>
+  <div class="col-md-6">
+    <h4>结束日期</h4>
+    <md-datepicker ng-model="vm.dateEnd" md-placeholder="Enter date"></md-datepicker>
+  </div>
+  <div class="col-md-12 pull-left">
+    <md-button class="md-raised md-primary" ng-click="vm.onQueryBills()">查询</md-button>
+  </div>
+  <div class="col-md-12">
+    <div ng-repeat="cart in vm.carts">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-md-6">
+              <h4><span>下单时间:</span>{{cart.carttime}}</h4>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-success pull-right" ng-click="vm.passAudit(cart.cartid)">通过</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-4" ng-repeat="order in cart.orders">
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h4><span>商品名称:</span>{{order.Title}}</h4>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <img src="{{order.Picture1}}" class="img-thumbnail">
+                    </div>
+                    <div class="col-md-8">
+                        <h4 class="pull-left"><span>商品总额：</span>{{order.Price*order.Amount}}</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <h4 class="pull-left"><span>购物车总金额：</span>{{cart.price}}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>

@@ -63,14 +63,14 @@
     .service('userService', function ($http) {
       var userService = this;
       userService.setPersonInfo = function (userData) {
-        return $http.put('/api/users', userData).then(function (res) {
+        return $http.put('/mobile/api/users', userData).then(function (res) {
           return res;
         }, function (error) {
           return error;
         })
       }
       userService.resetPassword = function (passwordData) {
-        return $http.post('/api/password', passwordData).then(function (res) {
+        return $http.post('/mobile/api/password', passwordData).then(function (res) {
           return res;
         }, function (error) {
           return error;
@@ -82,7 +82,7 @@
       productService.productID = 0;
 
       productService.getAllProducts = function (page, pageSize) {
-        var url = '/api/products?page=' + page + '&pageSize=' + pageSize;
+        var url = '/mobile/api/products?page=' + page + '&pageSize=' + pageSize;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -91,7 +91,7 @@
       }
 
       productService.getProductDetail = function () {
-        var url = '/api/products?ID=' + productService.productID;
+        var url = '/mobile/api/products?ID=' + productService.productID;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -100,7 +100,7 @@
       }
 
       productService.getProductDetail2 = function (saleProductID) {
-        var url = '/api/products?ID=' + saleProductID;
+        var url = '/mobile/api/products?ID=' + saleProductID;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -123,7 +123,7 @@
         return products;
       }
       cartService.orderNow = function (order) {
-        var url = '/api/orders';
+        var url = '/mobile/api/orders';
         return $http.post(url, order).then(function (res) {
           return res;
         }, function (error) {
@@ -178,7 +178,7 @@
       }
 
       receiversService.getAllReceivers = function () {
-        var url = '/api/orderreceiver';
+        var url = '/mobile/api/orderreceiver';
         return $http.get(url).then(function (res) {
           angular.copy(res.data.data, receivers);
           return receivers;
@@ -188,7 +188,7 @@
       }
 
       receiversService.saveReceiver = function (receiverData) {
-        var url = '/api/orderreceiver';
+        var url = '/mobile/api/orderreceiver';
         return $http.post(url, receiverData).then(function (res) {
           return res;
         }, function (error) {
@@ -201,7 +201,7 @@
       var orders = null;
 
       orderService.getAllOrders = function () {
-        var url = '/api/orders?page=1&pageSize=-1';
+        var url = '/mobile/api/orders?page=1&pageSize=-1';
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -212,7 +212,7 @@
     .factory('authService', function ($q, $http, sessionService, AUTH_MESSAGE_ZH) {
       var authService = {};
       authService.logIn = function (credentials) {
-        return $http.post('/api/login', credentials).then(function (res) {
+        return $http.post('/mobile/api/login', credentials).then(function (res) {
           if (res.data.data.length == 0) {
             return { userID: '', userRole: '', bNewUser: false, message: AUTH_MESSAGE_ZH.loginError };
           }
@@ -225,7 +225,7 @@
       };
 
       authService.logOff = function () {
-        return $http.post('/api/logoff').then(function (res) {
+        return $http.post('/mobile/api/logoff').then(function (res) {
           sessionService.destroy();
           return { res };
         }, function (error) {

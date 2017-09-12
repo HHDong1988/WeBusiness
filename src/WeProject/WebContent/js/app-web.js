@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('app-web', ['ngRoute', 'ngCookies'])
+  angular.module('app-web', ['ngMaterial','ngRoute', 'ngCookies'])
     .constant('AUTH_EVENTS', {
       loginSuccess: 'auth-login-success',
       loginFailed: 'auth-login-failed',
@@ -107,7 +107,7 @@
       var userService = this;
       userService.allPrimaryAgencies = [];
       userService.getAllUsers = function (page, pageSize, searchText) {
-        var url = '/api/users?page=' + page + '&pageSize=' + pageSize;
+        var url = '/desktop/api/users?page=' + page + '&pageSize=' + pageSize;
         if (searchText) {
           url = url + "&searchText=" + '"' + searchText + '"';
         }
@@ -135,7 +135,7 @@
         })
       }
       userService.setPersonInfo = function (userData) {
-        return $http.put('/api/users', userData).then(function (res) {
+        return $http.put('/desktop/api/users', userData).then(function (res) {
           return res;
         }, function (error) {
           return error;
@@ -143,7 +143,7 @@
       }
 
       userService.syncUserData = function (userData) {
-        return $http.post('/api/users', userData).then(function (res) {
+        return $http.post('/desktop/api/users', userData).then(function (res) {
           return res;
         }, function (error) {
           return error;
@@ -151,7 +151,7 @@
       }
 
       userService.resetPassword = function (passwordData) {
-        return $http.post('/api/password', passwordData).then(function (res) {
+        return $http.post('/desktop/api/password', passwordData).then(function (res) {
           return res;
         }, function (error) {
           return error;
@@ -162,7 +162,7 @@
     .service('stockService', function ($http) {
       var stockService = this;
       stockService.getAllStocks = function (page, pageSize) {
-        var url = '/api/stocks?page=' + page + '&pageSize=' + pageSize;
+        var url = '/desktop/api/stocks?page=' + page + '&pageSize=' + pageSize;
 
         return $http.get(url).then(function (res) {
           return res;
@@ -172,7 +172,7 @@
       };
 
       stockService.syncStockData = function (stockData) {
-        return $http.post('/api/stocks', stockData).then(function (res) {
+        return $http.post('/desktop/api/stocks', stockData).then(function (res) {
           return res;
         }, function (error) {
           return error;
@@ -182,7 +182,7 @@
     .service('purchaseService', function ($http) {
       var purchaseService = this;
       purchaseService.getAllPurchases = function (page, pageSize, stockID) {
-        var url = '/api/purchase?page=' + page + '&pageSize=' + pageSize;
+        var url = '/desktop/api/purchase?page=' + page + '&pageSize=' + pageSize;
 
         return $http.get(url).then(function (res) {
           return res;
@@ -192,7 +192,7 @@
       };
 
       purchaseService.syncPurchaseData = function (purchaseData) {
-        return $http.post('/api/purchase', purchaseData).then(function (res) {
+        return $http.post('/desktop/api/purchase', purchaseData).then(function (res) {
           return res;
         }, function (error) {
           return error;
@@ -203,7 +203,21 @@
       var salesService = this;
       salesService.getAllSales = function (page, pageSize, stockID) {
 
-        var url = '/api/sales?page=' + page + '&pageSize=' + pageSize;
+        var url = '/desktop/api/sales?page=' + page + '&pageSize=' + pageSize;
+
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+          
+        });
+      };
+    })
+    .service('financeService', function ($http) {
+      var financeService = this;
+      financeService.getAllBills = function (userID, fromtime, endtime) {
+
+        var url = '/desktop/api/bills?userid=' + userID + '&fromtime=' + fromtime + '&endtime=' + endtime;
 
         return $http.get(url).then(function (res) {
           return res;
@@ -211,6 +225,15 @@
           return error;
         });
       };
+      financeService.passAudit = function (id) {
+        var url = '/desktop/api/bills';
+
+        return $http.post(url,[{cartid:id}]).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      }
     })
     .service('salesProductService', function ($http) {
       var salesProductService = this;
@@ -223,7 +246,7 @@
         return onSaleProduct;
       }
       salesProductService.onSale = function (onSaleData) {
-        var url = '/api/sales';
+        var url = '/desktop/api/sales';
         return $http.post(url,onSaleData).then(function (res) {
           return res;
         }, function (error) {
@@ -231,7 +254,7 @@
         });
       }
       salesProductService.getAllProducts = function (page, pageSize) {
-        var url = '/api/sales?page=' + page + '&pageSize=' + pageSize;
+        var url = '/desktop/api/sales?page=' + page + '&pageSize=' + pageSize;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -239,7 +262,7 @@
         })
       }
       salesProductService.getProductDetail = function (saleProductID) {
-        var url = '/api/sales?ID=' + saleProductID;
+        var url = '/desktop/api/sales?ID=' + saleProductID;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -252,7 +275,7 @@
       productService.productID = 0;
 
       productService.getAllProducts = function (page, pageSize) {
-        var url = '/api/sales?page=' + page + '&pageSize=' + pageSize;
+        var url = '/desktop/api/sales?page=' + page + '&pageSize=' + pageSize;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -261,7 +284,7 @@
       }
 
       productService.getProductDetail = function () {
-        var url = '/api/sales?ID=' + productService.productID;
+        var url = '/desktop/api/sales?ID=' + productService.productID;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -270,7 +293,7 @@
       }
 
       productService.getProductDetail2 = function (saleProductID) {
-        var url = '/api/sales?ID=' + saleProductID;
+        var url = '/desktop/api/sales?ID=' + saleProductID;
         return $http.get(url).then(function (res) {
           return res;
         }, function (error) {
@@ -281,7 +304,7 @@
     .service('salesStatisticsService', function ($http) {
       var salesStatisticsService = this;
       salesStatisticsService.getStatistics = function (startTime, endTime, productID) {
-        var url = '/api/salesStatistics?startTime=' + startTime + '&endTime=' + endTime;
+        var url = '/desktop/api/salesStatistics?startTime=' + startTime + '&endTime=' + endTime;
         if (productID) {
           url = url + "&productID=" + productID;
         }
@@ -296,7 +319,7 @@
     .factory('authService', function ($q, $http, sessionService, AUTH_MESSAGE_ZH) {
       var authService = {};
       authService.logIn = function (credentials) {
-        return $http.post('/api/login', credentials).then(function (res) {
+        return $http.post('/desktop/api/login', credentials).then(function (res) {
           if (res.data.data.length == 0) {
             return { userID: '', userRole: '', bNewUser: false, message: AUTH_MESSAGE_ZH.loginError };
           }
@@ -309,7 +332,7 @@
       };
 
       authService.logOff = function () {
-        return $http.post('/api/logoff').then(function (res) {
+        return $http.post('/desktop/api/logoff').then(function (res) {
           sessionService.destroy();
           return { res };
         }, function (error) {
@@ -593,10 +616,10 @@
         controllerAs: 'vm',
         templateUrl: 'views/wbStockManagement.html'
       });
-      $routeProvider.when('/stockManagement', {
-        controller: 'stockManageController',
+      $routeProvider.when('/financeManagement', {
+        controller: 'financeManageController',
         controllerAs: 'vm',
-        templateUrl: 'views/wbStockManagement.html'
+        templateUrl: 'views/wbFinanceManage.html'
       });
 
       $routeProvider.when('/onSale', {
@@ -609,6 +632,12 @@
         controller: 'productManageController',
         controllerAs: 'vm',
         templateUrl: 'views/wbProductManagement.html'
+      });
+
+      $routeProvider.when('/productList', {
+        controller: 'productListController',
+        controllerAs: 'vm',
+        templateUrl: 'views/productList.html'
       });
 
       $routeProvider.when('/purchaseInfo', {
