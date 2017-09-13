@@ -108,10 +108,22 @@ public class AuditInfo  extends HttpServlet{
 			JSONObject cartJsonObject = new JSONObject();
 			cartJsonObject.put("cartid", id);
 			cartJsonObject.put("orders", val);
-			ps = conn.prepareStatement(Constant.SQL_Get_PriceBYCartID);
+			ps = conn.prepareStatement(Constant.SQL_Get_PricePassAuditBYCartID);
 			ps.setInt(1, id);
-			Double totalprice = DBController.getDoubleNumber(ps, conn);
-			cartJsonObject.put("price", totalprice);
+			JSONArray cartPriceAndPassinfoArray = DBController.getJsonArray(ps, conn);
+			if(cartPriceAndPassinfoArray.length()>0)
+			{
+				JSONObject cartinfoObject = cartPriceAndPassinfoArray.getJSONObject(0);
+				if(cartinfoObject.has("TotalPrice")){
+					double totalprice = cartinfoObject.getDouble("TotalPrice");
+					cartJsonObject.put("price", totalprice);
+				}
+				if(cartinfoObject.has("PassAudit")){
+					boolean pass = cartinfoObject.getBoolean("PassAudit");
+					cartJsonObject.put("PassAudit", pass);
+				}
+			}
+			
 			if(cartTimemap.containsKey(id))
 			{
 				cartJsonObject.put("carttime", cartTimemap.get(id));

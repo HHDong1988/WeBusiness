@@ -92,7 +92,7 @@ public final class Constant {
 	public static final String SQL_Get_OrderByIDAndTime = "SELECT *"
 			+ " FROM data_orders "
 			+ " WHERE LogTime > ? and LogTime < ? and SalerID = ?";
-	public static final String SQL_Get_PriceBYCartID = "SELECT TotalPrice"
+	public static final String SQL_Get_PricePassAuditBYCartID = "SELECT TotalPrice, PassAudit"
 			+ " FROM data_cart "
 			+ " WHERE ID = ?";
 	public static final String SQL_UPDATE_PostPassAudit = "UPDATE data_cart "
