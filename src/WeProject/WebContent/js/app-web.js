@@ -127,6 +127,20 @@
           return error;
         })
       }
+      userService.getAgencies = function (bPrimary) {
+        var userID = 5;
+        if (bPrimary) {
+          userID = 5;
+        }
+        else{
+          userID = 6;
+        }
+        return userService.getAllUsers(1, -1, "UserTypeID="+userID).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        })
+      }
       userService.getAllStoreKeeper = function () {
         return userService.getAllUsers(1, -1, "UserTypeID=4").then(function (res) {
           return res;

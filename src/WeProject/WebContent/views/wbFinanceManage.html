@@ -30,7 +30,7 @@
   </div>
   <div class="col-md-12">
     <div ng-repeat="cart in vm.carts">
-      <div class="panel panel-info">
+      <div ng-class="{true:'panel panel-sucess',false:'panel panel-info'}[cart.PassAudit==true]">
         <div class="panel-heading">
           <div class="row">
             <div class="col-md-6">
