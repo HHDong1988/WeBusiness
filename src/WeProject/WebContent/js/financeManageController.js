@@ -21,43 +21,6 @@
       vm.myDate = new Date();
       vm.isOpen = false;
 
-      vm.carts = [{
-        cardID: 1,
-        carttime:"2017-12-06",
-        orders: [
-          { Title: '鞋垫',Amount:10, Price: 250, img: "" },
-          { Title: '咸鱼',Amount:10, Price: 150, img: "" },
-          { Title: '鸡蛋',Amount:10, Price: 500, img: "" }
-        ],
-        price: 900
-      }, {
-        cardID: 2,
-        carttime:"2017-12-06",
-        orders: [
-          { Title: '鞋垫',Amount:10, Price: 250, img: "" },
-          { Title: '咸鱼',Amount:10, Price: 150, img: "" },
-          { Title: '鸡蛋',Amount:10, Price: 500, img: "" }
-        ],
-        price: 900
-      }, {
-        cardID: 3,
-        carttime:"2017-12-06",
-        orders: [
-          { Title: '鞋垫',Amount:10, Price: 250, img: "" },
-          { Title: '咸鱼',Amount:10, Price: 150, img: "" },
-          { Title: '鸡蛋',Amount:10, Price: 500, img: "" }
-        ],
-        price: 900
-      }, {
-        cardID: 4,
-        carttime:"2017-12-06",
-        orders: [
-          { Title: '鞋垫',Amount:10, Price: 250, img: "" },
-          { Title: '咸鱼',Amount:10, Price: 150, img: "" },
-          { Title: '鸡蛋',Amount:10, Price: 500, img: "" }
-        ],
-        price: 900
-      }];
       vm.carts = [];
 
       vm.getAllAgency();
