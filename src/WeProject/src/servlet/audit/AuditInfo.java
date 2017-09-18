@@ -331,7 +331,17 @@ public class AuditInfo  extends HttpServlet{
 				if(itemCount<=0){
 					updateresult = false;
 				}
-
+//				if(updateresult)
+//				{
+//					ps = conn.prepareStatement(Constant.SQL_DELETE_CARTBYCARTID);
+//					ps.setInt(1, cartid);
+//					itemCount=ps.executeUpdate();;
+//				}
+//				if(itemCount<=0){
+//					updateresult = false;
+//				}else{
+//					updateresult = true;
+//				}
 				
 				
 				endDate=new Date();

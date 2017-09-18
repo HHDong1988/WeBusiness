@@ -104,17 +104,17 @@ public final class Constant {
 			+ "FROM data_saleproducts "
 			+ "WHERE ID = ?";
 	public static final String SQL_GET_RECEIVERLIST = "SELECT * FROM data_cart "
-			+ "WHERE PostNum='' GROUP BY ReceiverTel";
+			+ "WHERE PostNum='' and IsDeleted=0 GROUP BY ReceiverTel";
 	public static final String SQL_GET_CARTIDBYRECEIVERTEL = "SELECT * FROM data_cart "
-			+ "WHERE ReceiverTel=? and PostNum=''";
+			+ "WHERE ReceiverTel=? and PostNum='' and IsDeleted=0";
 	public static final String SQL_GET_ORDERBYCARTID = "SELECT * FROM data_orders "
 			+ "WHERE CartID=?";
 	public static final String SQL_UPDATE_POSTNUMBYTEL = "UPDATE data_cart "
-			+ "SET PostNum =? WHERE ReceiverTel=?";
+			+ "SET PostNum =? WHERE ReceiverTel=? and IsDeleted=0";
 	public static final String SQL_DELETE_ORDERBYCARTID = "DELETE FROM data_orders "
 			+ "WHERE CartID=?";
 	public static final String SQL_DELETE_CARTBYCARTID = "UPDATE data_cart "
-			+ "SET Delete=1 WHERE ID=?";
+			+ "SET IsDeleted=1 WHERE ID=?";
 	// Audit
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";

@@ -201,10 +201,10 @@ public class PostInfo extends HttpServlet{
 //			}
 			
 			String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
-			JSONArray array;
+			JSONObject object;
 			
 			try {
-				array = new JSONArray(pJasonStr);
+				object = new JSONObject(pJasonStr);
 				conn = DBController.getConnection();
 				boolean updateresult=true;
 				
@@ -217,22 +217,19 @@ public class PostInfo extends HttpServlet{
 //					conn.close();
 //					return;
 //				}
-				for(int i=0;i<array.length();i++){
-					JSONObject object = array.getJSONObject(i);
-					if(object.has("ReceiverTel")&&object.has("PostNum"))
-					{
-						String tel = object.getString("ReceiverTel");
-						String postNum = object.getString("PostNum");
-						ps = conn.prepareStatement(Constant.SQL_UPDATE_POSTNUMBYTEL);
-						ps.setString(1, postNum);
-						ps.setString(2, tel);
-						int itemCount = ps.executeUpdate();
-						if(itemCount<=0){
-							updateresult = false;
-							break;
-						}
+				if(object.has("ReceiverTel")&&object.has("PostNum"))
+				{
+					String tel = object.getString("ReceiverTel");
+					String postNum = object.getString("PostNum");
+					ps = conn.prepareStatement(Constant.SQL_UPDATE_POSTNUMBYTEL);
+					ps.setString(1, postNum);
+					ps.setString(2, tel);
+					int itemCount = ps.executeUpdate();
+					if(itemCount<=0){
+						updateresult = false;
 					}
 				}
+				
 				endDate=new Date();
 				//ToDo: Check This
 				if(updateresult){
