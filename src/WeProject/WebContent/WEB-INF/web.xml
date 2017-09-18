@@ -107,6 +107,24 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
     <servlet-name>AuditInfo</servlet-name>
     <url-pattern>/api/bills</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>PostInfo</servlet-name>
+    <servlet-class>servlet.storage.PostInfo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PostInfo</servlet-name>
+    <url-pattern>/api/postinfo</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>PostExcel</servlet-name>
+    <servlet-class>servlet.storage.PostExcel</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PostExcel</servlet-name>
+    <url-pattern>/api/postexcel/download</url-pattern>
+  </servlet-mapping>
  
 
 </web-app>

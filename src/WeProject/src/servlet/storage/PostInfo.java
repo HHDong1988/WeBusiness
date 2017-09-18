@@ -1,12 +1,10 @@
-package servlet.audit;
+package servlet.storage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,13 +20,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import com.constant.Constant;
 import com.database.DBController;
 import com.util.GetRequestJsonUtils;
 import com.util.HttpUtil;
 
-public class AuditInfo  extends HttpServlet{
+public class PostInfo extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	private Boolean HasAuthority(HttpServletRequest req,Connection conn, String targetUserName){
@@ -49,7 +46,7 @@ public class AuditInfo  extends HttpServlet{
 				JSONObject userobject = array.getJSONObject(0);
 				int usertypeid = userobject.getInt("UserTypeID");
 				
-				if(usertypeid==Constant.Super_Admin_Id||usertypeid==Constant.Accountant_Id)return true;
+				if(usertypeid==Constant.Super_Admin_Id||usertypeid==Constant.Storekeeper_Id)return true;
 			} catch (SQLException | JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -61,76 +58,32 @@ public class AuditInfo  extends HttpServlet{
 		return false;
 	}
 	
-	private void IntertOrderInformationToCartMap(JSONArray array, HashMap<Integer,JSONArray> cartMap, 
-			HashMap<Integer, Object> cartTimemap,PreparedStatement ps,
+	private void InsertCartInfo(JSONArray array, PreparedStatement ps,
 			Connection conn) throws JSONException, SQLException{
 		for(int i=0;i<array.length();i++){
-			JSONObject object = array.getJSONObject(i);
-			if(!object.has("CartID"))continue;
-			int cartID = object.getInt("CartID");
-			ps = conn.prepareStatement(Constant.SQL_GET_TITLEPICFROMSALE);
-			int saleproductID = object.getInt("SaleProductID");
-			ps.setInt(1, saleproductID);
-			JSONArray procutinfoArray = DBController.getJsonArray(ps, conn);
-			if(procutinfoArray.length()<=0)continue;
-			JSONObject procutTitleAndPic = procutinfoArray.getJSONObject(0);
-			object.put("Title", procutTitleAndPic.get("Title"));
-			object.put("Picture1", procutTitleAndPic.get("Picture1"));
-			
-			if(cartMap.containsKey(cartID))
+			JSONObject infoobject = array.getJSONObject(i);
+			if(!infoobject.has("ReceiverTel"))continue;
+			String tel = infoobject.getString("ReceiverTel");
+			ps = conn.prepareStatement(Constant.SQL_GET_CARTIDBYRECEIVERTEL);
+			ps.setString(1, tel);
+			JSONArray cartArray = new JSONArray();
+			cartArray = DBController.getJsonArray(ps, conn);
+			for(int j=0;j<cartArray.length();j++)
 			{
-				JSONArray orders = cartMap.get(cartID);
-				orders.put(object);
-			}else
-			{
-				JSONArray orders = new JSONArray();
-				orders.put(object);
-				cartMap.put(cartID, orders);
+				JSONObject cartObject = cartArray.getJSONObject(j);
+				JSONArray orderArray = new JSONArray();
+				if(!cartObject.has("ID"))continue;
+				int cartID = cartObject.getInt("ID");
+				ps = conn.prepareStatement(Constant.SQL_GET_ORDERBYCARTID);
+				ps.setInt(1, cartID);
+				orderArray = DBController.getJsonArray(ps, conn);
+				cartObject.put("orders", orderArray);
 			}
-			if(!cartTimemap.containsKey(cartID))
-			{
-				Object date = object.get("LogTime");
-				cartTimemap.put(cartID, date);
-			}
-			
+			infoobject.put("carts", cartArray);
 		}
 	}
 	
-	private void SummaryInfoToReturnArray(HashMap<Integer,JSONArray> cartMap, 
-			HashMap<Integer, Object> cartTimemap,JSONArray returnArray,PreparedStatement ps,
-			Connection conn) throws JSONException, SQLException{
-		Iterator iter = cartMap.entrySet().iterator();
-		while (iter.hasNext()) { 
-			Map.Entry entry = (Map.Entry) iter.next(); 
-			Object key = entry.getKey(); 
-			Object val = entry.getValue();
-			int id = (Integer)key;
-			JSONObject cartJsonObject = new JSONObject();
-			cartJsonObject.put("cartid", id);
-			cartJsonObject.put("orders", val);
-			ps = conn.prepareStatement(Constant.SQL_Get_PricePassAuditBYCartID);
-			ps.setInt(1, id);
-			JSONArray cartPriceAndPassinfoArray = DBController.getJsonArray(ps, conn);
-			if(cartPriceAndPassinfoArray.length()>0)
-			{
-				JSONObject cartinfoObject = cartPriceAndPassinfoArray.getJSONObject(0);
-				if(cartinfoObject.has("TotalPrice")){
-					double totalprice = cartinfoObject.getDouble("TotalPrice");
-					cartJsonObject.put("price", totalprice);
-				}
-				if(cartinfoObject.has("PassAudit")){
-					boolean pass = cartinfoObject.getBoolean("PassAudit");
-					cartJsonObject.put("PassAudit", pass);
-				}
-			}
-			
-			if(cartTimemap.containsKey(id))
-			{
-				cartJsonObject.put("carttime", cartTimemap.get(id));
-			}
-			returnArray.put(cartJsonObject);
-		}
-	}
+	
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -152,12 +105,12 @@ public class AuditInfo  extends HttpServlet{
 //			writer.close();
 //			return;
 //		}
-		long serverstartTimeLong = Long.parseLong(req.getParameter("fromtime").trim());
-		Date serverstartDate= new Date(serverstartTimeLong);
-		java.sql.Timestamp sqlstartDate=new java.sql.Timestamp(serverstartDate.getTime());
-		long serverendTimeLong = Long.parseLong(req.getParameter("endtime").trim());
-		Date serverendDate= new Date(serverendTimeLong);
-		java.sql.Timestamp sqlendDate=new java.sql.Timestamp(serverendDate.getTime());
+//		long serverstartTimeLong = Long.parseLong(req.getParameter("fromtime").trim());
+//		Date serverstartDate= new Date(serverstartTimeLong);
+//		java.sql.Timestamp sqlstartDate=new java.sql.Timestamp(serverstartDate.getTime());
+//		long serverendTimeLong = Long.parseLong(req.getParameter("endtime").trim());
+//		Date serverendDate= new Date(serverendTimeLong);
+//		java.sql.Timestamp sqlendDate=new java.sql.Timestamp(serverendDate.getTime());
 		
 		try {
 			conn = DBController.getConnection();
@@ -170,28 +123,16 @@ public class AuditInfo  extends HttpServlet{
 //				conn.close();
 //				return;
 //			}
-			JSONArray returnArray= new JSONArray();
 			
-			ps = conn.prepareStatement(Constant.SQL_Get_OrderByIDAndTime);
-			ps.setObject(1, sqlstartDate);
-			ps.setObject(2, sqlendDate);
+			ps = conn.prepareStatement(Constant.SQL_GET_RECEIVERLIST);
 			JSONArray array = DBController.getJsonArray(ps, conn);
-			HashMap<Integer,JSONArray> cartMap=new HashMap<Integer,JSONArray>();
-			HashMap<Integer, Object> cartTimemap = new HashMap<Integer,Object>();
 			
-			IntertOrderInformationToCartMap(array,cartMap,cartTimemap,ps,conn);
+			InsertCartInfo(array,ps,conn);
 			
-			SummaryInfoToReturnArray(cartMap, cartTimemap,returnArray,ps,conn);
+			
 			endDate = new Date();
-			if(returnArray==null||(returnArray!=null&&returnArray.length()==0)){
-				jObject = HttpUtil.getResponseJson(false, null,
-						endDate.getTime() - beginDate.getTime(), Constant.DATEBASEEMPTY_ERROR,0,1,-1);
-				writer.append(jObject.toString());
-			}else
-			{
-				jObject = HttpUtil.getResponseJson(true, returnArray, endDate.getTime() - beginDate.getTime(), null,-1,-1,-1);
-				writer.append(jObject.toString());
-			}
+			jObject = HttpUtil.getResponseJson(true, array, endDate.getTime() - beginDate.getTime(), null,-1,-1,-1);
+			writer.append(jObject.toString());
 
 			writer.close();
 			conn.close();
@@ -244,11 +185,13 @@ public class AuditInfo  extends HttpServlet{
 //				}
 				for(int i=0;i<array.length();i++){
 					JSONObject object = array.getJSONObject(i);
-					if(object.has("cartid"))
+					if(object.has("ReceiverTel")&&object.has("PostNum"))
 					{
-						int cartid = object.getInt("cartid");
-						ps = conn.prepareStatement(Constant.SQL_UPDATE_PostPassAudit);
-						ps.setInt(1, cartid);
+						String tel = object.getString("ReceiverTel");
+						String postNum = object.getString("PostNum");
+						ps = conn.prepareStatement(Constant.SQL_UPDATE_POSTNUMBYTEL);
+						ps.setString(1, postNum);
+						ps.setString(2, tel);
 						int itemCount = ps.executeUpdate();
 						if(itemCount<=0){
 							updateresult = false;

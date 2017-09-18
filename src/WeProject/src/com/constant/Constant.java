@@ -91,7 +91,7 @@ public final class Constant {
 	// Audit
 	public static final String SQL_Get_OrderByIDAndTime = "SELECT *"
 			+ " FROM data_orders "
-			+ " WHERE LogTime > ? and LogTime < ? and SalerID = ?";
+			+ " WHERE LogTime > ? and LogTime < ?";
 	public static final String SQL_Get_PricePassAuditBYCartID = "SELECT TotalPrice, PassAudit"
 			+ " FROM data_cart "
 			+ " WHERE ID = ?";
@@ -101,6 +101,16 @@ public final class Constant {
 	public static final String SQL_GET_TITLEPICFROMSALE = "SELECT Title, Picture1 "
 			+ "FROM data_saleproducts "
 			+ "WHERE ID = ?";
+	public static final String SQL_GET_RECEIVERLIST = "SELECT * FROM data_cart "
+			+ "WHERE PostNum='' GROUP BY ReceiverTel";
+	public static final String SQL_GET_CARTIDBYRECEIVERTEL = "SELECT * FROM data_cart "
+			+ "WHERE ReceiverTel=? and PostNum=''";
+	public static final String SQL_GET_ORDERBYCARTID = "SELECT * FROM data_orders "
+			+ "WHERE CartID=?";
+	public static final String SQL_UPDATE_POSTNUMBYTEL = "UPDATE data_cart "
+			+ "SET PostNum =? WHERE ReceiverTel=?";
+	
+	// Audit
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
 	public static final String USERNAME_ERROR = "User name is occupied.";
