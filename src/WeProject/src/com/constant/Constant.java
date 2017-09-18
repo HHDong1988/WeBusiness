@@ -104,13 +104,13 @@ public final class Constant {
 			+ "FROM data_saleproducts "
 			+ "WHERE ID = ?";
 	public static final String SQL_GET_RECEIVERLIST = "SELECT * FROM data_cart "
-			+ "WHERE PostNum='' and IsDeleted=0 GROUP BY ReceiverTel";
+			+ "WHERE PostNum='' GROUP BY ReceiverTel";
 	public static final String SQL_GET_CARTIDBYRECEIVERTEL = "SELECT * FROM data_cart "
-			+ "WHERE ReceiverTel=? and PostNum='' and IsDeleted=0";
+			+ "WHERE ReceiverTel=? and PostNum='' ";
 	public static final String SQL_GET_ORDERBYCARTID = "SELECT * FROM data_orders "
 			+ "WHERE CartID=?";
 	public static final String SQL_UPDATE_POSTNUMBYTEL = "UPDATE data_cart "
-			+ "SET PostNum =? WHERE ReceiverTel=? and IsDeleted=0";
+			+ "SET PostNum =? WHERE ReceiverTel=?";
 	public static final String SQL_DELETE_ORDERBYCARTID = "DELETE FROM data_orders "
 			+ "WHERE CartID=?";
 	public static final String SQL_DELETE_CARTBYCARTID = "UPDATE data_cart "
