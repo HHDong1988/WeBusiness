@@ -289,4 +289,79 @@ public class AuditInfo  extends HttpServlet{
 			}
 		}
 	
+		//delete
+		@Override
+		protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
+				throws ServletException, IOException{
+			Date beginDate = new Date();
+			Date endDate = null;
+			resp.setContentType("application/json; charset=utf-8");
+			resp.setCharacterEncoding("UTF-8");
+			Connection conn = null;
+			PreparedStatement ps = null;
+			PrintWriter writer = resp.getWriter();
+			JSONObject jObject = null;
+//			if(!HttpUtil.doBeforeProcessing(req)){
+//				endDate = new Date();
+//				jObject = HttpUtil.getResponseJson(false, null,
+//						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+//				writer.append(jObject.toString());
+//				writer.close();
+//				return;
+//			}
+			int cartid = Integer.parseInt(req.getParameter("cartID").trim());
+			String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
+			JSONArray array;
+			
+			try {
+				conn = DBController.getConnection();
+				boolean updateresult=true;
+				
+//				if(!HasAuthority(req,conn,null)){
+//					endDate = new Date();
+//					jObject = HttpUtil.getResponseJson(false, null,
+//							endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+//					writer.append(jObject.toString());
+//					writer.close();
+//					conn.close();
+//					return;
+//				}
+				
+				ps = conn.prepareStatement(Constant.SQL_DELETE_ORDERBYCARTID);
+				ps.setInt(1, cartid);
+				int itemCount = ps.executeUpdate();
+				if(itemCount<=0){
+					updateresult = false;
+				}
+				if(updateresult)
+				{
+					ps = conn.prepareStatement(Constant.SQL_DELETE_CARTBYCARTID);
+					ps.setInt(1, cartid);
+					itemCount=ps.executeUpdate();;
+				}
+				if(itemCount<=0){
+					updateresult = false;
+				}else{
+					updateresult = true;
+				}
+				
+				
+				endDate=new Date();
+				//ToDo: Check This
+				if(updateresult){
+					jObject = HttpUtil.getResponseJson(true, null,
+							endDate.getTime() - beginDate.getTime(), "success",0,1,-1);
+					writer.append(jObject.toString());
+				}else
+				{
+					jObject = HttpUtil.getResponseJson(false, null, endDate.getTime() - beginDate.getTime(), null,0,1,-1);
+					writer.append(jObject.toString());
+				}
+				writer.close();
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 }

@@ -90,7 +90,7 @@ public final class Constant {
 			+ " FROM data_storage_products "
 			+ " WHERE Name = ? ";
 	
-	// Audit
+	// Audit and post
 	public static final String SQL_Get_OrderByIDAndTime = "SELECT *"
 			+ " FROM data_orders "
 			+ " WHERE LogTime > ? and LogTime < ?";
@@ -111,7 +111,10 @@ public final class Constant {
 			+ "WHERE CartID=?";
 	public static final String SQL_UPDATE_POSTNUMBYTEL = "UPDATE data_cart "
 			+ "SET PostNum =? WHERE ReceiverTel=?";
-	
+	public static final String SQL_DELETE_ORDERBYCARTID = "DELETE data_orders "
+			+ "WHERE CartID=?";
+	public static final String SQL_DELETE_CARTBYCARTID = "DELETE data_cart "
+			+ "WHERE ID=?";
 	// Audit
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";
