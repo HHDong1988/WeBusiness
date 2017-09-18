@@ -310,8 +310,6 @@ public class AuditInfo  extends HttpServlet{
 //				return;
 //			}
 			int cartid = Integer.parseInt(req.getParameter("cartID").trim());
-			String pJasonStr = GetRequestJsonUtils.getRequestJsonString(req);
-			JSONArray array;
 			
 			try {
 				conn = DBController.getConnection();
