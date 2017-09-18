@@ -25,8 +25,10 @@ public final class Constant {
 			+ "WHERE UserName = ?";
 	public static final String SQL_GET_USERS="SELECT ID, Password, UserName, UserTypeID, CreateTime, "
 			+ "LastLoginTime, RealName, Tel, Address, AliveUser, UpperID"
-			+ " FROM sys_conf_userinfo "
-			;
+			+ " FROM sys_conf_userinfo ";
+	public static final String SQL_GET_USERSBYID="SELECT UserName FROM sys_conf_userinfo "
+			+ "WHERE ID = ?";
+	
 	public static final String SQL_RESET_PASSWORD="UPDATE sys_conf_userinfo "
 			+ "SET Password = ?"
 			+ "WHERE UserName = ?";
