@@ -113,8 +113,8 @@ public final class Constant {
 			+ "SET PostNum =? WHERE ReceiverTel=?";
 	public static final String SQL_DELETE_ORDERBYCARTID = "DELETE FROM data_orders "
 			+ "WHERE CartID=?";
-	public static final String SQL_DELETE_CARTBYCARTID = "DELETE FROM data_cart "
-			+ "WHERE ID=?";
+	public static final String SQL_DELETE_CARTBYCARTID = "UPDATE data_cart "
+			+ "SET Delete=1 WHERE ID=?";
 	// Audit
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";

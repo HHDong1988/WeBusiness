@@ -60,6 +60,7 @@ public class PostInfo extends HttpServlet{
 	
 	private void InsertCartInfo(JSONArray array, PreparedStatement ps,
 			Connection conn) throws JSONException, SQLException{
+		HashMap<Integer,JSONObject> orderMap = new HashMap<Integer,JSONObject>();
 		for(int i=0;i<array.length();i++){
 			JSONObject infoobject = array.getJSONObject(i);
 			if(!infoobject.has("ReceiverTel"))continue;
@@ -77,9 +78,42 @@ public class PostInfo extends HttpServlet{
 				ps = conn.prepareStatement(Constant.SQL_GET_ORDERBYCARTID);
 				ps.setInt(1, cartID);
 				orderArray = DBController.getJsonArray(ps, conn);
-				cartObject.put("orders", orderArray);
+				for(int k=0;k<orderArray.length();k++){
+					JSONObject orderObject = orderArray.getJSONObject(k);
+					int saleid = orderObject.getInt("SaleProductID");
+					if(orderMap.containsKey(saleid)){
+						JSONObject countObject = orderMap.get(saleid);
+						int currentamount = countObject.getInt("Amount");
+						currentamount = currentamount + orderObject.getInt("Amount");
+						countObject.put("Amount", currentamount);
+					}else
+					{
+						JSONObject countObject = new JSONObject();
+						int currentamount = orderObject.getInt("Amount");
+						countObject.put("Amount", currentamount);
+						countObject.put("SaleProductID", saleid);
+						ps = conn.prepareStatement(Constant.SQL_GET_TITLEPICFROMSALE);
+						ps.setInt(1, saleid);
+						JSONArray titlearray = DBController.getJsonArray(ps, conn);
+						JSONObject titleObject = titlearray.getJSONObject(0);
+						String title = titleObject.getString("Title");
+						String pic1 = titleObject.getString("Picture1");
+						countObject.put("Title", title);
+						countObject.put("Picture1", pic1);
+						orderMap.put(saleid, countObject);
+					}
+				}
+				
 			}
-			infoobject.put("carts", cartArray);
+			JSONArray ordersumArray = new JSONArray();
+			Iterator iter = orderMap.entrySet().iterator();
+			while (iter.hasNext()) { 
+				Map.Entry entry = (Map.Entry) iter.next(); 
+				Object key = entry.getKey(); 
+				Object val = entry.getValue();
+				ordersumArray.put(val);
+			}
+			infoobject.put("orders", ordersumArray);
 		}
 	}
 	
