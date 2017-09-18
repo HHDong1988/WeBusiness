@@ -1,22 +1,4 @@
 <div class="row">
-  <div class="col-md-12">
-    <div class="autocompletedemoBasicUsage" ng-cloak="">
-      <md-content class="md-padding">
-        <form ng-submit="$event.preventDefault()">
-          <md-autocomplete placeholder="请输入用户名" ng-disabled="vm.isDisabled" md-min-length="0" md-item-text="item.display" md-items="item in vm.querySearch(vm.searchText)"
-            md-selected-item-change="vm.selectedItemChange(item)" md-search-text="vm.searchText" md-search-text-change="vm.searchTextChange(vm.searchText)"
-            md-selected-item="vm.selectedItem" md-no-cache="vm.noCache">
-            <md-item-template>
-              <span md-highlight-flags="^i" md-highlight-text="vm.searchText">{{item.display}}</span>
-            </md-item-template>
-            <md-not-found>
-              没有发现 "{{vm.searchText}}".
-            </md-not-found>
-          </md-autocomplete>
-        </form>
-      </md-content>
-    </div>
-  </div>
   <div class="col-md-6">
     <h4>开始日期</h4>
     <md-datepicker ng-model="vm.dateBegin" md-placeholder="Enter date"></md-datepicker>
@@ -26,18 +8,59 @@
     <md-datepicker ng-model="vm.dateEnd" md-placeholder="Enter date"></md-datepicker>
   </div>
   <div class="col-md-12 pull-left">
-    <md-button class="md-raised md-primary" ng-click="vm.onQueryBills()">查询</md-button>
+    <button class="btn btn-primary" ng-click="vm.onQueryBills()">查询</button>
+  </div>
+  <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="confirmModalLabel">确认审计通过</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <p class="help-block">请输入购物车金额</p>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" ng-model="vm.confirmTotalPrice">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭<a/button>
+          <button type="button" class="btn btn-primary" ng-click="vm.confirmPass()">确认通过</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="confirmModalLabel">是否删除购物车</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭<a/button>
+          <button type="button" class="btn btn-primary" ng-click="vm.confirmDelete()">确认</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="col-md-12">
     <div ng-repeat="cart in vm.carts">
-      <div ng-class="{true:'panel panel-sucess',false:'panel panel-info'}[cart.PassAudit==true]">
+      <div ng-class="{true:'panel panel-success',false:'panel panel-info'}[cart.PassAudit==true]">
         <div class="panel-heading">
           <div class="row">
             <div class="col-md-6">
-              <h4><span>下单时间:</span>{{cart.carttime}}</h4>
+              <h4><span><sapn>代理: <span>{{cart.SalerName}}</span></sapn>    下单时间: </span>{{cart.carttime}}</h4>
             </div>
             <div class="col-md-6">
-              <button class="btn btn-success pull-right" ng-click="vm.passAudit(cart.cartid)">通过</button>
+              <button class="btn btn-success pull-right" ng-click="vm.passAudit(cart.cartid,cart.price)" ng-disabled="cart.PassAudit">通过</button>
+              <button class="btn btn-danger pull-right" ng-click="vm.deleteCart(cart.cartid)">删除</button>
             </div>
           </div>
         </div>
@@ -58,7 +81,7 @@
                       <img src="{{order.Picture1}}" class="img-thumbnail">
                     </div>
                     <div class="col-md-8">
-                        <h4 class="pull-left"><span>商品总额：</span>{{order.Price*order.Amount}}</h4>
+                      <h4 class="pull-left"><span>商品总额：</span>{{order.Price*order.Amount}}</h4>
                     </div>
                   </div>
                 </div>
@@ -71,5 +94,4 @@
         </div>
       </div>
     </div>
-
   </div>
