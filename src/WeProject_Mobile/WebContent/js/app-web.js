@@ -340,7 +340,7 @@
       ]);
     }]).run(function ($rootScope, $location, productService) {
       $rootScope.$on('$locationChangeStart', function (event, next, current) {
-        var path = /#!\/productDetail\/(\d)+/i.exec(next);
+        var path = /#!\/productDetail\/(\d+)+/i.exec(next);
         if (path && path[1]) {
           productService.productID = path[1];
           $location.path('/productDetail');
