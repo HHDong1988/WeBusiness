@@ -10,21 +10,18 @@
       vm.simulateQuery = false;
       vm.isDisabled = false;
 
-      vm.agencies = loadAll();
-      vm.agencyID = 0;
-      vm.querySearch = querySearch;
-      vm.selectedItemChange = selectedItemChange;
-      vm.searchTextChange = searchTextChange;
+      vm.currentCartID = 0;
+      vm.deleteCartID = 0;
+      vm.currentTotalPrice = 0;
+      vm.confirmTotalPrice = 0;
+
       vm.dateBegin = null;
       vm.dateEnd = null;
 
       vm.myDate = new Date();
       vm.isOpen = false;
 
-      vm.carts = [];
-
-      vm.getAllAgency();
-      
+      vm.carts = [];    
     }
 
     vm.onQueryBills = function () {
@@ -33,7 +30,7 @@
 
     vm.getAllBills = function () {
       vm.carts = [];
-      financeService.getAllBills(vm.agencyID,vm.dateBegin.getTime(),vm.dateEnd.getTime()).then(function (res) {
+      financeService.getAllBills(vm.dateBegin.getTime(),vm.dateEnd.getTime()).then(function (res) {
         if (res.data.success) {
           angular.copy(res.data.data, vm.carts);
         }
@@ -42,34 +39,33 @@
       })
     }
 
-    vm.getAllAgency = function () {
-      userService.getAgencies(true).then(function (res) {
-        if (res.data.success == true) {
-          vm.agencies = [];
-          for (var i = 0; i < res.data.data.length; i++) {
-            var user = res.data.data[i];
-            vm.agencies.push({ value: user.ID, display: user.UserName });
-          }
-          userService.getAgencies(false).then(function (res) {
-            if (res.data.success == true) {
-              for (var i = 0; i < res.data.data.length; i++) {
-                var user = res.data.data[i];
-                vm.agencies.push({ value: user.ID, display: user.UserName });
-              }
-            }
-          },function (error) {
-            
-          })
+    vm.passAudit = function (id, price) {
+      vm.currentCartID = id;
+      vm.currentTotalPrice = price;
+      $('#confirmModal').modal();
 
-        }
-      },function (error) {
-        
-      })
     }
 
-    vm.passAudit = function (id) {
-      financeService.passAudit(id).then(function (res) {
-        
+    vm.deleteCart = function (id) {
+      vm.deleteCartID  = id;
+      $('#deleteModal').modal();
+
+    }
+
+    vm.confirmPass = function () {
+      if (vm.currentTotalPrice == vm.confirmTotalPrice) {
+        financeService.passAudit(vm.currentCartID).then(function (res) {
+          $('#confirmModal').modal('hide');
+        },function (error) {
+          
+        });
+      }
+
+    }
+
+    vm.confirmDelete = function () {
+      financeService.deleteCart(vm.deleteCartID).then(function (res) {
+        $('#deleteModal').modal('hide');
       },function (error) {
         
       });
@@ -86,44 +82,6 @@
         return results;
       }
     }
-
-    function searchTextChange(text) {
-      $log.info('Text changed to ' + text);
-    }
-
-    function selectedItemChange(item) {
-      $log.info('Item changed to ' + JSON.stringify(item));
-      vm.agencyID = item.value;
-    }
-
-
-    function loadAll() {
-      var allAgencies = [
-        { ID: 1, Name: '张三' },
-        { ID: 2, Name: '李四' },
-        { ID: 3, Name: '王五' },
-        { ID: 4, Name: '赵六' },
-        { ID: 5, Name: '田七' },
-        { ID: 6, Name: '刘八' }
-      ];
-
-      var results = [];
-      for (var i = 0; i < allAgencies.length; i++) {
-        var element = allAgencies[i];
-        results.push({ value: element.Name, display: element.Name });
-
-      }
-
-      return results;
-    }
-
-    function createFilterFor(query) {
-      return function filterFn(state) {
-        return (state.display.indexOf(query) === 0);
-      };
-
-    }
-
     vm.init();
   }
 })();

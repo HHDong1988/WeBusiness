@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('app-web', ['ngMaterial','ngRoute', 'ngCookies'])
+  angular.module('app-web', ['ngMaterial', 'ngRoute', 'ngCookies'])
     .constant('AUTH_EVENTS', {
       loginSuccess: 'auth-login-success',
       loginFailed: 'auth-login-failed',
@@ -132,10 +132,10 @@
         if (bPrimary) {
           userID = 5;
         }
-        else{
+        else {
           userID = 6;
         }
-        return userService.getAllUsers(1, -1, "UserTypeID="+userID).then(function (res) {
+        return userService.getAllUsers(1, -1, "UserTypeID=" + userID).then(function (res) {
           return res;
         }, function (error) {
           return error;
@@ -223,15 +223,15 @@
           return res;
         }, function (error) {
           return error;
-          
+
         });
       };
     })
     .service('financeService', function ($http) {
       var financeService = this;
-      financeService.getAllBills = function (userID, fromtime, endtime) {
+      financeService.getAllBills = function (fromtime, endtime) {
 
-        var url = '/desktop/api/bills?userid=' + userID + '&fromtime=' + fromtime + '&endtime=' + endtime;
+        var url = '/desktop/api/bills?fromtime=' + fromtime + '&endtime=' + endtime;
 
         return $http.get(url).then(function (res) {
           return res;
@@ -242,7 +242,34 @@
       financeService.passAudit = function (id) {
         var url = '/desktop/api/bills';
 
-        return $http.post(url,[{cartid:id}]).then(function (res) {
+        return $http.post(url, [{ cartid: id }]).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      }
+      financeService.deleteCart = function (id) {
+        var url = '/desktop/api/bills?cartID=' + id;
+
+        return $http.delete(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+
+      }
+      financeService.getAllPassAuditBills = function () {
+        var url = '/desktop/api/postinfo';
+
+        return $http.get(url).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      }
+      financeService.deliverBill = function (deliverInfo) {
+        var url = '/desktop/api/postinfo';
+        return $http.post(url, deliverInfo).then(function (res) {
           return res;
         }, function (error) {
           return error;
@@ -261,7 +288,7 @@
       }
       salesProductService.onSale = function (onSaleData) {
         var url = '/desktop/api/sales';
-        return $http.post(url,onSaleData).then(function (res) {
+        return $http.post(url, onSaleData).then(function (res) {
           return res;
         }, function (error) {
           return error;
