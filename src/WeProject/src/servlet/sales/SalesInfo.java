@@ -304,7 +304,22 @@ public class SalesInfo extends HttpServlet{
 				if(value<=0)return false;
 			}
 		}
+		
+		PreparedStatement prepare = conn.prepareStatement(Constant.SQL_Get_AUTOID);
+		int saleproductId = DBController.getIntNumber(prepare,conn);
+		String webaddr = GenerateWebAddr(saleproductId);
+		prepare = conn.prepareStatement(Constant.SQL_UPDATE_WEBADDRBYID);
+		prepare.setString(1, webaddr);
+		prepare.setInt(2,saleproductId);
+		int itemCount = prepare.executeUpdate();
+		if(itemCount<=0){
+			return false;
+		}
 		return true;
+	}
+	
+	private String GenerateWebAddr(int saleproductID){
+		return "mobile/#!/productDetail/"+saleproductID;
 	}
 	
 	private Boolean Uupdate(JSONObject object, 

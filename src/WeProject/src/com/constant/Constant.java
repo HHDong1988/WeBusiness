@@ -71,6 +71,9 @@ public final class Constant {
 	public static final String SQL_GET_SALESINFOBYPRODUCTID="SELECT * "
 			+ " FROM data_saleproducts "
 			+ " WHERE ProductID = ?";
+	public static final String SQL_UPDATE_WEBADDRBYID="UPDATE data_saleproducts "
+			+ " SET WebAddr=? "
+			+ " WHERE ID = ?";
 	public static final String SQL_GET_ORDERINFOSTATISTICS="SELECT * "
 			+ " FROM data_orders "
 			+ " WHERE LogTime > ? and LogTime < ?";
@@ -84,6 +87,7 @@ public final class Constant {
 	public static final String SQL_UPDATE_PRODUCTCURRENTAMOUNTBYID="UPDATE data_storage_products "
 			+ "SET CurrentAmount=CurrentAmount+? "
 			+ "WHERE ID = ?";
+	public static final String SQL_Get_AUTOID="SELECT LAST_INSERT_ID()";
 	
 	public static final String LastLogInTimeColumn="LastLoginTime";
 	public static final String SQL_CHECK_PRODUCTEXIST = "SELECT ID"

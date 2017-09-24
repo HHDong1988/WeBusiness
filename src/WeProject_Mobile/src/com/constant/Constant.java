@@ -58,7 +58,7 @@ public final class Constant {
 	public static final String SQL_UPDATETOTALPRICE_CART= "UPDATE data_cart "
 			+ "SET TotalCount = ?, TotalPrice = ? "
 			+ "WHERE CartID = ?";
-	public static final String SQL_Get_AUTOID="select @@identity";
+	public static final String SQL_Get_AUTOID="SELECT LAST_INSERT_ID()";
 	public static final String SQL_GET_SALESPRODUCTPRICEANDPRODUCTID="SELECT Price, ProductID"
 			+ " FROM data_saleproducts "
 			+ " WHERE ID = ?";
