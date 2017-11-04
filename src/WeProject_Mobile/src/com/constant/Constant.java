@@ -86,7 +86,7 @@ public final class Constant {
 			+ " ORDER BY ID LIMIT ?,?";
 	public static final String SQL_GET_ORDERALL="SELECT * "
 			+ " FROM data_orders "
-			+ " WHERE SalerID=?";
+			+ " WHERE SalerID=? ORDER BY LogTime DESC";
 	// End Orders from Users
 	
 	public static final String LOGIN_ERROR = "User name or password is wrong.";

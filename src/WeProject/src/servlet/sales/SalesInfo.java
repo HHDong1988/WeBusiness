@@ -198,6 +198,52 @@ public class SalesInfo extends HttpServlet{
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		Date beginDate = new Date();
+		Date endDate = null;
+		resp.setContentType("application/json; charset=utf-8");
+		resp.setCharacterEncoding("UTF-8");
+		Connection conn = null;
+		PreparedStatement ps = null;
+		PrintWriter writer = resp.getWriter();
+		JSONObject jObject = null;
+//		if(!HttpUtil.doBeforeProcessing(req)){
+//			endDate = new Date();
+//			jObject = HttpUtil.getResponseJson(false, null,
+//					endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+//			writer.append(jObject.toString());
+//			writer.close();
+//			return;
+//		}
+		int id = Integer.parseInt(req.getParameter("id").trim());
+		try {
+			conn = DBController.getConnection();
+//			if(!HasAuthority(req,conn,null)){
+//				endDate = new Date();
+//				jObject = HttpUtil.getResponseJson(false, null,
+//						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
+//				writer.append(jObject.toString());
+//				writer.close();
+//				conn.close();
+//				return;
+//			}
+			ps = conn.prepareStatement(Constant.SQL_GETPRODUCTOFFLIN);
+			ps.setInt(1, id);
+			int count = ps.executeUpdate();
+			endDate=new Date();
+			if(count>0){
+				jObject = HttpUtil.getResponseJson(true, null,
+						endDate.getTime() - beginDate.getTime(), "offline operation successfuly",0,1,-1);
+				writer.append(jObject.toString());
+			}else
+			{
+				jObject = HttpUtil.getResponseJson(false, null, 
+						endDate.getTime() - beginDate.getTime(), "database error offline operation failed",0,1,-1);
+				writer.append(jObject.toString());
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -523,4 +569,6 @@ public class SalesInfo extends HttpServlet{
 	            return false;
 	        }
 	    }
+	 
+	 
 }

@@ -74,6 +74,9 @@ public final class Constant {
 	public static final String SQL_UPDATE_WEBADDRBYID="UPDATE data_saleproducts "
 			+ " SET WebAddr=? "
 			+ " WHERE ID = ?";
+	public static final String SQL_GETPRODUCTOFFLIN="UPDATE data_saleproducts "
+			+ " SET Online=0 "
+			+ " WHERE ID = ?";
 	public static final String SQL_GET_ORDERINFOSTATISTICS="SELECT * "
 			+ " FROM data_orders "
 			+ " WHERE LogTime > ? and LogTime < ?";
@@ -114,7 +117,7 @@ public final class Constant {
 	public static final String SQL_GET_ORDERBYCARTID = "SELECT * FROM data_orders "
 			+ "WHERE CartID=?";
 	public static final String SQL_UPDATE_POSTNUMBYTEL = "UPDATE data_cart "
-			+ "SET PostNum =? WHERE ReceiverTel=?";
+			+ "SET PostNum =? WHERE ReceiverTel=? AND PostNum=''";
 	public static final String SQL_DELETE_ORDERBYCARTID = "DELETE FROM data_orders "
 			+ "WHERE CartID=?";
 	public static final String SQL_DELETE_CARTBYCARTID = "DELETE FROM data_cart "
