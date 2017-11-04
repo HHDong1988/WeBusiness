@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('salesInfoController', ['$scope', 'salesService', 'PAGE_SIZE_OPTIONS', salesInfoController])
+  angular.module('app-web').controller('salesInfoController', ['$scope','menuService', 'salesService', 'PAGE_SIZE_OPTIONS', salesInfoController])
 
-  function salesInfoController($scope, salesService, PAGE_SIZE_OPTIONS) {
+  function salesInfoController($scope,menuService, salesService, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onRefresh = function () {
@@ -83,7 +83,7 @@
     }
 
     vm.init = function () {
-
+      menuService.setMenuActive(3);
       vm.language = new LanguageUtility();
 
       vm.pageSizeOptions = PAGE_SIZE_OPTIONS;

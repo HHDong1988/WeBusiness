@@ -5,7 +5,7 @@
 
   function outOfStoreController($scope, PAGE_SIZE_OPTIONS, financeService) {
     var vm = this;
-    vm.deliverInfo = {ReceiverTel:"",PostNum:""};
+    
     vm.deliverOrder = function (tel) {
       vm.deliverInfo.ReceiverTel = tel;
       $('#confirmDeliverModal').modal();
@@ -14,11 +14,13 @@
 
     vm.confirmDeliver = function () {
       financeService.deliverBill(vm.deliverInfo).then(function (res) {
-
+        vm.getAllPassAuditOrders();
       }, function (error) {
 
       })
       $('#confirmDeliverModal').modal('hide');
+      vm.deliverInfo.PostNum = null;
+      vm.deliverBill.ReceiverTel = null;
     }
 
     vm.getAllPassAuditOrders = function () {
@@ -35,7 +37,7 @@
       vm.language = new LanguageUtility();
       vm.bills = [];
       vm.cartID = 0;
-      vm.trackingNumber = "";
+      vm.deliverInfo = {ReceiverTel:"",PostNum:""};
       vm.getAllPassAuditOrders();
     };
 

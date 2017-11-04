@@ -9,11 +9,6 @@
     vm.onRefresh = function () {
       vm.gotoPage(vm.currentPage);
     }
-
-    vm.onSync = function () {
-    }
-
-
     vm.refreshPaginator = function () {
 
       vm.pages = [];
@@ -95,6 +90,10 @@
       vm.dataDirty = true;
     }
 
+    vm.offSale = function (id) {
+      
+    }
+
     vm.init = function () {
 
       vm.language = new LanguageUtility();
@@ -117,7 +116,8 @@
       vm.columnHeaders = [vm.language.ITEM_ID,
       vm.language.STOCK_NAME,
       vm.language.PRODUCT_PRICE,
-      vm.language.PRODUCT_DESCRIPTION];
+      vm.language.PRODUCT_DESCRIPTION,
+      vm.language.OFF_SALE];
 
       vm.productList = [
         {ID:1, ProductID: 1, Picture1: '/img/xianyadan.jpg', Title: '咸鸭蛋', Description: '正宗家养鸭', Price: 100 },

@@ -113,4 +113,5 @@ function LanguageUtility() {
   this.ERROR_MESSAGE_SYNC_STOCKS = '同步库存数据失败'
   this.SUCCESS_MESAAGE_SYNC_PURCHASE = '同步采购数据成功';
   this.ERROR_MESSAGE_SYNC_PURCHASE  = '同步采购数据失败'
+  this.OFF_SALE = '商品下架';
 }

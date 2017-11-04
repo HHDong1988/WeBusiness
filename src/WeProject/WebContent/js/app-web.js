@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('app-web', ['ngMaterial', 'ngRoute', 'ngCookies'])
+  angular.module('app-web', [, 'ngRoute', 'ngCookies'])
     .constant('AUTH_EVENTS', {
       loginSuccess: 'auth-login-success',
       loginFailed: 'auth-login-failed',
@@ -81,7 +81,19 @@
     })
     .service('menuService', function ($http) {
       var menuService = this;
-      menuService.menus = [];
+      menuService.menus =  [{ value: '用户管理', href: '#!/userManagement', bActive: false },
+      { value: '财务审计', href: '#!/financeManagement', bActive: false  },
+      { value: '库存管理', href: '#!/stockManagement', bActive: false  },
+      { value: '销售管理', href: '#!/salesInfo', bActive: false  },
+      { value: '商品管理', href: '#!/productManagement', bActive: false  }];
+      menuService.setMenuActive = function (index) {
+        for (var i = 0; i < menuService.menus .length; i++) {
+          var menu = menuService.menus [i];
+          menu.bActive = false;
+        }
+        menuService.menus[index].bActive = true;
+      }
+
       menuService.getMenus = function () {
         return $http.get('/api/menu').then(function (res) {
           angular.copy(res.data, menuService.menus);
@@ -289,6 +301,14 @@
       salesProductService.onSale = function (onSaleData) {
         var url = '/desktop/api/sales';
         return $http.post(url, onSaleData).then(function (res) {
+          return res;
+        }, function (error) {
+          return error;
+        });
+      }
+      salesProductService.offSale = function (id) {
+        var url = '';
+        return $http.post(url, id).then(function (res) {
           return res;
         }, function (error) {
           return error;
@@ -728,17 +748,14 @@
       ]);
     }])
     .run(function (sessionService, userService, menuService, AUTH_EVENTS, MENU_EVENT, $rootScope, $cookieStore, $cookies) {
-
-      var currentUser = $cookies.get('username');
-      if (!currentUser) {
-        sessionService.destroy();
-        return;
-      }
-
-      userService.getAllPrimaryAgencies();
-      var currentUserRole = $cookies.get('usertypeid')
-      sessionService.createUserInfo(0, currentUser, currentUserRole);
-
-      $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, { userID: currentUser, userRole: currentUserRole });
+      // var currentUser = $cookies.get('username');
+      // if (!currentUser) {
+      //   sessionService.destroy();
+      //   return;
+      // }
+      // userService.getAllPrimaryAgencies();
+      // var currentUserRole = $cookies.get('usertypeid')
+      // sessionService.createUserInfo(0, currentUser, currentUserRole);
+      // $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, { userID: currentUser, userRole: currentUserRole });
     });
 })();

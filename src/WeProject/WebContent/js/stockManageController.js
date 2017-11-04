@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('stockManageController', ['$scope', '$location', 'stockService', 'salesProductService', 'toastService', 'PAGE_SIZE_OPTIONS', stockManageController])
+  angular.module('app-web').controller('stockManageController', ['$scope','menuService', '$location', 'stockService', 'salesProductService', 'toastService', 'PAGE_SIZE_OPTIONS', stockManageController])
 
-  function stockManageController($scope, $location, stockService, salesProductService, toastService, PAGE_SIZE_OPTIONS) {
+  function stockManageController($scope,menuService, $location, stockService, salesProductService, toastService, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onAdd = function () {
@@ -156,7 +156,7 @@
     }
 
     vm.init = function () {
-
+      menuService.setMenuActive(2);
       vm.language = new LanguageUtility();
 
       vm.pageSizeOptions = PAGE_SIZE_OPTIONS;
@@ -176,7 +176,6 @@
 
       vm.columnHeaders = [vm.language.ITEM_ID,
       vm.language.STOCK_NAME,
-      vm.language.STOCK_THUMBNAIL,
       vm.language.STOCK_PURCHASE_COUNT,
       vm.language.STOCK_STOCK_COUNT,
       vm.language.STOCK_PURCHASE_INFORMATION,

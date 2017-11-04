@@ -28,7 +28,7 @@
           vm.currentUser = user;
           vm.errorMessage = '';
           userService.getAllPrimaryAgencies();
-          menuService.getMenus();
+          //menuService.getMenus();
           $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, user);
         }
       }, function (error) {
@@ -100,14 +100,8 @@
       vm.showMainWindow = function () {
         return vm.isUserAuth() && !vm.isNewUser();
       }
-
-      vm.menus = [];
-      vm.menuList = [{ value: vm.language.USER_MANAGEMENT, href: '#!/userManagement' },
-      { value: vm.language.FINANCE_MANAGEMENT, href: '#!/financeManagement' },
-      { value: vm.language.STOCK_MANAGEMENT, href: '#!/stockManagement' },
-      { value: vm.language.SALES_MENU_SALES_INFO, href: '#!/salesInfo' },
-      { value: vm.language.PRODUCTS_MANAGEMENT, href: '#!/productManagement' }];
-      vm.menus = vm.menuList;
+      
+      vm.menus = menuService.menus;
     };
 
     vm.init();

@@ -37,22 +37,9 @@
               </div>
             </td>
             <td>
-              <div>
-                <img src="{{stock.imgUrl}}" alt="{{stock.Name.value}}" class="img-thumbnail">
-              </div>
-            </td>
-            <td>
-              <!-- <div ng-class="stockForm['purchaseCount_' + $index].$valid ? '':'invalidData'">
-                <input type="number" name="purchaseCount_{{$index}}" class="form-control" ng-model="stock.purchaseCount.value" ng-change="vm.onStockChange(stock, stock.purchaseCount)">
-                <div ng-if="stock.purchaseCount.bDirty"></div>
-              </div> -->
               {{stock.TotalAmount}}
             </td>
             <td>
-              <!-- <div ng-class="stockForm['currentCount_' + $index].$valid ? '':'invalidData'">
-                <input type="number" name="currentCount_{{$index}}" class="form-control" ng-model="stock.currentCount.value" ng-change="vm.onStockChange(stock, stock.currentCount)">
-                <div ng-if="stock.currentCount.bDirty"></div>
-              </div> -->
               {{stock.CurrentAmount}}
             </td>
             <td>

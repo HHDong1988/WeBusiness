@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('userManageController', ['$scope', 'userService', 'USER_ROLES', 'toastService', 'passwordGenerator', 'PAGE_SIZE_OPTIONS', userManageController])
+  angular.module('app-web').controller('userManageController', ['$scope','menuService', 'userService', 'USER_ROLES', 'toastService', 'passwordGenerator', 'PAGE_SIZE_OPTIONS', userManageController])
 
-  function userManageController($scope, userService, USER_ROLES, toastService, passwordGenerator, PAGE_SIZE_OPTIONS) {
+  function userManageController($scope,menuService, userService, USER_ROLES, toastService, passwordGenerator, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onAddUser = function () {
@@ -246,6 +246,7 @@
 
     vm.init = function () {
 
+      menuService.setMenuActive(0);
       vm.language = new LanguageUtility();
 
       vm.pageSizeOptions = PAGE_SIZE_OPTIONS;

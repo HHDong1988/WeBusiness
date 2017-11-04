@@ -17,10 +17,10 @@
     </nav>
   </header>
   <div>
-    <div ng-repeat="product in vm.productList" ng-if="vm.productList.length != 0">
-      <div class="row">
+    <div ng-if="vm.productList.length != 0">
+      <div  ng-repeat="product in vm.productList" class="row" ng-click="vm.gotoDetail(product.ID)">
         <div class="col-xs-4 center-block">
-          <a ng-click="vm.gotoDetail(product.ID)"><img class="img-responsive" src="{{product.Picture1}}"></a>
+          <a><img class="img-responsive" src="{{product.Picture1}}"></a>
         </div>
         <div class="col-xs-8">
           <strong>{{product.Title}}</strong>

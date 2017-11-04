@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  angular.module('app-web').controller('productManageController', ['$scope', '$location', 'stockService', 'salesProductService', 'productService', 'toastService', 'PAGE_SIZE_OPTIONS', productManageController])
+  angular.module('app-web').controller('productManageController', ['$scope','menuService', '$location', 'stockService', 'salesProductService', 'productService', 'toastService', 'PAGE_SIZE_OPTIONS', productManageController])
 
-  function productManageController($scope, $location, stockService, salesProductService, productService, toastService, PAGE_SIZE_OPTIONS) {
+  function productManageController($scope,menuService, $location, stockService, salesProductService, productService, toastService, PAGE_SIZE_OPTIONS) {
     var vm = this;
 
     vm.onRefresh = function () {
@@ -90,7 +90,7 @@
     }
 
     vm.init = function () {
-
+      menuService.setMenuActive(4);
       vm.language = new LanguageUtility();
 
       vm.pageSizeOptions = PAGE_SIZE_OPTIONS;
@@ -110,7 +110,6 @@
 
       vm.columnHeaders = [vm.language.ITEM_ID,
       vm.language.STOCK_NAME,
-      vm.language.STOCK_THUMBNAIL,
       vm.language.STOCK_PURCHASE_COUNT,
       vm.language.STOCK_STOCK_COUNT,
       vm.language.STOCK_ON_SALE];
