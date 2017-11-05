@@ -91,7 +91,17 @@
     }
 
     vm.offSale = function (id) {
-      
+      vm.offSaleId = id;
+      $('#offSaleModel').modal();
+    }
+
+    vm.confirmOffSale = function () {
+      salesProductService.offSale(vm.offSaleId).then(function (res) {
+        vm.gotoPage(vm.currentPage);
+      },function (error) {
+        
+      });
+      $('#offSaleModel').modal('hide');
     }
 
     vm.init = function () {
@@ -112,6 +122,7 @@
 
       vm.bSelectCurrentPage = false;
       vm.dataDirty = false;
+      vm.offSaleId = 0;
 
       vm.columnHeaders = [vm.language.ITEM_ID,
       vm.language.STOCK_NAME,

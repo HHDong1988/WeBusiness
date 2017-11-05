@@ -307,8 +307,8 @@
         });
       }
       salesProductService.offSale = function (id) {
-        var url = '';
-        return $http.post(url, id).then(function (res) {
+        var url = '/desktop/api/sales?id='+id;
+        return $http.delete(url).then(function (res) {
           return res;
         }, function (error) {
           return error;
