@@ -279,16 +279,34 @@ public static Double getDoubleNumber(PreparedStatement ps, Connection conn){
 		}
 		
 	}
-	
+	private static Integer ConnectCount=0;
 	public static Connection getConnection(){
 		Connection conn;
 		try {
-			Class.forName(driverName);;
+			synchronized(ConnectCount)
+			{
+				if(ConnectCount>500)return null;
+				ConnectCount++;
+			}
+			
+			Class.forName(driverName);
 			conn = DriverManager.getConnection(url, username, password);
 			return conn;
 		} catch (Exception e) {
 			return null;
 		}
 		
+	}
+	
+	public static void ReleaseConnection(Connection conn) throws SQLException
+	{
+		if(conn!=null)
+		{
+			conn.close();
+			synchronized(ConnectCount)
+			{
+				ConnectCount--;
+			}
+		}
 	}
 }

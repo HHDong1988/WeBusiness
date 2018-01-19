@@ -112,7 +112,7 @@ public class ResetPassword extends HttpServlet {
 			}
 
 			writer.close();
-			conn.close();
+			DBController.ReleaseConnection(conn);
 		} catch (SQLException | JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

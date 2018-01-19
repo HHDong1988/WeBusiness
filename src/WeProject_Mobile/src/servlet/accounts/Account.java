@@ -176,7 +176,7 @@ public class Account extends HttpServlet{
 						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
 				writer.append(jObject.toString());
 				writer.close();
-				conn.close();
+				DBController.ReleaseConnection(conn);
 				return;
 			}
 			
@@ -194,7 +194,7 @@ public class Account extends HttpServlet{
 			}
 
 			writer.close();
-			conn.close();
+			DBController.ReleaseConnection(conn);
 		} catch (SQLException |JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -236,7 +236,7 @@ public class Account extends HttpServlet{
 						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
 				writer.append(jObject.toString());
 				writer.close();
-				conn.close();
+				DBController.ReleaseConnection(conn);
 				return;
 			}
 			
@@ -290,7 +290,7 @@ public class Account extends HttpServlet{
 			}
 
 			writer.close();
-			conn.close();
+			DBController.ReleaseConnection(conn);
 		} catch (SQLException  e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -333,7 +333,7 @@ public class Account extends HttpServlet{
 						endDate.getTime() - beginDate.getTime(), Constant.COMMON_ERROR,0,1,-1);
 				writer.append(jObject.toString());
 				writer.close();
-				conn.close();
+				DBController.ReleaseConnection(conn);
 				return;
 			}
 			JSONArray tempArray;
@@ -370,7 +370,7 @@ public class Account extends HttpServlet{
 				writer.append(jObject.toString());
 			}
 			writer.close();
-			conn.close();
+			DBController.ReleaseConnection(conn);
 		} catch (SQLException |JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

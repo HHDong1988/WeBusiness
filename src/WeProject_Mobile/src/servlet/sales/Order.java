@@ -271,7 +271,7 @@ public class Order extends HttpServlet{
 			jObject = HttpUtil.getResponseJson(true, null, endDate.getTime() - beginDate.getTime(), null,0,1,-1);
 			writer.append(jObject.toString());
 			writer.close();
-			conn.close();
+			DBController.ReleaseConnection(conn);
 		} catch (SQLException |JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -342,7 +342,7 @@ public class Order extends HttpServlet{
 			}
 
 			writer.close();
-			conn.close();
+			DBController.ReleaseConnection(conn);
 		} catch (SQLException  e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

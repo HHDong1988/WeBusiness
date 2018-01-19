@@ -118,7 +118,7 @@ public class SalesInfo extends HttpServlet{
 			}
 
 			writer.close();
-			conn.close();
+			DBController.ReleaseConnection(conn);
 		} catch (SQLException  e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
